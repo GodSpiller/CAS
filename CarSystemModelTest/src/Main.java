@@ -24,17 +24,12 @@ public class Main {
             sb.append("public class Test" + new DecimalFormat("000").format(i) + "{\n");
             sb.append("public void test(){\n");
             sb.append("CarSystem cs = new CarSystem();\n");
-            sb.append(ReadFromTestCode(path));
+            // reads the test code provided by UPPAAL
+            sb.append(Files.readString(path));
             sb.append("}\n}");
             writer.write(sb.toString());
             writer.close();
             System.out.println(sb);
         }
-    }
-
-    public static String ReadFromTestCode(Path filePath) throws IOException {
-
-        String content = Files.readString(filePath);
-        return content;
     }
 }
