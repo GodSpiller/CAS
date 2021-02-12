@@ -11,25 +11,27 @@ public class Main {
     }
 
     public static void LoadTestCases() throws IOException {
+        File file = new File("CarSystemModelTest\\test\\CarSystemTests.java");
         int numberOfTestCases = new File("testCases").listFiles().length;
+        StringBuilder sb = new StringBuilder();
+        FileWriter writer = new FileWriter(file);
+        sb.append("import org.junit.jupiter.api.BeforeEach;\n");
+        sb.append("import org.junit.jupiter.api.Test;\n");
+        sb.append("import static org.junit.jupiter.api.Assertions.*;\n" + "\n");
+        sb.append("class CarSystemTests{\n\n");
+        sb.append("@BeforeEach\n void setup(){\n CarSystem cs = new CarSystem();\n}\n");
         for (int i = 0; i < numberOfTestCases; i++){
-            File file = new File("CarSystemModelTest\\src\\Test"+ new DecimalFormat("000").format(i)+".java");
             String filePath = "D:\\repos\\CAS\\testCases\\test" + new DecimalFormat("000").format(i)+".txt";
             Path path = Paths.get(filePath);
 
-            FileWriter writer = new FileWriter(file);
-            StringBuilder sb = new StringBuilder();
-            sb.append("import static org.junit.jupiter.api.Assertions.*;\n" +
-                    "\n");
-            sb.append("public class Test" + new DecimalFormat("000").format(i) + "{\n");
-            sb.append("public void test(){\n");
+            //FileWriter writer = new FileWriter(file);
+            sb.append("\n@Test\n void test" +  new DecimalFormat("000").format(i) + "(){\n");
             sb.append("CarSystem cs = new CarSystem();\n");
-            // reads the test code provided by UPPAAL
             sb.append(Files.readString(path));
-            sb.append("}\n}");
-            writer.write(sb.toString());
-            writer.close();
-            System.out.println(sb);
+            sb.append("}\n");
         }
+        sb.append("}");
+        writer.write(sb.toString());
+        writer.close();
     }
 }
