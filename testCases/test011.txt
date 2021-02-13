@@ -1,0 +1,18 @@
+
+
+cs.lock();
+
+assertTrue(cs.locked);
+assertFalse(cs.unlocked);
+assertTrue(cs.opened);
+assertFalse(cs.closed);
+
+cs.close();
+cs.c = 0;
+
+assertTrue(cs.c == 0);
+assertTrue(cs.locked);
+assertTrue(cs.closed);
+assertFalse(cs.opened);
+assertFalse(cs.unlocked);
+

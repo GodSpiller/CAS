@@ -1,0 +1,37 @@
+
+
+cs.close();
+
+assertFalse(cs.locked);
+assertTrue(cs.unlocked);
+assertFalse(cs.opened);
+assertTrue(cs.closed);
+assertFalse(cs.armed);
+
+cs.lock();
+cs.c = 0;
+
+assertTrue(cs.c == 0);
+assertTrue(cs.locked);
+assertTrue(cs.closed);
+assertFalse(cs.opened);
+assertFalse(cs.unlocked);
+
+cs.wait20seconds();
+cs.armedOn();
+
+assertTrue(cs.armed);
+
+cs.unlock();
+
+assertTrue(cs.closed);
+assertTrue(cs.unlocked);
+
+cs.armedOff();
+
+assertFalse(cs.locked);
+assertTrue(cs.unlocked);
+assertFalse(cs.opened);
+assertTrue(cs.closed);
+assertFalse(cs.armed);
+

@@ -20,20 +20,32 @@ assertFalse(cs.locked);
 assertTrue(cs.unlocked);
 assertFalse(cs.opened);
 assertTrue(cs.closed);
+assertFalse(cs.armed);
 
 cs.lock();
 cs.c = 0;
 
-assertEquals(0, cs.c);
+assertTrue(cs.c == 0);
 assertTrue(cs.locked);
 assertTrue(cs.closed);
 assertFalse(cs.opened);
 assertFalse(cs.unlocked);
 
-wait20seconds();
-armedOn();
+cs.wait20seconds();
+cs.armedOn();
 
-open();
+assertTrue(cs.armed);
+
+cs.open();
+cs.e = 0;
+
+assertTrue(cs.e <= 0);
+assertTrue(cs.opened);
+
+cs.armedOff();
+
+assertTrue(cs.e <= 0);
+assertFalse(cs.armed);
 
 }
 
@@ -48,28 +60,54 @@ assertFalse(cs.locked);
 assertTrue(cs.unlocked);
 assertFalse(cs.opened);
 assertTrue(cs.closed);
+assertFalse(cs.armed);
 
 cs.lock();
 cs.c = 0;
 
-assertEquals(0, cs.c);
+assertTrue(cs.c == 0);
 assertTrue(cs.locked);
 assertTrue(cs.closed);
 assertFalse(cs.opened);
 assertFalse(cs.unlocked);
 
-wait20seconds();
-armedOn();
+cs.wait20seconds();
+cs.armedOn();
 
-open();
+assertTrue(cs.armed);
 
-flashOn();
+cs.open();
+cs.e = 0;
 
-soundOn();
+assertTrue(cs.e <= 0);
+assertTrue(cs.opened);
 
-unlock();
+cs.armedOff();
 
-soundOff();
+assertTrue(cs.e <= 0);
+assertFalse(cs.armed);
+
+cs.flashOn();
+
+assertTrue(cs.e <= 0);
+assertTrue(cs.flash);
+
+cs.soundOn();
+assertTrue(cs.sound);
+
+assertTrue(cs.e<=30);
+assertTrue(cs.sound);
+
+assertTrue(cs.e < 30);
+cs.unlock();
+
+assertTrue(cs.g <= 0);
+assertTrue(cs.unlocked);
+
+cs.soundOff();
+
+assertTrue(cs.g <= 0);
+assertFalse(cs.sound);
 
 }
 
@@ -84,30 +122,60 @@ assertFalse(cs.locked);
 assertTrue(cs.unlocked);
 assertFalse(cs.opened);
 assertTrue(cs.closed);
+assertFalse(cs.armed);
 
 cs.lock();
 cs.c = 0;
 
-assertEquals(0, cs.c);
+assertTrue(cs.c == 0);
 assertTrue(cs.locked);
 assertTrue(cs.closed);
 assertFalse(cs.opened);
 assertFalse(cs.unlocked);
 
-wait20seconds();
-armedOn();
+cs.wait20seconds();
+cs.armedOn();
 
-open();
+assertTrue(cs.armed);
 
-flashOn();
+cs.open();
+cs.e = 0;
 
-soundOn();
+assertTrue(cs.e <= 0);
+assertTrue(cs.opened);
 
-soundOff();
+cs.armedOff();
 
-soundOff();
+assertTrue(cs.e <= 0);
+assertFalse(cs.armed);
 
-flashOff();
+cs.flashOn();
+
+assertTrue(cs.e <= 0);
+assertTrue(cs.flash);
+
+cs.soundOn();
+assertTrue(cs.sound);
+
+assertTrue(cs.e<=30);
+assertTrue(cs.sound);
+
+cs.tick(30);
+cs.soundOff();
+
+assertTrue(cs.e <= 300);
+assertFalse(cs.sound);
+
+cs.tick(270);
+assertTrue(cs.e == 300);
+cs.soundOff();
+
+assertTrue(cs.e <= 300);
+assertFalse(cs.sound);
+
+cs.flashOff();
+
+assertFalse(cs.flash);
 
 }
 
@@ -122,30 +190,73 @@ assertFalse(cs.locked);
 assertTrue(cs.unlocked);
 assertFalse(cs.opened);
 assertTrue(cs.closed);
+assertFalse(cs.armed);
 
 cs.lock();
 cs.c = 0;
 
-assertEquals(0, cs.c);
+assertTrue(cs.c == 0);
 assertTrue(cs.locked);
 assertTrue(cs.closed);
 assertFalse(cs.opened);
 assertFalse(cs.unlocked);
 
-wait20seconds();
-armedOn();
+cs.wait20seconds();
+cs.armedOn();
 
-open();
+assertTrue(cs.armed);
 
-flashOn();
+cs.open();
+cs.e = 0;
 
-soundOn();
+assertTrue(cs.e <= 0);
+assertTrue(cs.opened);
 
-soundOff();
+cs.armedOff();
 
-soundOff();
+assertTrue(cs.e <= 0);
+assertFalse(cs.armed);
 
-flashOff();
+cs.flashOn();
+
+assertTrue(cs.e <= 0);
+assertTrue(cs.flash);
+
+cs.soundOn();
+assertTrue(cs.sound);
+
+assertTrue(cs.e<=30);
+assertTrue(cs.sound);
+
+cs.tick(30);
+cs.soundOff();
+
+assertTrue(cs.e <= 300);
+assertFalse(cs.sound);
+
+cs.tick(270);
+assertTrue(cs.e == 300);
+cs.soundOff();
+
+assertTrue(cs.e <= 300);
+assertFalse(cs.sound);
+
+cs.flashOff();
+
+assertFalse(cs.flash);
+
+cs.f = 0;
+cs.close();
+
+assertTrue(cs.f == 0);
+assertTrue(cs.closed);
+assertFalse(cs.opened);
+assertTrue(cs.locked);
+assertFalse(cs.unlocked);
+
+cs.armedOn();
+
+assertTrue(cs.armed);
 
 }
 
@@ -160,32 +271,62 @@ assertFalse(cs.locked);
 assertTrue(cs.unlocked);
 assertFalse(cs.opened);
 assertTrue(cs.closed);
+assertFalse(cs.armed);
 
 cs.lock();
 cs.c = 0;
 
-assertEquals(0, cs.c);
+assertTrue(cs.c == 0);
 assertTrue(cs.locked);
 assertTrue(cs.closed);
 assertFalse(cs.opened);
 assertFalse(cs.unlocked);
 
-wait20seconds();
-armedOn();
+cs.wait20seconds();
+cs.armedOn();
 
-open();
+assertTrue(cs.armed);
 
-flashOn();
+cs.open();
+cs.e = 0;
 
-soundOn();
+assertTrue(cs.e <= 0);
+assertTrue(cs.opened);
 
-soundOff();
+cs.armedOff();
 
-soundOff();
+assertTrue(cs.e <= 0);
+assertFalse(cs.armed);
 
-flashOff();
+cs.flashOn();
 
-unlock();
+assertTrue(cs.e <= 0);
+assertTrue(cs.flash);
+
+cs.soundOn();
+assertTrue(cs.sound);
+
+assertTrue(cs.e<=30);
+assertTrue(cs.sound);
+
+cs.tick(30);
+cs.soundOff();
+
+assertTrue(cs.e <= 300);
+assertFalse(cs.sound);
+
+cs.tick(270);
+assertTrue(cs.e == 300);
+cs.soundOff();
+
+assertTrue(cs.e <= 300);
+assertFalse(cs.sound);
+
+cs.flashOff();
+
+assertFalse(cs.flash);
+
+cs.unlock();
 
 }
 
@@ -200,28 +341,55 @@ assertFalse(cs.locked);
 assertTrue(cs.unlocked);
 assertFalse(cs.opened);
 assertTrue(cs.closed);
+assertFalse(cs.armed);
 
 cs.lock();
 cs.c = 0;
 
-assertEquals(0, cs.c);
+assertTrue(cs.c == 0);
 assertTrue(cs.locked);
 assertTrue(cs.closed);
 assertFalse(cs.opened);
 assertFalse(cs.unlocked);
 
-wait20seconds();
-armedOn();
+cs.wait20seconds();
+cs.armedOn();
 
-open();
+assertTrue(cs.armed);
 
-flashOn();
+cs.open();
+cs.e = 0;
 
-soundOn();
+assertTrue(cs.e <= 0);
+assertTrue(cs.opened);
 
-soundOff();
+cs.armedOff();
 
-unlock();
+assertTrue(cs.e <= 0);
+assertFalse(cs.armed);
+
+cs.flashOn();
+
+assertTrue(cs.e <= 0);
+assertTrue(cs.flash);
+
+cs.soundOn();
+assertTrue(cs.sound);
+
+assertTrue(cs.e<=30);
+assertTrue(cs.sound);
+
+cs.tick(30);
+cs.soundOff();
+
+assertTrue(cs.e <= 300);
+assertFalse(cs.sound);
+
+cs.g = 0;
+cs.unlock();
+
+assertTrue(cs.g <= 0);
+assertTrue(cs.unlocked);
 
 }
 
@@ -236,30 +404,56 @@ assertFalse(cs.locked);
 assertTrue(cs.unlocked);
 assertFalse(cs.opened);
 assertTrue(cs.closed);
+assertFalse(cs.armed);
 
 cs.lock();
 cs.c = 0;
 
-assertEquals(0, cs.c);
+assertTrue(cs.c == 0);
 assertTrue(cs.locked);
 assertTrue(cs.closed);
 assertFalse(cs.opened);
 assertFalse(cs.unlocked);
 
-wait20seconds();
-armedOn();
+cs.wait20seconds();
+cs.armedOn();
 
-open();
+assertTrue(cs.armed);
 
-flashOn();
+cs.open();
+cs.e = 0;
 
-soundOn();
+assertTrue(cs.e <= 0);
+assertTrue(cs.opened);
 
-unlock();
+cs.armedOff();
 
-soundOff();
+assertTrue(cs.e <= 0);
+assertFalse(cs.armed);
 
-flashOff();
+cs.flashOn();
+
+assertTrue(cs.e <= 0);
+assertTrue(cs.flash);
+
+cs.soundOn();
+assertTrue(cs.sound);
+
+assertTrue(cs.e<=30);
+assertTrue(cs.sound);
+
+assertTrue(cs.e < 30);
+cs.unlock();
+
+assertTrue(cs.g <= 0);
+assertTrue(cs.unlocked);
+
+cs.soundOff();
+
+assertTrue(cs.g <= 0);
+assertFalse(cs.sound);
+
+cs.flashOff();
 
 }
 
@@ -274,27 +468,34 @@ assertFalse(cs.locked);
 assertTrue(cs.unlocked);
 assertFalse(cs.opened);
 assertTrue(cs.closed);
+assertFalse(cs.armed);
 
 cs.lock();
 cs.c = 0;
 
-assertEquals(0, cs.c);
+assertTrue(cs.c == 0);
 assertTrue(cs.locked);
 assertTrue(cs.closed);
 assertFalse(cs.opened);
 assertFalse(cs.unlocked);
 
-wait20seconds();
-armedOn();
+cs.wait20seconds();
+cs.armedOn();
 
-unlock();
+assertTrue(cs.armed);
 
-armedOff();
+cs.unlock();
+
+assertTrue(cs.closed);
+assertTrue(cs.unlocked);
+
+cs.armedOff();
 
 assertFalse(cs.locked);
 assertTrue(cs.unlocked);
 assertFalse(cs.opened);
 assertTrue(cs.closed);
+assertFalse(cs.armed);
 
 }
 
@@ -309,8 +510,9 @@ assertFalse(cs.locked);
 assertTrue(cs.unlocked);
 assertFalse(cs.opened);
 assertTrue(cs.closed);
+assertFalse(cs.armed);
 
-open();
+cs.open();
 
 }
 
@@ -325,17 +527,18 @@ assertFalse(cs.locked);
 assertTrue(cs.unlocked);
 assertFalse(cs.opened);
 assertTrue(cs.closed);
+assertFalse(cs.armed);
 
 cs.lock();
 cs.c = 0;
 
-assertEquals(0, cs.c);
+assertTrue(cs.c == 0);
 assertTrue(cs.locked);
 assertTrue(cs.closed);
 assertFalse(cs.opened);
 assertFalse(cs.unlocked);
 
-open();
+cs.open();
 
 assertTrue(cs.locked);
 assertFalse(cs.unlocked);
@@ -356,7 +559,7 @@ assertFalse(cs.unlocked);
 assertTrue(cs.opened);
 assertFalse(cs.closed);
 
-unlock();
+cs.unlock();
 
 }
 
@@ -375,7 +578,7 @@ assertFalse(cs.closed);
 cs.close();
 cs.c = 0;
 
-assertEquals(0, cs.c);
+assertTrue(cs.c == 0);
 assertTrue(cs.locked);
 assertTrue(cs.closed);
 assertFalse(cs.opened);
@@ -394,22 +597,24 @@ assertFalse(cs.locked);
 assertTrue(cs.unlocked);
 assertFalse(cs.opened);
 assertTrue(cs.closed);
+assertFalse(cs.armed);
 
 cs.lock();
 cs.c = 0;
 
-assertEquals(0, cs.c);
+assertTrue(cs.c == 0);
 assertTrue(cs.locked);
 assertTrue(cs.closed);
 assertFalse(cs.opened);
 assertFalse(cs.unlocked);
 
-unlock();
+cs.unlock();
 
 assertFalse(cs.locked);
 assertTrue(cs.unlocked);
 assertFalse(cs.opened);
 assertTrue(cs.closed);
+assertFalse(cs.armed);
 
 }
 }

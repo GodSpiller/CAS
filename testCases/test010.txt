@@ -1,0 +1,11 @@
+
+
+cs.lock();
+
+assertTrue(cs.locked);
+assertFalse(cs.unlocked);
+assertTrue(cs.opened);
+assertFalse(cs.closed);
+
+cs.unlock();
+

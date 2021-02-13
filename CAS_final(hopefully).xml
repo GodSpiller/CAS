@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+int __single__=0;
+int __reach__=0;
+
+clock c;
+clock g;
+clock e;
+clock d;
+clock f;
+
+chan open;
+chan close;
+chan unlock;
+chan lock;
+
+broadcast chan armedOn;
+broadcast chan armedOff;
+broadcast chan soundOn;
+broadcast chan soundOff;
+broadcast chan flashOn;
+broadcast chan flashOff;
+</declaration>
+	<template>
+		<name x="5" y="5">Spec</name>
+		<declaration>// Place local declarations here.
+</declaration>
+		<location id="id0" x="40" y="-256">
+			<label kind="invariant" x="57" y="-264">e&lt;=0</label>
+			<label kind="testcodeEnter">assertTrue(cs.e &lt;= 0);
+assertTrue(cs.opened);</label>
+		</location>
+		<location id="id1" x="-160" y="-192">
+			<name x="-246" y="-246">SilentAndFlashingAndUnlocked</name>
+			<label kind="invariant" x="-155" y="-233">g&lt;=0</label>
+			<label kind="testcodeEnter">assertTrue(cs.g &lt;= 0);
+assertFalse(cs.sound);</label>
+		</location>
+		<location id="id2" x="231" y="-211">
+			<name x="238" y="-255">SilentAndFlashing2</name>
+			<label kind="invariant" x="168" y="-248">e&lt;=300</label>
+			<label kind="testcodeEnter">assertTrue(cs.e &lt;= 300);
+assertFalse(cs.sound);</label>
+		</location>
+		<location id="id3" x="141" y="-194">
+			<name x="93" y="-229">ClosedAndLocked</name>
+			<label kind="invariant" x="126" y="-224">f&lt;=0</label>
+			<label kind="testcodeEnter">assertTrue(cs.f == 0);
+assertTrue(cs.closed);
+assertFalse(cs.opened);
+assertTrue(cs.locked);
+assertFalse(cs.unlocked);</label>
+		</location>
+		<location id="id4" x="-161" y="-459">
+			<name x="-170" y="-501">weird</name>
+			<label kind="invariant" x="-177" y="-491">g&lt;=0</label>
+			<label kind="testcodeEnter">assertTrue(cs.g &lt;= 0);
+assertTrue(cs.unlocked);</label>
+		</location>
+		<location id="id5" x="231" y="0">
+			<name x="168" y="24">SilentAndOpened</name>
+			<label kind="testcodeEnter">assertFalse(cs.flash);</label>
+		</location>
+		<location id="id6" x="230" y="-462">
+			<name x="220" y="-496">SilentAndFlashing1</name>
+			<label kind="invariant" x="164" y="-494">e&lt;=300</label>
+			<label kind="testcodeEnter">assertTrue(cs.e &lt;= 300);
+assertFalse(cs.sound);</label>
+		</location>
+		<location id="id7" x="-104" y="-192">
+			<name x="-136" y="-195">ArmedAndClosedAndUnlocked</name>
+			<label kind="invariant" x="-94" y="-185">d&lt;=0</label>
+			<label kind="testcodeEnter">assertTrue(cs.closed);
+assertTrue(cs.unlocked);</label>
+		</location>
+		<location id="id8" x="40" y="-408">
+			<label kind="invariant" x="11" y="-438">e&lt;=30</label>
+			<label kind="testcodeEnter">assertTrue(cs.e&lt;=30);
+assertTrue(cs.sound);</label>
+		</location>
+		<location id="id9" x="42" y="-357">
+			<label kind="invariant" x="58" y="-366">e&lt;=0</label>
+			<label kind="testcodeEnter">assertTrue(cs.e &lt;= 0);
+assertTrue(cs.flash);</label>
+		</location>
+		<location id="id10" x="40" y="-304">
+			<label kind="invariant" x="56" y="-312">e&lt;=0</label>
+			<label kind="testcodeEnter">assertTrue(cs.e &lt;= 0);
+assertFalse(cs.armed);</label>
+		</location>
+		<location id="id11" x="144" y="16">
+			<name x="134" y="-18">LockedAndOpen</name>
+			<label kind="testcodeEnter">assertTrue(cs.locked);
+assertFalse(cs.unlocked);
+assertTrue(cs.opened);
+assertFalse(cs.closed);</label>
+		</location>
+		<location id="id12" x="40" y="-192">
+			<name x="-51" y="-178">ArmedAndClosedAndLocked</name>
+			<label kind="testcodeEnter">assertTrue(cs.armed);</label>
+		</location>
+		<location id="id13" x="40" y="-96">
+			<name x="-8" y="-119">lockedclosed</name>
+			<label kind="invariant" x="46" y="-125">c&lt;=20</label>
+			<label kind="testcodeEnter">assertTrue(cs.c == 0);
+assertTrue(cs.locked);
+assertTrue(cs.closed);
+assertFalse(cs.opened);
+assertFalse(cs.unlocked);</label>
+		</location>
+		<location id="id14" x="-64" y="8">
+			<name x="-74" y="-26">unlockedclosed</name>
+			<label kind="testcodeEnter">assertFalse(cs.locked);
+assertTrue(cs.unlocked);
+assertFalse(cs.opened);
+assertTrue(cs.closed);
+assertFalse(cs.armed);</label>
+		</location>
+		<location id="id15" x="40" y="112">
+			<name x="30" y="78">Start</name>
+		</location>
+		<init ref="id15"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="-34" y="-289">armedOff!</label>
+			<label kind="testcode">cs.armedOff();</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-152" y="-335">soundOff!</label>
+			<label kind="testcode">cs.soundOff();</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="170" y="-177">flashOff!</label>
+			<label kind="testcode">cs.flashOff();</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="59" y="-212">armedOn!</label>
+			<label kind="testcode">cs.armedOn();</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="116" y="-150">close?</label>
+			<label kind="assignment" x="118" y="-165">f:=0</label>
+			<label kind="testcode">cs.f = 0;
+cs.close();</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="164" y="95">unlock?</label>
+			<label kind="testcode">cs.unlock();</label>
+			<nail x="231" y="125"/>
+			<nail x="146" y="126"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-40" y="-480">unlock?</label>
+			<label kind="assignment" x="-41" y="-496">g:=0</label>
+			<label kind="testcode">cs.g = 0;
+cs.unlock();</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="-148" y="72">flashOff!</label>
+			<label kind="testcode">cs.flashOff();</label>
+			<nail x="-160" y="125"/>
+			<nail x="-61" y="124"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id2"/>
+			<label kind="guard" x="167" y="-308">e==300</label>
+			<label kind="synchronisation" x="160" y="-323">soundOff!</label>
+			<label kind="testcode">cs.tick(270);
+assertTrue(cs.e == 300);
+cs.soundOff();</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id6"/>
+			<label kind="guard" x="136" y="-419">e==30</label>
+			<label kind="synchronisation" x="134" y="-434">soundOff!</label>
+			<label kind="testcode">cs.tick(30);
+cs.soundOff();</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-99" y="-403">e&lt;30</label>
+			<label kind="synchronisation" x="-101" y="-420">unlock?</label>
+			<label kind="assignment" x="-101" y="-436">g:=0</label>
+			<label kind="testcode">assertTrue(cs.e &lt; 30);
+cs.unlock();</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id12"/>
+			<label kind="guard" x="-16" y="-143">c==20</label>
+			<label kind="synchronisation" x="-31" y="-159">armedOn!</label>
+			<label kind="testcode">cs.wait20seconds();
+cs.armedOn();</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-100" y="-132">armedOff!</label>
+			<label kind="testcode">cs.armedOff();</label>
+			<nail x="-104" y="-48"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="-74" y="-209">unlock?</label>
+			<label kind="assignment" x="-74" y="-225">d:=0</label>
+			<label kind="testcode">cs.unlock();</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="-61" y="90">open?</label>
+			<label kind="testcode">cs.open();</label>
+			<nail x="-64" y="112"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id11"/>
+			<label kind="guard" x="101" y="-76">c&lt;20</label>
+			<label kind="synchronisation" x="95" y="-92">open?</label>
+			<label kind="testcode">cs.open();</label>
+			<nail x="144" y="-96"/>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="87" y="91">unlock?</label>
+			<label kind="testcode">cs.unlock();</label>
+			<nail x="144" y="112"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="-31" y="-390">soundOn!</label>
+			<label kind="testcode">cs.soundOn();
+assertTrue(cs.sound);</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-24" y="-337">flashOn!</label>
+			<label kind="testcode">cs.flashOn();</label>
+			<nail x="42" y="-331"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-7" y="-224">open?</label>
+			<label kind="assignment" x="-8" y="-239">e:=0</label>
+			<label kind="testcode">cs.open();
+cs.e = 0;</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="50" y="-33">close?</label>
+			<label kind="assignment" x="50" y="-48">c:=0</label>
+			<label kind="testcode">cs.close();
+cs.c = 0;</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="58" y="44">lock?</label>
+			<label kind="testcode">cs.lock();</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id14"/>
+			<label kind="guard" x="-60" y="-77">c&lt;20</label>
+			<label kind="synchronisation" x="-59" y="-94">unlock?</label>
+			<label kind="testcode">cs.unlock();</label>
+			<nail x="-64" y="-96"/>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="-13" y="-28">lock?</label>
+			<label kind="assignment" x="-13" y="-44">c:=0</label>
+			<label kind="testcode">cs.lock();
+cs.c = 0;</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-9" y="42">close?</label>
+			<label kind="testcode">cs.close();</label>
+		</transition>
+	</template>
+	<template>
+		<name>User</name>
+		<location id="id16" x="0" y="0">
+		</location>
+		<init ref="id16"/>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="18" y="-42">close!</label>
+			<nail x="161" y="-51"/>
+			<nail x="161" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="-126" y="-42">lock!</label>
+			<nail x="-144" y="-51"/>
+			<nail x="-144" y="42"/>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="-41" y="93">open!</label>
+			<nail x="-59" y="110"/>
+			<nail x="51" y="110"/>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="-58" y="-68">unlock!</label>
+			<nail x="-76" y="-102"/>
+			<nail x="51" y="-102"/>
+			<nail x="42" y="-102"/>
+		</transition>
+	</template>
+	<system>
+// List one or more processes to be composed into a system.
+system Spec, User;
+
+/** TEST_FILENAME test */
+/** TEST_FILEEXT .txt */
+</system>
+	<queries>
+		<query>
+			<formula>E&lt;&gt; Spec.SilentAndOpened</formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

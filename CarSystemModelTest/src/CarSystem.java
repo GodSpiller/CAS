@@ -43,8 +43,49 @@ public class CarSystem implements ICarAlarmSystem {
     }
 
     @Override
-    public void tick() {
+    public void tick(int i) {
+        for (int j = 0; j < i; j++){
+            c++;
+            d++;
+            e++;
+            f++;
+            g++;
+        }
+    }
 
+    @Override
+    public void wait20seconds() {
+
+    }
+
+    @Override
+    public void armedOn() {
+        armed = true;
+    }
+
+    @Override
+    public void armedOff() {
+        armed = false;
+    }
+
+    @Override
+    public void flashOn() {
+        flash = true;
+    }
+
+    @Override
+    public void flashOff() {
+        flash = false;
+    }
+
+    @Override
+    public void soundOn() {
+        sound = true;
+    }
+
+    @Override
+    public void soundOff() {
+        sound = false;
     }
 
 }
