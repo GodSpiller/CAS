@@ -44,13 +44,11 @@ public class CarSystem implements ICarAlarmSystem {
 
     @Override
     public void tick(int i) {
-        for (int j = 0; j < i; j++){
-            c++;
-            d++;
-            e++;
-            f++;
-            g++;
-        }
+        c += i;
+        d += i;
+        e += i;
+        f += i;
+        g += i;
     }
 
     @Override
