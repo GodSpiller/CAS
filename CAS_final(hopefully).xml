@@ -28,6 +28,7 @@ broadcast chan flashOff;
 		<declaration>// Place local declarations here.
 </declaration>
 		<location id="id0" x="40" y="-256">
+			<name x="30" y="-290">AlarmTriggered</name>
 			<label kind="invariant" x="57" y="-264">e&lt;=0</label>
 			<label kind="testcodeEnter">assertTrue(cs.e &lt;= 0);
 assertTrue(cs.opened);</label>
@@ -76,16 +77,19 @@ assertFalse(cs.sound);</label>
 assertTrue(cs.unlocked);</label>
 		</location>
 		<location id="id8" x="40" y="-408">
+			<name x="30" y="-442">SoundOn</name>
 			<label kind="invariant" x="11" y="-438">e&lt;=30</label>
 			<label kind="testcodeEnter">assertTrue(cs.e&lt;=30);
 assertTrue(cs.sound);</label>
 		</location>
 		<location id="id9" x="42" y="-357">
+			<name x="32" y="-391">FlashOn</name>
 			<label kind="invariant" x="58" y="-366">e&lt;=0</label>
 			<label kind="testcodeEnter">assertTrue(cs.e &lt;= 0);
 assertTrue(cs.flash);</label>
 		</location>
 		<location id="id10" x="40" y="-304">
+			<name x="30" y="-338">ArmedOff</name>
 			<label kind="invariant" x="56" y="-312">e&lt;=0</label>
 			<label kind="testcodeEnter">assertTrue(cs.e &lt;= 0);
 assertFalse(cs.armed);</label>
@@ -352,7 +356,55 @@ system Spec, User;
 </system>
 	<queries>
 		<query>
-			<formula>E&lt;&gt; Spec.LockedAndOpen</formula>
+			<formula>E&lt;&gt; Spec.SoundOn</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Spec.FlashOn</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Spec.ArmedOff</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Spec.AlarmTriggered</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Spec.ClosedAndLocked</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Spec.ArmedAndClosedAndUnlocked</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Spec.weird</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Spec.SilentAndFlashingAndUnlocked</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Spec.SilentAndFlashing2</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Spec.SilentAndFlashing1</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Spec.LockedAndClosed</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Spec.UnlockedAndClosed</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Spec.LockedAndOpened</formula>
 			<comment></comment>
 		</query>
 		<query>
