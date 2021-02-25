@@ -569,7 +569,7 @@ system Spec, User;
 			<formula>E&lt;&gt; Spec.ArmedAndClosedAndLocked</formula>
 			<comment></comment>
 		</query>
-		<query>
+		 <query>
 			<formula>E&lt;&gt; Spec.SilentAndOpened</formula>
 			<comment></comment>
 		</query>
