@@ -4,24 +4,29 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
-import com.uppaal.engine.Engine;
-import com.uppaal.engine.EngineException;
-import com.uppaal.model.core2.Document;
-import com.uppaal.model.core2.Element;
-import com.uppaal.model.core2.PrototypeDocument;
+import com.uppaal.model.core2.*;
+import com.uppaal.engine.*;
+import com.uppaal.model.system.UppaalSystem;
+import com.uppaal.model.system.symbolic.SymbolicState;
+import com.uppaal.model.system.symbolic.SymbolicTransition;
+
 
 public class Main {
+
     public static void main(String[] args) throws IOException, EngineException {
-        URL url = new URL("https://github.com/GodSpiller/CAS/blob/main/CAS_final(hopefully).xml");
+        URL url = new URL("https://pastebin.com/raw/54yhYF8g");
         Document doc = new PrototypeDocument().load(url);
+
         Engine engine = new Engine();
-        engine.setServerPath("C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
+        engine.setServerPath("C:\\Users\\Yann\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
         engine.connect();
         engine.disconnect();
+
     }
 
-    public static void LoadTestCases() throws IOException {
+    /*public static void LoadTestCases() throws IOException {
         File file = new File("CarSystemModelTest\\test\\CarSystemTests.java");
         int numberOfTestCases = new File("testCases").listFiles().length;
         StringBuilder sb = new StringBuilder();
@@ -45,4 +50,5 @@ public class Main {
         writer.write(sb.toString());
         writer.close();
     }
+         */
 }

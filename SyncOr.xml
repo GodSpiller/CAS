@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+clock t;
+broadcast chan tik;
+bool in1, in2, out;
+bool w, x, y, z;
+
+const int num_components = 5; // three SyncNot and one SyncAnd
+typedef int[1,num_components] component_t;
+
+
+//we describe the task precence edges using a square matrix of booleans, 
+//1 indicates A' &lt; A, e.g. SyncNot3 has await dependencies on all other components
+//a row has the precedence constraints for component i
+const bool precedence_rel[component_t][component_t] = {
+{0,0,0,0,0},
+{0,0,0,0,0},
+{1,1,0,0,0},
+{1,1,1,0,0},
+{1,1,1,1,0}
+};
+
+bool done[component_t] = {false,false,false,false,false};
+
+
+//checks if the precedence constraints for component id are satisfied
+bool check_precedence(component_t id) {
+    bool ans = true;
+    for ( i : component_t ) {
+        if ( i != id &amp;&amp; precedence_rel[id][i] &amp;&amp; !done[i])
+            ans = false;
+    }
+    return ans;
+}</declaration>
+	<template>
+		<name>SyncOr</name>
+		<parameter>int id, bool &amp;in1, bool &amp;in2, bool &amp;out</parameter>
+		<location id="id0" x="170" y="0">
+			<name x="153" y="17">input_output</name>
+		</location>
+		<location id="id1" x="0" y="0">
+			<name x="-42" y="17">update</name>
+			<urgent/>
+		</location>
+		<init ref="id1"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="68" y="-119">tik?</label>
+			<label kind="assignment" x="18" y="-93">done[id]:=false</label>
+			<nail x="170" y="-93"/>
+			<nail x="0" y="-93"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="guard" x="8" y="-34">check_precedence(id)</label>
+			<label kind="assignment" x="17" y="8">out := (in1 || in2),
+done[id] := true</label>
+		</transition>
+	</template>
+	<template>
+		<name>User</name>
+		<location id="id2" x="0" y="0">
+		</location>
+		<init ref="id2"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-153" y="-25">tik?</label>
+			<label kind="assignment" x="-238" y="0">in1 := true, in2 := true</label>
+			<nail x="-110" y="42"/>
+			<nail x="-110" y="-68"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="0" y="110">tik?</label>
+			<label kind="assignment" x="-68" y="127">in1 := true, in2 := false</label>
+			<nail x="68" y="102"/>
+			<nail x="-59" y="102"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="127" y="-51">tik?</label>
+			<label kind="assignment" x="76" y="-25">in1 := false, in2 := true</label>
+			<nail x="119" y="-59"/>
+			<nail x="118" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-41" y="-136">tik?</label>
+			<label kind="assignment" x="-41" y="-119">in1 := false, in2 := false</label>
+			<nail x="-59" y="-119"/>
+			<nail x="59" y="-119"/>
+		</transition>
+	</template>
+	<template>
+		<name>SyncAnd</name>
+		<parameter>int id, bool &amp;in1, bool &amp;in2, bool &amp;out</parameter>
+		<location id="id3" x="0" y="0">
+			<name x="-42" y="17">update</name>
+			<urgent/>
+		</location>
+		<location id="id4" x="170" y="0">
+			<name x="153" y="25">input_output</name>
+		</location>
+		<init ref="id3"/>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="68" y="-119">tik?</label>
+			<label kind="assignment" x="18" y="-93">done[id]:=false</label>
+			<nail x="170" y="-93"/>
+			<nail x="0" y="-93"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="guard" x="8" y="-34">check_precedence(id)</label>
+			<label kind="assignment" x="17" y="8">out := (in1 &amp;&amp; in2),
+done[id] := true</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">Cround</name>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id5" x="0" y="0">
+			<label kind="invariant" x="-10" y="17">t &lt;= 1000</label>
+		</location>
+		<init ref="id5"/>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-33" y="-170">t &gt;= 1000</label>
+			<label kind="synchronisation" x="-33" y="-153">tik!</label>
+			<label kind="assignment" x="-33" y="-136">t := 0</label>
+			<nail x="-51" y="-136"/>
+			<nail x="59" y="-136"/>
+		</transition>
+	</template>
+	<template>
+		<name>SyncNot</name>
+		<parameter>int id, bool &amp;in, bool &amp;out</parameter>
+		<location id="id6" x="0" y="0">
+			<name x="-25" y="17">update</name>
+			<urgent/>
+		</location>
+		<location id="id7" x="221" y="0">
+			<name x="195" y="17">input_output</name>
+		</location>
+		<init ref="id6"/>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="102" y="-153">tik?</label>
+			<label kind="assignment" x="42" y="-127">done[id] := false</label>
+			<nail x="221" y="-127"/>
+			<nail x="0" y="-127"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="guard" x="25" y="-25">check_precedence(id)</label>
+			<label kind="assignment" x="51" y="0">out := !in, 
+done[id] := true</label>
+		</transition>
+	</template>
+	<system>
+SyncNot1 = SyncNot(1,in2,x);   
+SyncNot2 = SyncNot(2,in1,y);
+SyncAnd1 = SyncAnd(3,x,y,z);
+SyncNot3 = SyncNot(4,z,out);
+//SyncOr1 = SyncOr(5,y,z,out);
+
+
+//note that the system is defined using Uppaal's parallel composition 
+system User, Cround, SyncNot1, SyncNot2, SyncAnd1, SyncNot3/*, SyncOr1*/;
+</system>
+	<queries>
+		<query>
+			<formula>A[] t&gt;0 imply out == (in1 || in2)</formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

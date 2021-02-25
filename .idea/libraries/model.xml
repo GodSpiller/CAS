@@ -1,7 +1,8 @@
 <component name="libraryTable">
   <library name="model">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Desktop/uppaal-4.1.24/lib/model.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../uppaal-4.1.24/lib/model.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../uppaal-4.1.24/uppaal.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
