@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE nta 
-[<!ELEMENT project (imports?, declaration?, template*, lsc*, instantiation?, system, queries?)>
+[
+<!ELEMENT project (imports?, declaration?, template*, lsc*, instantiation?, system, queries?)>
 <!ELEMENT imports (#PCDATA)>
 <!ELEMENT declaration (#PCDATA)>
 <!ELEMENT template (name, parameter?, declaration?, location*, init?, transition*)>
