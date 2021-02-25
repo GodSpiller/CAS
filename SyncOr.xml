@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE>
+<!DOCTYPE> nta PUBLIC 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
 	<declaration>// Place global declarations here.
 clock t;
 broadcast chan tik;
