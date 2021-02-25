@@ -53,26 +53,10 @@ public class Main {
 
             @Override
             public void setProgress(int i, long l, long l1, long l2, long l3, long l4, long l5, long l6, long l7, long l8) {
-              /*  System.out.println(i);
-                System.out.println(l);
-                System.out.println(l1);
-                System.out.println(l2);
-                System.out.println(l3);
-                System.out.println(l4);
-                System.out.println(l5);
-                System.out.println(l6);
-                System.out.println(l7);
-                System.out.println(l8);
-               */
             }
 
             @Override
             public void setSystemInfo(long l, long l1, long l2) {
-                /*System.out.println(l);
-                System.out.println(l1);
-                System.out.println(l2);
-
-                 */
             }
 
             @Override
@@ -111,16 +95,18 @@ public class Main {
             }
         };
 
-        for (Query qs: system.getDocument().getQueryList()) {
-            System.out.println(qs);
+        //System.out.println(engine.query(system, "representation 0", q, qr));
+
+        QueryData qd = engine.query(system, "representation 0", q, qr).getData();
+        ArrayList<String> dt = qd.getDataTitles();
+
+        for (String s : dt) {
+            System.out.println("title: " + s);
         }
 
-        System.out.println(engine.query(system, "trace 0", q, qr));
 
 
         engine.disconnect();
-
-
 
     }
 
