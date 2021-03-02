@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.file.Path;
 
 
 import com.uppaal.engine.*;
@@ -8,8 +9,20 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         Durum durum = new Durum();
-
-        System.out.println(durum.getDurum(""));
+        StringBuilder sb = new StringBuilder();
+        File file = new File("CarSystemModelTest\\test\\CarSystemTest.java");
+        FileWriter writer = new FileWriter(file);
+        sb.append("import org.junit.jupiter.api.BeforeEach;\n");
+        sb.append("import org.junit.jupiter.api.Test;\n");
+        sb.append("import static org.junit.jupiter.api.Assertions.*;\n" + "\n");
+        sb.append("class CarSystemTests{\n\n");
+        sb.append("@BeforeEach\n void setup(){\n CarSystem cs = new CarSystem();\n}\n");
+        sb.append("\n@Test\nvoid test(){\n");
+        sb.append("CarSystem cs = new CarSystem();\n");
+        sb.append(durum.getDurum(""));
+        sb.append("}\n}");
+        writer.write(sb.toString());
+        writer.close();
     }
 
     /*public static void LoadTestCases() throws IOException {
