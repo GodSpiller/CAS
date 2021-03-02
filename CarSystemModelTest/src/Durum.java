@@ -39,20 +39,19 @@ public class Durum {
         StringBuilder stringBuilder = new StringBuilder();
 
 
-        while (!state.getLocations()[0].getName().equals("LockedAndOpened")) {
+        while (!state.getLocations()[0].getName().equals("weird")) {
             trans = engine.getTransitions(system, state);
             transition = trans.get((int) Math.floor(Math.random() * trans.size()));
 
-            if (transition.getSource().getLocations()[0].getLocation().getPropertyValue("testcodeEnter") != null) {
-                stringBuilder.append(transition.getSource().getLocations()[0].getLocation().getPropertyValue("testcodeEnter"));
-            }
-
-            for (SystemEdgeSelect edge : transition.getEdges()) {
-                if (edge.getEdge().getTarget().getName().equals(transition.getTarget().getLocations()[0].getLocation().getName())) {
-                    stringBuilder.append(transition.getEdges()[0].getEdge().getPropertyValue("testcode"));
+            for (SystemEdge edge : transition.getEdges()) {
+                if (edge.getProcess().getName().equals("Spec")) {
+                    stringBuilder.append(edge.getEdge().getPropertyValue("testcode") + "\n");
                 }
             }
 
+            if (transition.getTarget().getLocations()[0].getLocation().getPropertyValue("testcodeEnter") != null) {
+                stringBuilder.append(transition.getTarget().getLocations()[0].getLocation().getPropertyValue("testcodeEnter") + "\n");
+            }
 
             state = transition.getTarget();
         }
