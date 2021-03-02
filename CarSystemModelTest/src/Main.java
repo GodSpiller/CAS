@@ -1,113 +1,15 @@
 import java.io.*;
-import java.math.BigDecimal;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 
-import com.uppaal.model.core2.*;
+
 import com.uppaal.engine.*;
-import com.uppaal.model.system.GanttChart;
-import com.uppaal.model.system.SystemEdge;
-import com.uppaal.model.system.UppaalSystem;
-import com.uppaal.model.system.concrete.ConcreteTrace;
-import com.uppaal.model.system.symbolic.SymbolicState;
-import com.uppaal.model.system.symbolic.SymbolicTrace;
-import com.uppaal.model.system.symbolic.SymbolicTransition;
 
 
 public class Main {
 
-    public static void main(String[] args) throws IOException, EngineException, CannotEvaluateException {
-        URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS_final(hopefully).xml");
-        Document doc = new PrototypeDocument().load(url);
+    public static void main(String[] args) throws Exception {
+        Durum durum = new Durum();
 
-        try {
-            doc.save("sampledoc.xml");
-        } catch (IOException e) {
-            e.printStackTrace(System.err);
-        }
-
-        Engine engine = new Engine();
-        engine.setServerPath("C:\\Users\\Yann\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
-        engine.connect();
-
-        ArrayList<Problem> problems = new ArrayList<Problem>();
-        UppaalSystem system = engine.getSystem(doc, problems);
-
-
-        Query q = new Query("E<> Spec.weird", "");
-
-        QueryFeedback qr = new QueryFeedback() {
-            @Override
-            public void setProgressAvail(boolean b) {
-                if (b) {
-                    System.out.println("Progress information available");
-                }
-                else {
-                    System.out.println("Progress information not available");
-                }
-            }
-
-            @Override
-            public void setProgress(int i, long l, long l1, long l2, long l3, long l4, long l5, long l6, long l7, long l8) {
-            }
-
-            @Override
-            public void setSystemInfo(long l, long l1, long l2) {
-            }
-
-            @Override
-            public void setLength(int i) {
-                System.out.println(i);
-            }
-
-            @Override
-            public void setCurrent(int i) {
-                System.out.println(i);
-            }
-
-            @Override
-            public void setTrace(char c, String s, SymbolicTrace symbolicTrace, QueryResult queryResult) {
-                System.out.println("Im in setTrace1: " + c);
-            }
-
-            @Override
-            public void setTrace(char c, String s, ConcreteTrace concreteTrace, QueryResult queryResult) {
-                System.out.println("Im in setTrace2: " + queryResult);
-            }
-
-            @Override
-            public void setFeedback(String s) {
-                //System.out.println("setFeedback" + s);
-            }
-
-            @Override
-            public void appendText(String s) {
-                System.out.println(s);
-            }
-
-            @Override
-            public void setResultText(String s) {
-                System.out.println(s);
-            }
-        };
-
-        //System.out.println(engine.query(system, "representation 0", q, qr));
-
-        QueryData qd = engine.query(system, "representation 0", q, qr).getData();
-        ArrayList<String> dt = qd.getDataTitles();
-
-        for (String s : dt) {
-            System.out.println("title: " + s);
-        }
-
-
-
-        engine.disconnect();
-
+        System.out.println(durum.getDurum(""));
     }
 
     /*public static void LoadTestCases() throws IOException {

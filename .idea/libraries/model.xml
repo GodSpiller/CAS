@@ -3,6 +3,8 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../../uppaal-4.1.24/lib/model.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../uppaal-4.1.24/uppaal.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../uppaal-4.1.24/lib/xml-apis.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../uppaal-4.1.24/lib/uppaal-oslc4j-common.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
