@@ -70,7 +70,22 @@ public class Durum {
 
         @Override
         public void setTrace(char c, String s, SymbolicTrace symbolicTrace, QueryResult queryResult) {
-            System.out.println(symbolicTrace.get(1).getEdge(1).getEdge().getPropertyValue("testcode"));
+
+
+                symbolicTrace.forEach(symbolicTransition -> {
+                    if (symbolicTransition.getEdges() != null) {
+                        try {
+                            symbolicTransition.getEdges()[0].getEdge().accept(dv);
+
+                            symbolicTransition.getTarget().getLocations()[0].getLocation().accept(dv);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else {
+                        System.out.println("jeg fucking hader jøder");
+                    }
+                });
         }
 
         @Override
@@ -102,10 +117,12 @@ public class Durum {
         state = engine.getInitialState(system);
     }
 
-    public void getTrace() throws EngineException, IOException {
+    public String getTrace() throws EngineException, IOException {
 
         Query q = new Query("E<> Spec.weird", "");
         QueryResult qr = engine.query(system, "trace 1", q, qf);
+
+        return dv.testCode.toString();
     }
 
     public String getTestCode(String locationName) throws Exception {

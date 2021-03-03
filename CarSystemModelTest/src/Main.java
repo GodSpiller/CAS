@@ -8,12 +8,7 @@ import com.uppaal.engine.*;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Durum durum = new Durum();
-
-        System.out.println(durum.getTestCode("weird"));
-    
-        //makeUnitTest();
-
+        makeUnitTest();
     }
 
     public static void makeUnitTest() throws Exception {
@@ -28,7 +23,7 @@ public class Main {
         sb.append("@BeforeEach\n void setup(){\n CarSystem cs = new CarSystem();\n}\n");
         sb.append("\n@Test\nvoid test(){\n");
         sb.append("CarSystem cs = new CarSystem();\n");
-        sb.append(durum.getTestCode("weird"));
+        sb.append(durum.getTrace());
         sb.append("}\n}");
         writer.write(sb.toString());
         writer.close();
