@@ -71,21 +71,21 @@ public class Durum {
         @Override
         public void setTrace(char c, String s, SymbolicTrace symbolicTrace, QueryResult queryResult) {
 
-
-                symbolicTrace.forEach(symbolicTransition -> {
-                    if (symbolicTransition.getEdges() != null) {
-                        try {
-                            symbolicTransition.getEdges()[0].getEdge().accept(dv);
-
-                            symbolicTransition.getTarget().getLocations()[0].getLocation().accept(dv);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+            symbolicTrace.forEach(symbolicTransition -> {
+                if (symbolicTransition.getEdges() != null) {
+                    try {
+                        for (SystemEdgeSelect edge : symbolicTransition.getEdges()){
+                            edge.getEdge().accept(dv);
                         }
+                        symbolicTransition.getTarget().getLocations()[0].getLocation().accept(dv);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    else {
-                        System.out.println("jeg fucking hader jøder");
-                    }
-                });
+                }
+                else {
+                    System.out.println("jeg fucking hader jøder");
+                }
+            });
         }
 
         @Override
@@ -110,7 +110,7 @@ public class Durum {
 
     public Durum() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("C:\\Users\\Yann\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
+        engine.setServerPath("C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
         engine.connect();
         ArrayList<Problem> problems = new ArrayList<Problem>();
         system = engine.getSystem(document, problems);
