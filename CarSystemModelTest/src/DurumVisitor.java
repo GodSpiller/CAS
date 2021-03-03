@@ -52,7 +52,6 @@ public class DurumVisitor implements Visitor {
 
     @Override
     public void visitEdge(Edge edge) throws Exception {
-
         testCode.append(edge.getPropertyValue("testcode") + "\n");
     }
 

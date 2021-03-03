@@ -6,7 +6,6 @@ import com.uppaal.model.system.symbolic.SymbolicState;
 import com.uppaal.model.system.symbolic.SymbolicTrace;
 import com.uppaal.model.system.symbolic.SymbolicTransition;
 import com.uppaal.engine.QueryFeedback;
-import com.uppaal.engine.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -19,28 +18,6 @@ public class Durum {
     UppaalSystem system;
     SymbolicState state;
     DurumVisitor dv = new DurumVisitor();
-
-    public TraceListener traceListener = new TraceListener() {
-        @Override
-        public void append(AbstractTransition transition) {
-
-        }
-
-        @Override
-        public void remove(AbstractTransition transition) {
-
-        }
-
-        @Override
-        public void cover(AbstractTransition transition) {
-
-        }
-
-        @Override
-        public void uncover(AbstractTransition transition) {
-
-        }
-    };
 
     public QueryFeedback qf = new QueryFeedback() {
         @Override
@@ -82,9 +59,6 @@ public class Durum {
                         e.printStackTrace();
                     }
                 }
-                else {
-                    System.out.println("jeg fucking hader jøder");
-                }
             });
         }
 
@@ -110,7 +84,7 @@ public class Durum {
 
     public Durum() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
+        engine.setServerPath("C:\\Users\\Yann\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
         engine.connect();
         ArrayList<Problem> problems = new ArrayList<Problem>();
         system = engine.getSystem(document, problems);
@@ -118,36 +92,8 @@ public class Durum {
     }
 
     public String getTrace() throws EngineException, IOException {
-
         Query q = new Query("E<> Spec.weird", "");
         QueryResult qr = engine.query(system, "trace 1", q, qf);
-
         return dv.testCode.toString();
     }
-
-    public String getTestCode(String locationName) throws Exception {
-
-        ArrayList<SymbolicTransition> transitions;
-        SymbolicTransition transition;
-        StringBuilder stringBuilder = new StringBuilder();
-
-        while (!state.getLocations()[0].getName().equals(locationName)) {
-            transitions = engine.getTransitions(system, state);
-            transition = transitions.get((int) Math.floor(Math.random() * transitions.size()));
-
-            for (SystemEdge edge : transition.getEdges()) {
-                if (edge.getProcess().getName().equals("Spec")) {
-                    edge.getEdge().accept(dv);
-                }
-            }
-
-            if (transition.getTarget().getLocations()[0].getLocation().getPropertyValue("testcodeEnter") != null) {
-                transition.getTarget().getLocations()[0].getLocation().accept(dv);
-            }
-
-            state = transition.getTarget();
-        }
-        return dv.testCode.toString();
-    }
-
 }
