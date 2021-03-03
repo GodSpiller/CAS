@@ -9,7 +9,8 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         Durum durum = new Durum();
-        StringBuilder sb = new StringBuilder();
+        durum.getTrace();
+        /*StringBuilder sb = new StringBuilder();
         File file = new File("CarSystemModelTest\\test\\CarSystemTest.java");
         FileWriter writer = new FileWriter(file);
         sb.append("import org.junit.jupiter.api.BeforeEach;\n");
@@ -19,11 +20,17 @@ public class Main {
         sb.append("@BeforeEach\n void setup(){\n CarSystem cs = new CarSystem();\n}\n");
         sb.append("\n@Test\nvoid test(){\n");
         sb.append("CarSystem cs = new CarSystem();\n");
-        sb.append(durum.getDurum(""));
+        sb.append(durum.GetTestCode("weird"));
         sb.append("}\n}");
         writer.write(sb.toString());
         writer.close();
+         */
     }
+
+
+
+
+
 
     /*public static void LoadTestCases() throws IOException {
         File file = new File("CarSystemModelTest\\test\\CarSystemTests.java");

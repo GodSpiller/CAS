@@ -12,32 +12,13 @@ class CarSystemTests{
 @Test
 void test(){
 CarSystem cs = new CarSystem();
-cs.lock();
-assertTrue(cs.locked);
-assertFalse(cs.unlocked);
-assertTrue(cs.opened);
-assertFalse(cs.closed);
 cs.close();
-cs.c = 0;
-assertTrue(cs.c == 0);
-assertTrue(cs.locked);
-assertTrue(cs.closed);
-assertFalse(cs.opened);
-assertFalse(cs.unlocked);
-cs.unlock();
 assertFalse(cs.locked);
 assertTrue(cs.unlocked);
 assertFalse(cs.opened);
 assertTrue(cs.closed);
 assertFalse(cs.armed);
-cs.open();
-
 cs.lock();
-assertTrue(cs.locked);
-assertFalse(cs.unlocked);
-assertTrue(cs.opened);
-assertFalse(cs.closed);
-cs.close();
 cs.c = 0;
 assertTrue(cs.c == 0);
 assertTrue(cs.locked);
@@ -61,10 +42,7 @@ cs.soundOn();
 assertTrue(cs.sound);
 assertTrue(cs.e<=30);
 assertTrue(cs.sound);
-cs.tick(30);
-cs.soundOff();
-assertTrue(cs.e <= 300);
-assertFalse(cs.sound);
+assertTrue(cs.e < 30);
 cs.g = 0;
 cs.unlock();
 assertTrue(cs.g <= 0);
