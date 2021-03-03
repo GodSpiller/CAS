@@ -20,6 +20,78 @@ public class Durum {
     SymbolicState state;
     DurumVisitor dv = new DurumVisitor();
 
+    public TraceListener traceListener = new TraceListener() {
+        @Override
+        public void append(AbstractTransition transition) {
+
+        }
+
+        @Override
+        public void remove(AbstractTransition transition) {
+
+        }
+
+        @Override
+        public void cover(AbstractTransition transition) {
+
+        }
+
+        @Override
+        public void uncover(AbstractTransition transition) {
+
+        }
+    };
+
+    public QueryFeedback qf = new QueryFeedback() {
+        @Override
+        public void setProgressAvail(boolean b) {
+
+        }
+
+        @Override
+        public void setProgress(int i, long l, long l1, long l2, long l3, long l4, long l5, long l6, long l7, long l8) {
+
+        }
+
+        @Override
+        public void setSystemInfo(long l, long l1, long l2) {
+
+        }
+
+        @Override
+        public void setLength(int i) {
+
+        }
+
+        @Override
+        public void setCurrent(int i) {
+
+        }
+
+        @Override
+        public void setTrace(char c, String s, SymbolicTrace symbolicTrace, QueryResult queryResult) {
+            System.out.println(symbolicTrace.get(1).getEdge(1).getEdge().getPropertyValue("testcode"));
+        }
+
+        @Override
+        public void setTrace(char c, String s, ConcreteTrace concreteTrace, QueryResult queryResult) {
+
+        }
+
+        @Override
+        public void setFeedback(String s) {
+
+        }
+
+        @Override
+        public void appendText(String s) {
+        }
+
+        @Override
+        public void setResultText(String s) {
+            System.out.println("setResultText");
+        }
+    };
 
     public Durum() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
@@ -31,79 +103,6 @@ public class Durum {
     }
 
     public void getTrace() throws EngineException, IOException {
-
-        TraceListener traceListener = new TraceListener() {
-            @Override
-            public void append(AbstractTransition transition) {
-
-            }
-
-            @Override
-            public void remove(AbstractTransition transition) {
-
-            }
-
-            @Override
-            public void cover(AbstractTransition transition) {
-
-            }
-
-            @Override
-            public void uncover(AbstractTransition transition) {
-
-            }
-        };
-
-        QueryFeedback qf = new QueryFeedback() {
-            @Override
-            public void setProgressAvail(boolean b) {
-
-            }
-
-            @Override
-            public void setProgress(int i, long l, long l1, long l2, long l3, long l4, long l5, long l6, long l7, long l8) {
-
-            }
-
-            @Override
-            public void setSystemInfo(long l, long l1, long l2) {
-
-            }
-
-            @Override
-            public void setLength(int i) {
-
-            }
-
-            @Override
-            public void setCurrent(int i) {
-
-            }
-
-            @Override
-            public void setTrace(char c, String s, SymbolicTrace symbolicTrace, QueryResult queryResult) {
-                System.out.println(symbolicTrace.get(1).getEdge(1).getEdge().getPropertyValue("testcode"));
-            }
-
-            @Override
-            public void setTrace(char c, String s, ConcreteTrace concreteTrace, QueryResult queryResult) {
-
-            }
-
-            @Override
-            public void setFeedback(String s) {
-
-            }
-
-            @Override
-            public void appendText(String s) {
-            }
-
-            @Override
-            public void setResultText(String s) {
-                System.out.println("setResultText");
-            }
-        };
 
         Query q = new Query("E<> Spec.weird", "");
         QueryResult qr = engine.query(system, "trace 1", q, qf);
