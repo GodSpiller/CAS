@@ -9,7 +9,8 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         Durum durum = new Durum();
-        durum.getTrace();
+
+        System.out.println(durum.getTestCode("weird"));
     
         //makeUnitTest();
 

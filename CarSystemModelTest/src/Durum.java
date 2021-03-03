@@ -30,55 +30,73 @@ public class Durum {
         state = engine.getInitialState(system);
     }
 
-    public void getTrace() throws EngineException {
+    public void getTrace() throws EngineException, IOException {
+
+        TraceListener traceListener = new TraceListener() {
+            @Override
+            public void append(AbstractTransition transition) {
+
+            }
+
+            @Override
+            public void remove(AbstractTransition transition) {
+
+            }
+
+            @Override
+            public void cover(AbstractTransition transition) {
+
+            }
+
+            @Override
+            public void uncover(AbstractTransition transition) {
+
+            }
+        };
+
         QueryFeedback qf = new QueryFeedback() {
             @Override
             public void setProgressAvail(boolean b) {
-                System.out.println("setProgressAvail");
+
             }
 
             @Override
             public void setProgress(int i, long l, long l1, long l2, long l3, long l4, long l5, long l6, long l7, long l8) {
-                System.out.println("setProgress");
+
             }
 
             @Override
             public void setSystemInfo(long l, long l1, long l2) {
-                System.out.println("setSystemInfo");
+
             }
 
             @Override
             public void setLength(int i) {
-                System.out.println("setLength");
+
             }
 
             @Override
             public void setCurrent(int i) {
-                System.out.println("setCurrent");
+
             }
 
             @Override
             public void setTrace(char c, String s, SymbolicTrace symbolicTrace, QueryResult queryResult) {
-                System.out.println( queryResult.getResult());
-                System.out.println("hej");
+                System.out.println(symbolicTrace.get(1).getEdge(1).getEdge().getPropertyValue("testcode"));
             }
 
             @Override
             public void setTrace(char c, String s, ConcreteTrace concreteTrace, QueryResult queryResult) {
-                System.out.println( queryResult.getResult());
-                System.out.println("hej");
+
             }
 
             @Override
             public void setFeedback(String s) {
-                System.out.println("setFeedback");
 
             }
 
             @Override
             public void appendText(String s) {
-                System.out.println("appendText");
-
             }
 
             @Override
@@ -88,9 +106,7 @@ public class Durum {
         };
 
         Query q = new Query("E<> Spec.weird", "");
-        QueryResult qr = engine.query(system, "order 0", q, qf);
-
-        System.out.println(qr.getResult());
+        QueryResult qr = engine.query(system, "trace 1", q, qf);
     }
 
     public String getTestCode(String locationName) throws Exception {
@@ -105,18 +121,17 @@ public class Durum {
 
             for (SystemEdge edge : transition.getEdges()) {
                 if (edge.getProcess().getName().equals("Spec")) {
-                    stringBuilder.append(edge.getEdge().getPropertyValue("testcode") + "\n");
                     edge.getEdge().accept(dv);
                 }
             }
 
             if (transition.getTarget().getLocations()[0].getLocation().getPropertyValue("testcodeEnter") != null) {
-                stringBuilder.append(transition.getTarget().getLocations()[0].getLocation().getPropertyValue("testcodeEnter") + "\n");
+                transition.getTarget().getLocations()[0].getLocation().accept(dv);
             }
 
             state = transition.getTarget();
         }
-        return stringBuilder.toString();
+        return dv.testCode.toString();
     }
 
 }

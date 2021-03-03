@@ -12,8 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class DurumVisitor implements Visitor {
-
-
+    public StringBuilder testCode = new StringBuilder();
 
     @Override
     public void visitElement(Element element) throws Exception {
@@ -43,6 +42,7 @@ public class DurumVisitor implements Visitor {
     @Override
     public void visitLocation(Location location) throws Exception {
 
+        testCode.append(location.getPropertyValue("testcodeEnter") + "\n");
     }
 
     @Override
@@ -53,6 +53,7 @@ public class DurumVisitor implements Visitor {
     @Override
     public void visitEdge(Edge edge) throws Exception {
 
+        testCode.append(edge.getPropertyValue("testcode") + "\n");
     }
 
     @Override
