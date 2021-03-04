@@ -3,12 +3,17 @@ import java.nio.file.Path;
 
 
 import com.uppaal.engine.*;
+import com.uppaal.model.core2.AbstractTemplate;
+import com.uppaal.model.core2.Template;
 
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        makeUnitTest();
+        Durum durum = new Durum();
+
+        durum.AddTemplateToSystem();
+        //makeUnitTest();
     }
 
     public static void makeUnitTest() throws Exception {

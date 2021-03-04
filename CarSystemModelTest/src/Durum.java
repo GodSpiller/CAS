@@ -1,6 +1,7 @@
 import com.uppaal.engine.*;
 import com.uppaal.model.core2.*;
 import com.uppaal.model.system.*;
+import com.uppaal.model.system.Process;
 import com.uppaal.model.system.concrete.ConcreteTrace;
 import com.uppaal.model.system.symbolic.SymbolicState;
 import com.uppaal.model.system.symbolic.SymbolicTrace;
@@ -14,8 +15,8 @@ import java.util.ArrayList;
 public class Durum {
     URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS_final(hopefully).xml");
     Engine engine = new Engine();
-    Document document;
-    UppaalSystem system;
+    public Document document;
+    public UppaalSystem system;
     SymbolicState state;
     DurumVisitor dv = new DurumVisitor();
 
@@ -84,7 +85,7 @@ public class Durum {
 
     public Durum() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("C:\\Users\\Yann\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
+        engine.setServerPath("C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
         engine.connect();
         ArrayList<Problem> problems = new ArrayList<Problem>();
         system = engine.getSystem(document, problems);
@@ -95,5 +96,38 @@ public class Durum {
         Query q = new Query("E<> Spec.weird", "");
         QueryResult qr = engine.query(system, "trace 1", q, qf);
         return dv.testCode.toString();
+    }
+
+    public void ChangeProperties() {
+        for (Process process : system.getProcesses()) {
+            for (SystemEdge edge : process.getEdges()) {
+                edge.getEdge().setProperty("guard","e==0");
+                System.out.println(edge.getEdge().getPropertyValue("guard"));
+            }
+        }
+    }
+
+    public Template CloneProcess() throws CloneNotSupportedException {
+        return (Template) document.getTemplate("Spec").clone();
+    }
+
+    public void AddTemplateToSystem() throws IOException, CloneNotSupportedException {
+        Template t = CloneProcess();
+        Location killState = t.createLocation();
+        t.insert(killState, null).setProperty("name", "Kill State");
+        killState.setProperty("x", 508);
+        killState.setProperty("y", -276);
+        Edge edge = t.createEdge();
+        t.insert(edge, null);
+        document2 = new PrototypeDocument();
+        edge.setSource(state.getLocations()[1].getLocation());
+
+        document.insert(t,null).setProperty("name", "mutant");
+        document.setProperty("system", "system Spec, User, mutant;");
+        try {
+            document.save("sampledoc.xml");
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+        }
     }
 }
