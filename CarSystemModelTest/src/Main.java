@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import com.uppaal.engine.*;
 import com.uppaal.model.core2.AbstractTemplate;
 import com.uppaal.model.core2.Template;
+import com.uppaal.model.system.symbolic.SymbolicTransition;
 
 
 public class Main {
@@ -12,7 +13,11 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Durum durum = new Durum();
 
-        durum.AddTemplateToSystem();
+        for (SymbolicTransition st : durum.getTransitionInfo()) {
+
+            System.out.println(st.getEdgeDescription());
+
+        }
         //makeUnitTest();
     }
 
