@@ -24,7 +24,7 @@ public class Durum {
 
     public Durum() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("C:\\Users\\Yann\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
+        engine.setServerPath("C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
         engine.connect();
         ArrayList<Problem> problems = new ArrayList<Problem>();
         system = engine.getSystem(document, problems);
@@ -175,5 +175,35 @@ public class Durum {
 
     public Template CloneProcess() throws CloneNotSupportedException {
         return (Template) document.getTemplate("Spec").clone();
+    }
+
+    public void CreateMutant() throws CloneNotSupportedException {
+        Template t = CloneProcess();
+
+        document.insert(t, null).setProperty("name", "mutant");
+        document.setProperty("system", "system Spec, User, mutant;");
+        try {
+            document.save("sampledoc.xml");
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+        }
+    }
+
+    public void ChangeMutant() throws EngineException {
+        ArrayList<Problem> problems = new ArrayList<Problem>();
+        UppaalSystem system2 = engine.getSystem(document, problems);
+
+        for(SystemEdge edge : system2.getProcess(2).getEdges()){
+            if(edge.getEdge().getProperty("guard") != null){
+                if(edge.getEdge().getPropertyValue("guard").toString().equals("e<30")) {
+                    edge.getEdge().setProperty("guard", "e<29");
+                }
+            }
+        }
+        try {
+            document.save("sampledoc.xml");
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+        }
     }
 }

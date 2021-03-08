@@ -18,6 +18,8 @@ public class Main {
             System.out.println(st.getEdgeDescription());
 
         }
+        durum.CreateMutant();
+        durum.ChangeMutant();
         //makeUnitTest();
     }
 
