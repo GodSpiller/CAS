@@ -23,7 +23,7 @@ public class Main {
         //makeUnitTest();
     }
 
-    public static void makeUnitTest(StringBuilder testcode) throws Exception {
+    public static void makeUnitTest() throws Exception {
         Durum durum = new Durum();
         StringBuilder sb = new StringBuilder();
         File file = new File("CarSystemModelTest\\test\\CarSystemTest.java");
@@ -37,7 +37,7 @@ public class Main {
         sb.append("CarSystem cs = new CarSystem();\n");
         sb.append(durum.getTrace());
         sb.append("}\n}");
-        writer.write(testcode.toString());
+        writer.write(sb.toString());
         writer.close();
     }
 
