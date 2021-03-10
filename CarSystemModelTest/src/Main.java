@@ -5,7 +5,6 @@ import lexer.Lexer;
 import modelhandler.ModelHandler;
 import token.Token;
 
-
 public class Main {
 
     public static void main(String[] args) throws Exception {
@@ -16,6 +15,7 @@ public class Main {
         for (Token token : lexer.getFilteredTokens()) {
             System.out.println(token.getType() + " " + token.getValue());
         }
+
 
       /*  for (SymbolicTransition st : modelHandler.getTransitionInfo()) {
 
