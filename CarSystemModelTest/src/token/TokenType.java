@@ -18,6 +18,18 @@ public enum TokenType {
 
     GREATER_THAN("^\\>"),
 
+    LPAR("^\\("),
+
+    RPAR("^\\)"),
+
+    PLUS("^\\+"),
+
+    MINUS("^\\-"),
+
+    TIMES("^\\*"),
+
+    DIVIDED("^\\/"),
+
     AND("^\\&&"),
 
     OR("^\\|\\|"),

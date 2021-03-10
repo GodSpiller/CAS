@@ -2,6 +2,13 @@ grammar g;
 
 prog            : boolExpr (OR boolExpr)*;
 
+boolExpr        : compareExpr (AND compareExpr)*;
+
+compareExpr     : logicOpExpr (BOOLCOMPARE logicOpExpr)*;
+
+logicOpExpr     : operatorExpr (COMPARE operatorExpr)*
+                | BOOL;
+
 operatorExpr    : timesExpr ((PLUS | MINUS) timesExpr)*;
 
 timesExpr       : operatorTail ((TIMES | DIVIDED) operatorTail)*;
@@ -9,12 +16,6 @@ timesExpr       : operatorTail ((TIMES | DIVIDED) operatorTail)*;
 operatorTail    : NUM | ID
                 | LPAR operatorExpr RPAR;
 
-boolExpr        : compareExpr (AND compareExpr)*;
-
-compareExpr     : logicOpExpr (BOOLCOMPARE logicOpExpr)*;
-
-logicOpExpr     : operatorExpr (COMPARE operatorExpr)*
-                | BOOL;
 
 OR              : '||';
 AND             : '&&';
