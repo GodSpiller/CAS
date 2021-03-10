@@ -1,6 +1,7 @@
 package parser;
 
 import ast.ASTNode;
+import ast.PrettyPrintVisitor;
 import ast.nodes.Identifier;
 import ast.nodes.Program;
 import ast.nodes.literals.NumberLit;
@@ -13,6 +14,7 @@ import ast.nodes.operators.logical.Or;
 import lexer.Lexer;
 import token.TokenStream;
 import token.TokenType;
+import ast.PrettyPrintVisitor;
 
 public class Parser {
 
@@ -20,14 +22,16 @@ public class Parser {
 
     private ASTNode program;
 
+
     public Parser(Lexer lexer){
         tokenStream = new TokenStream(lexer.getFilteredTokens());
         program = new Program(null);
         parse(program);
+        program.accept(new PrettyPrintVisitor());
     }
 
-    private ASTNode parse(ASTNode parent){
-        return boolExpr();
+    private void parse(ASTNode parent){
+        parent.addChild(boolExpr());
     }
 
     private ASTNode boolExpr() {

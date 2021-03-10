@@ -3,29 +3,14 @@ import java.io.*;
 import com.uppaal.model.system.symbolic.SymbolicTransition;
 import lexer.Lexer;
 import modelhandler.ModelHandler;
+import parser.Parser;
 import token.Token;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        ModelHandler modelHandler = new ModelHandler();
+        Parser parse = new Parser(new Lexer("e <= 30 && g > f || 3 > 1"));
 
-        Lexer lexer = new Lexer("1000 < e && e == 3");
-
-        for (Token token : lexer.getFilteredTokens()) {
-            System.out.println(token.getType() + " " + token.getValue());
-        }
-
-
-      /*  for (SymbolicTransition st : modelHandler.getTransitionInfo()) {
-
-            System.out.println(st.getEdgeDescription());
-
-        }
-        */
-        //modelHandler.CreateMutant();
-        //modelHandler.ChangeMutant();
-        //makeUnitTest();
     }
 
     public static void makeUnitTest() throws Exception {
