@@ -1,3 +1,5 @@
+package modelhandler;
+
 import com.uppaal.engine.*;
 import com.uppaal.model.core2.*;
 import com.uppaal.model.system.*;
@@ -11,20 +13,19 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-
-public class Durum {
+public class ModelHandler {
     URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS_final(hopefully).xml");
     Engine engine = new Engine();
     public Document document;
     public UppaalSystem system;
     SymbolicState state;
-    DurumVisitor dv = new DurumVisitor();
+    ModelHandlerVisitor dv = new ModelHandlerVisitor();
 
 
 
-    public Durum() throws IOException, EngineException, CannotEvaluateException {
+    public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
+        engine.setServerPath("C:\\Users\\Yann\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
         engine.connect();
         ArrayList<Problem> problems = new ArrayList<Problem>();
         system = engine.getSystem(document, problems);
@@ -205,5 +206,9 @@ public class Durum {
         } catch (IOException e) {
             e.printStackTrace(System.err);
         }
+    }
+
+    public void changeProperty(Edge edge) {
+
     }
 }

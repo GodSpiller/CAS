@@ -1,30 +1,35 @@
 import java.io.*;
-import java.nio.file.Path;
 
-
-import com.uppaal.engine.*;
-import com.uppaal.model.core2.AbstractTemplate;
-import com.uppaal.model.core2.Template;
 import com.uppaal.model.system.symbolic.SymbolicTransition;
+import lexer.Lexer;
+import modelhandler.ModelHandler;
+import token.Token;
 
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Durum durum = new Durum();
+        ModelHandler modelHandler = new ModelHandler();
 
-        for (SymbolicTransition st : durum.getTransitionInfo()) {
+        Lexer lexer = new Lexer("1000 < e && e == 3");
+
+        for (Token token : lexer.getFilteredTokens()) {
+            System.out.println(token.getType() + " " + token.getValue());
+        }
+
+      /*  for (SymbolicTransition st : modelHandler.getTransitionInfo()) {
 
             System.out.println(st.getEdgeDescription());
 
         }
-        durum.CreateMutant();
-        durum.ChangeMutant();
+        */
+        //modelHandler.CreateMutant();
+        //modelHandler.ChangeMutant();
         //makeUnitTest();
     }
 
     public static void makeUnitTest() throws Exception {
-        Durum durum = new Durum();
+        ModelHandler modelHandler = new ModelHandler();
         StringBuilder sb = new StringBuilder();
         File file = new File("CarSystemModelTest\\test\\CarSystemTest.java");
         FileWriter writer = new FileWriter(file);
@@ -32,10 +37,10 @@ public class Main {
         sb.append("import org.junit.jupiter.api.Test;\n");
         sb.append("import static org.junit.jupiter.api.Assertions.*;\n" + "\n");
         sb.append("class CarSystemTests{\n\n");
-        sb.append("@BeforeEach\n void setup(){\n CarSystem cs = new CarSystem();\n}\n");
+        sb.append("@BeforeEach\n void setup(){\n carSystem.CarSystem cs = new carSystem.CarSystem();\n}\n");
         sb.append("\n@Test\nvoid test(){\n");
-        sb.append("CarSystem cs = new CarSystem();\n");
-        sb.append(durum.getTrace());
+        sb.append("carSystem.CarSystem cs = new carSystem.CarSystem();\n");
+        sb.append(modelHandler.getTrace());
         sb.append("}\n}");
         writer.write(sb.toString());
         writer.close();
@@ -53,12 +58,12 @@ public class Main {
         sb.append("import org.junit.jupiter.api.Test;\n");
         sb.append("import static org.junit.jupiter.api.Assertions.*;\n" + "\n");
         sb.append("class CarSystemTests{\n\n");
-        sb.append("@BeforeEach\n void setup(){\n CarSystem cs = new CarSystem();\n}\n");
+        sb.append("@BeforeEach\n void setup(){\n carSystem.CarSystem cs = new carSystem.CarSystem();\n}\n");
         for (int i = 0; i < numberOfTestCases; i++){
             filePath = "D:\\repos\\CAS\\testCases\\test" + new DecimalFormat("000").format(i)+".txt";
             path = Paths.get(filePath);
             sb.append("\n@Test\nvoid testcase" +  new DecimalFormat("000").format(i) + "(){\n");
-            sb.append("CarSystem cs = new CarSystem();\n");
+            sb.append("carSystem.CarSystem cs = new carSystem.CarSystem();\n");
             sb.append(Files.readString(path));
             sb.append("}\n");
         }

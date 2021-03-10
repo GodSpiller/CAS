@@ -1,3 +1,5 @@
+package modelhandler;
+
 import com.uppaal.engine.CannotEvaluateException;
 import com.uppaal.engine.Engine;
 import com.uppaal.engine.EngineException;
@@ -11,7 +13,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class DurumVisitor implements Visitor {
+public class ModelHandlerVisitor implements Visitor {
     public StringBuilder testCode = new StringBuilder();
 
     @Override
