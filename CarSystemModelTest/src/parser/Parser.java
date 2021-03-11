@@ -1,6 +1,7 @@
 package parser;
 
 import ast.ASTNode;
+import ast.BoundaryVisitor;
 import ast.PrettyPrintVisitor;
 import ast.nodes.Identifier;
 import ast.nodes.Program;
@@ -27,7 +28,7 @@ public class Parser {
         tokenStream = new TokenStream(lexer.getFilteredTokens());
         program = new Program(null);
         parse(program);
-        program.accept(new PrettyPrintVisitor());
+        program.accept(new BoundaryVisitor());
     }
 
     private void parse(ASTNode parent){
