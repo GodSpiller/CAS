@@ -9,7 +9,7 @@ import token.Token;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Parser parse = new Parser(new Lexer("e == 30 && e > 10"));
+        Parser parser = new Parser(new Lexer("30 > e"));
     }
 
     public static void makeUnitTest(StringBuilder testCode) throws Exception {
