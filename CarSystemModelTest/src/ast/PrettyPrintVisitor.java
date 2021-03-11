@@ -11,6 +11,8 @@ import ast.nodes.operators.compare.*;
 import ast.nodes.operators.logical.And;
 import ast.nodes.operators.logical.Or;
 
+import static java.lang.Integer.parseInt;
+
 public class PrettyPrintVisitor implements ASTVisitor{
     @Override
     public Object visit(Program program) {
@@ -27,7 +29,7 @@ public class PrettyPrintVisitor implements ASTVisitor{
 
     @Override
     public Object visit(NumberLit integer) {
-        return integer.getValue();
+        return parseInt(integer.getValue());
     }
 
     @Override

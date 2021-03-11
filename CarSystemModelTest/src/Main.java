@@ -9,11 +9,10 @@ import token.Token;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Parser parse = new Parser(new Lexer("e <= 30 && g > f || 3 > 1"));
-
+        Parser parse = new Parser(new Lexer("(10+3*4) > 1"));
     }
 
-    public static void makeUnitTest() throws Exception {
+    public static void makeUnitTest(StringBuilder testCode) throws Exception {
         ModelHandler modelHandler = new ModelHandler();
         StringBuilder sb = new StringBuilder();
         File file = new File("CarSystemModelTest\\test\\CarSystemTest.java");
@@ -25,7 +24,7 @@ public class Main {
         sb.append("@BeforeEach\n void setup(){\n carSystem.CarSystem cs = new carSystem.CarSystem();\n}\n");
         sb.append("\n@Test\nvoid test(){\n");
         sb.append("carSystem.CarSystem cs = new carSystem.CarSystem();\n");
-        sb.append(modelHandler.getTrace());
+        sb.append(testCode);
         sb.append("}\n}");
         writer.write(sb.toString());
         writer.close();

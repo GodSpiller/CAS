@@ -161,6 +161,7 @@ public class Parser {
         else {
             tokenStream.expect(TokenType.LPAR);
             node = boolExpr();
+            tokenStream.expect(TokenType.RPAR);
         }
 
         return node;
