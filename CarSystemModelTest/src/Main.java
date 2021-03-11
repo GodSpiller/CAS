@@ -11,12 +11,9 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         StringBuilder sb = new StringBuilder();
-        sb.append("e < 30");
-
-        Parser parser = new Parser(new Lexer(sb.toString()));
-
-
-        System.out.println(sb.toString());
+        sb.append("e < 30 && zeggy <= 100 || e > 10 && 27 <= g");
+        TestMaker tm = new TestMaker();
+        tm.superraplcer(sb);
     }
 
     public static void makeUnitTest(StringBuilder testCode) throws Exception {

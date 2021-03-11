@@ -35,7 +35,7 @@ public class Parser {
         tokenStream = new TokenStream(lexer.getFilteredTokens());
         program = new Program(null);
         parse(program);
-        program.accept(new BoundaryVisitor());
+        superList = (ArrayList<ArrayList<Integer>>) program.accept(new BoundaryVisitor());
     }
 
     public ASTNode getProgram() {
