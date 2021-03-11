@@ -17,18 +17,29 @@ import token.TokenStream;
 import token.TokenType;
 import ast.PrettyPrintVisitor;
 
+import java.util.ArrayList;
+
 public class Parser {
+
+    private ArrayList<ArrayList<Integer>> superList = new ArrayList<>();
 
     private TokenStream tokenStream;
 
     private ASTNode program;
 
+    public ArrayList<ArrayList<Integer>> getSuperList() {
+        return superList;
+    }
 
     public Parser(Lexer lexer){
         tokenStream = new TokenStream(lexer.getFilteredTokens());
         program = new Program(null);
         parse(program);
         program.accept(new BoundaryVisitor());
+    }
+
+    public ASTNode getProgram() {
+        return program;
     }
 
     private void parse(ASTNode parent){

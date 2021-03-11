@@ -20,7 +20,7 @@ import static java.lang.Integer.parseInt;
 
 public class BoundaryVisitor implements ASTVisitor {
 
-    ArrayList<ArrayList<Integer>> superList = new ArrayList<>();
+    public ArrayList<ArrayList<Integer>> superList = new ArrayList<>();
 
     @Override
     public Object visit(Program program) {
@@ -33,7 +33,7 @@ public class BoundaryVisitor implements ASTVisitor {
                 System.out.println(integer);
             }
         }
-        return null;
+        return superList;
     }
 
     @Override
@@ -135,12 +135,10 @@ public class BoundaryVisitor implements ASTVisitor {
         ArrayList<Integer> boundaries = new ArrayList<>();
 
         if (lss.getLeft().getType().equals(TokenType.NUMBER.toString())){
-            boundaries.add(parseInt(lss.getLeft().getValue())+1);
             boundaries.add(parseInt(lss.getLeft().getValue()));
             boundaries.add(parseInt(lss.getLeft().getValue())-1);
         }
         if (lss.getRight().getType().equals(TokenType.NUMBER.toString())){
-            boundaries.add(parseInt(lss.getRight().getValue())-1);
             boundaries.add(parseInt(lss.getRight().getValue()));
             boundaries.add(parseInt(lss.getRight().getValue())+1);
         }

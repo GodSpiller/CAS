@@ -1,5 +1,6 @@
 import java.io.*;
 
+import ast.BoundaryVisitor;
 import com.uppaal.model.system.symbolic.SymbolicTransition;
 import lexer.Lexer;
 import modelhandler.ModelHandler;
@@ -9,7 +10,13 @@ import token.Token;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Parser parser = new Parser(new Lexer("30 > e"));
+        StringBuilder sb = new StringBuilder();
+        sb.append("e < 30");
+
+        Parser parser = new Parser(new Lexer(sb.toString()));
+
+
+        System.out.println(sb.toString());
     }
 
     public static void makeUnitTest(StringBuilder testCode) throws Exception {
@@ -56,4 +63,5 @@ public class Main {
         writer.close();
     }
          */
+
 }
