@@ -21,8 +21,6 @@ public class ModelHandler {
     SymbolicState state;
     ModelHandlerVisitor dv = new ModelHandlerVisitor();
 
-
-
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
         engine.setServerPath("C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
@@ -100,15 +98,9 @@ public class ModelHandler {
         return dv.testCode.toString();
     }
 
-    public void ChangeProperties() {
-        for (Process process : system.getProcesses()) {
-            for (SystemEdge edge : process.getEdges()) {
-                edge.getEdge().setProperty("guard","e==0");
-                System.out.println(edge.getEdge().getPropertyValue("guard"));
-            }
-        }
+    public void ChangeProperty(SystemEdge edge, String newGuard){
+        edge.getEdge().setProperty("guard", newGuard);
     }
-
 
     public ArrayList<SymbolicTransition> getTransitionInfo() throws EngineException {
 
@@ -178,37 +170,20 @@ public class ModelHandler {
         return (Template) document.getTemplate("Spec").clone();
     }
 
-    public void CreateMutant() throws CloneNotSupportedException {
+    public void SaveMutant(Template t, int i){
+        document.insert(t, null).setProperty("name", "mutant"+i);
+        document.setProperty("system", "system Spec, User, mutant" + i + ";");
+        try {
+            document.save("sampledoc.xml");
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+        }
+    }
+
+    public Template CreateMutant(int i) throws CloneNotSupportedException {
         Template t = CloneProcess();
 
-        document.insert(t, null).setProperty("name", "mutant");
-        document.setProperty("system", "system Spec, User, mutant;");
-        try {
-            document.save("sampledoc.xml");
-        } catch (IOException e) {
-            e.printStackTrace(System.err);
-        }
+        return t;
     }
 
-    public void ChangeMutant() throws EngineException {
-        ArrayList<Problem> problems = new ArrayList<Problem>();
-        UppaalSystem system2 = engine.getSystem(document, problems);
-
-        for(SystemEdge edge : system2.getProcess(2).getEdges()){
-            if(edge.getEdge().getProperty("guard") != null){
-                if(edge.getEdge().getPropertyValue("guard").toString().equals("e<30")) {
-                    edge.getEdge().setProperty("guard", "e<29");
-                }
-            }
-        }
-        try {
-            document.save("sampledoc.xml");
-        } catch (IOException e) {
-            e.printStackTrace(System.err);
-        }
-    }
-
-    public void changeProperty(Edge edge) {
-
-    }
 }

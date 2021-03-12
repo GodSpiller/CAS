@@ -2,23 +2,73 @@ import java.io.*;
 import java.util.ArrayList;
 
 import ast.BoundaryVisitor;
+import com.uppaal.engine.CannotEvaluateException;
+import com.uppaal.engine.EngineException;
+import com.uppaal.model.core2.Document;
+import com.uppaal.model.core2.Template;
+import com.uppaal.model.system.Process;
+import com.uppaal.model.system.SystemEdge;
+import com.uppaal.model.system.UppaalSystem;
 import com.uppaal.model.system.symbolic.SymbolicTransition;
 import lexer.Lexer;
 import modelhandler.ModelHandler;
+import org.junit.jupiter.params.provider.EnumSource;
 import parser.Parser;
 import token.Token;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        StringBuilder sb = new StringBuilder();
-        sb.append("e == 11");
-
+        ModelHandler modelHandler = new ModelHandler();
+        UppaalSystem newSystem = modelHandler.system;
+        Document newDocument = modelHandler.document;
         TestMaker tm = new TestMaker();
-        ArrayList<String> guards = tm.guardMaker(sb);
 
-        for (String s : guards) {
-            System.out.println(s);
+        for (Process process : newSystem.getProcesses()){
+            for (SystemEdge edge : process.getEdges()){
+                int i = 0;
+                StringBuilder sb = new StringBuilder();
+                String s;
+                ArrayList<String> guards = new ArrayList<>();
+                s = edge.getEdge().getPropertyValue("guard").toString();
+                if (!s.equals("")){
+                    sb.append(s);
+                }
+                //guards = tm.guardMaker(sb);
+                for (String str : guards){
+                    modelHandler.ChangeProperty(edge, str);
+
+                    try {
+                        newDocument.save("sampledoc" + i + ".xml");
+                    } catch (IOException e) {
+                        e.printStackTrace(System.err);
+                    }
+                    i++;
+                }
+            }
+        }
+
+
+    }
+
+
+
+    public static void idkman() throws CannotEvaluateException, EngineException, IOException, CloneNotSupportedException {
+        ModelHandler modelHandler = new ModelHandler();
+        TestMaker tm = new TestMaker();
+        for (Process process : modelHandler.system.getProcesses()){
+            for (SystemEdge edge : process.getEdges()){
+                int i = 0;
+                StringBuilder sb = new StringBuilder();
+                sb.append(edge.getEdge().getProperty("guard"));
+                ArrayList<String> guards = tm.guardMaker(sb);
+                for (String s : guards){
+                    modelHandler.ChangeProperty(edge, s);
+                    Template t = modelHandler.CloneProcess();
+                    modelHandler.SaveMutant(t, i);
+                    i++;
+                }
+            }
         }
     }
 
