@@ -8,28 +8,30 @@ import java.util.ArrayList;
 public class TestMaker {
 
 
-    public void superraplcer(StringBuilder sb) {
+    public ArrayList<String> guardMaker(StringBuilder sb) {
         Parser ps = new Parser(new Lexer(sb.toString()));
         ArrayList<String> guardList = new ArrayList<>();
 
         StringBuilder SUPER = sb;
 
-        for (ArrayList<Integer> liste : ps.getSuperList()) {
-            for (int i = 0; i < liste.size(); i++) {
+        for (ArrayList<Integer> list : ps.getSuperList()) {
+            for (int i = 0; i < list.size(); i++) {
                 if(i != 0) {
                     SUPER = new StringBuilder();
                     SUPER.append(sb);
-                    System.out.println(replace2(SUPER, liste.get(0).toString(), liste.get(i).toString()));
+                    guardList.add(replace(SUPER, list.get(0).toString(), list.get(i).toString()));
                 }
             }
         }
+
+        return guardList;
     }
 
-    public static String replace2(StringBuilder builder, String from, String to){
+    public static String replace(StringBuilder builder, String from, String to){
         int index = builder.indexOf(from);
         while (index != -1) {
             builder.replace(index, index + from.length(), to);
-            index += to.length(); // Move to the end of the replacement
+            index += to.length();
             index = builder.indexOf(from, index);
         }
         return builder.toString();

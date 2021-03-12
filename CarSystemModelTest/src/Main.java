@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 import ast.BoundaryVisitor;
 import com.uppaal.model.system.symbolic.SymbolicTransition;
@@ -11,9 +12,14 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         StringBuilder sb = new StringBuilder();
-        sb.append("e < 30 && zeggy <= 100 || e > 10 && 27 <= g");
+        sb.append("e == 11");
+
         TestMaker tm = new TestMaker();
-        tm.superraplcer(sb);
+        ArrayList<String> guards = tm.guardMaker(sb);
+
+        for (String s : guards) {
+            System.out.println(s);
+        }
     }
 
     public static void makeUnitTest(StringBuilder testCode) throws Exception {

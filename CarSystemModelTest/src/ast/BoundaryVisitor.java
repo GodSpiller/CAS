@@ -62,8 +62,15 @@ public class BoundaryVisitor implements ASTVisitor {
 
         if(eql.getRight().getType().equals(TokenType.NUMBER.toString())) {
             boundaries.add(parseInt(eql.getRight().getValue()));
+            boundaries.add(parseInt(eql.getRight().getValue()));
             boundaries.add(parseInt(eql.getRight().getValue()) - 1);
             boundaries.add(parseInt(eql.getRight().getValue()) + 1);
+        }
+        if(eql.getLeft().getType().equals(TokenType.NUMBER.toString())) {
+            boundaries.add(parseInt(eql.getLeft().getValue()));
+            boundaries.add(parseInt(eql.getRight().getValue()));
+            boundaries.add(parseInt(eql.getLeft().getValue()) - 1);
+            boundaries.add(parseInt(eql.getLeft().getValue()) + 1);
         }
 
         if (boundaries != null) {
@@ -75,14 +82,21 @@ public class BoundaryVisitor implements ASTVisitor {
 
     @Override
     public Object visit(NEQ neq) {
-        int[] boundaries = new int[2];
-        for (ASTNode node : neq.getChildren()){
-            if (node.getRight().getType().equals(TokenType.NUMBER.toString())) {
-                boundaries[0] = parseInt(node.getRight().getValue()) - 1;
-                boundaries[1] = parseInt(node.getRight().getValue()) + 1;
-            }
+        ArrayList<Integer> boundaries = new ArrayList<>();
+
+        if (neq.getRight().getType().equals(TokenType.NUMBER.toString())) {
+            boundaries.add(parseInt(neq.getRight().getValue()));
+            boundaries.add(parseInt(neq.getRight().getValue()) + 1);
         }
-        return boundaries;
+        if (neq.getLeft().getType().equals(TokenType.NUMBER.toString())) {
+            boundaries.add(parseInt(neq.getLeft().getValue()));
+            boundaries.add(parseInt(neq.getLeft().getValue()) + 1);
+        }
+
+        if (boundaries != null) {
+            superList.add(boundaries);
+        }
+        return null;
     }
 
     @Override
@@ -92,12 +106,12 @@ public class BoundaryVisitor implements ASTVisitor {
         if (gtr.getRight().getType().equals(TokenType.NUMBER.toString())){
             boundaries.add(parseInt(gtr.getRight().getValue()));
             boundaries.add(parseInt(gtr.getRight().getValue()));
-            boundaries.add(parseInt(gtr.getRight().getValue())+1);
+            boundaries.add(parseInt(gtr.getRight().getValue())-1);
         }
         if (gtr.getLeft().getType().equals(TokenType.NUMBER.toString())){
-            boundaries.add(parseInt(gtr.getRight().getValue()));
             boundaries.add(parseInt(gtr.getLeft().getValue()));
-            boundaries.add(parseInt(gtr.getLeft().getValue())-1);
+            boundaries.add(parseInt(gtr.getLeft().getValue()));
+            boundaries.add(parseInt(gtr.getLeft().getValue())+1);
         }
 
         if (boundaries != null) {
@@ -112,15 +126,13 @@ public class BoundaryVisitor implements ASTVisitor {
 
         if (geq.getRight().getType().equals(TokenType.NUMBER.toString())){
             boundaries.add(parseInt(geq.getRight().getValue()));
-            boundaries.add(parseInt(geq.getRight().getValue())-1);
             boundaries.add(parseInt(geq.getRight().getValue()));
-            boundaries.add(parseInt(geq.getRight().getValue())+1);
+            boundaries.add(parseInt(geq.getRight().getValue())-1);
         }
         if (geq.getLeft().getType().equals(TokenType.NUMBER.toString())){
-            boundaries.add(parseInt(geq.getRight().getValue()));
-            boundaries.add(parseInt(geq.getLeft().getValue())+1);
             boundaries.add(parseInt(geq.getLeft().getValue()));
-            boundaries.add(parseInt(geq.getLeft().getValue())-1);
+            boundaries.add(parseInt(geq.getLeft().getValue()));
+            boundaries.add(parseInt(geq.getLeft().getValue())+1);
         }
 
         if (boundaries != null) {
@@ -134,7 +146,7 @@ public class BoundaryVisitor implements ASTVisitor {
         ArrayList<Integer> boundaries = new ArrayList<>();
 
         if (lss.getLeft().getType().equals(TokenType.NUMBER.toString())){
-            boundaries.add(parseInt(lss.getRight().getValue()));
+            boundaries.add(parseInt(lss.getLeft().getValue()));
             boundaries.add(parseInt(lss.getLeft().getValue()));
             boundaries.add(parseInt(lss.getLeft().getValue())-1);
         }
@@ -156,15 +168,13 @@ public class BoundaryVisitor implements ASTVisitor {
 
         if (leq.getRight().getType().equals(TokenType.NUMBER.toString())){
             boundaries.add(parseInt(leq.getRight().getValue()));
-            boundaries.add(parseInt(leq.getRight().getValue())+1);
             boundaries.add(parseInt(leq.getRight().getValue()));
-            boundaries.add(parseInt(leq.getRight().getValue())-1);
+            boundaries.add(parseInt(leq.getRight().getValue())+1);
         }
         if (leq.getLeft().getType().equals(TokenType.NUMBER.toString())){
             boundaries.add(parseInt(leq.getLeft().getValue()));
-            boundaries.add(parseInt(leq.getLeft().getValue())-1);
             boundaries.add(parseInt(leq.getLeft().getValue()));
-            boundaries.add(parseInt(leq.getLeft().getValue())+1);
+            boundaries.add(parseInt(leq.getLeft().getValue())-1);
         }
 
         if (boundaries != null) {
