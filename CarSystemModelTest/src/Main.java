@@ -1,4 +1,8 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import ast.BoundaryVisitor;
@@ -19,54 +23,33 @@ import token.Token;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        ModelHandler modelHandler = new ModelHandler();
-        UppaalSystem newSystem = modelHandler.system;
-        Document newDocument = modelHandler.document;
-        TestMaker tm = new TestMaker();
 
-        for (Process process : newSystem.getProcesses()){
-            for (SystemEdge edge : process.getEdges()){
-                int i = 0;
-                StringBuilder sb = new StringBuilder();
-                String s;
-                ArrayList<String> guards = new ArrayList<>();
-                s = edge.getEdge().getPropertyValue("guard").toString();
-                if (!s.equals("")){
-                    sb.append(s);
-                }
-                //guards = tm.guardMaker(sb);
-                for (String str : guards){
-                    modelHandler.ChangeProperty(edge, str);
-
-                    try {
-                        newDocument.save("sampledoc" + i + ".xml");
-                    } catch (IOException e) {
-                        e.printStackTrace(System.err);
-                    }
-                    i++;
-                }
-            }
-        }
-
-
-    }
-
-
-
-    public static void idkman() throws CannotEvaluateException, EngineException, IOException, CloneNotSupportedException {
         ModelHandler modelHandler = new ModelHandler();
         TestMaker tm = new TestMaker();
+
+
         for (Process process : modelHandler.system.getProcesses()){
-            for (SystemEdge edge : process.getEdges()){
-                int i = 0;
+            int i = 0;
+            for (SystemEdge edge : process.getEdges()) {
                 StringBuilder sb = new StringBuilder();
-                sb.append(edge.getEdge().getProperty("guard"));
-                ArrayList<String> guards = tm.guardMaker(sb);
-                for (String s : guards){
-                    modelHandler.ChangeProperty(edge, s);
-                    Template t = modelHandler.CloneProcess();
-                    modelHandler.SaveMutant(t, i);
-                    i++;
+                ArrayList<String> guards;
+                if (!edge.getEdge().getPropertyValue("guard").equals("")) {
+                    sb.append(edge.getEdge().getPropertyValue("guard"));
+                }
+                if (!sb.isEmpty()) {
+                    guards = tm.guardMaker(sb);
+                    Document newDocument = modelHandler.document;
+                    for (String str : guards) {
+                        modelHandler.ChangeGuard(edge, str);
+                        System.out.println(edge.getEdge().getName() + " - " + str);
+                        try {
+                            newDocument.save("sampledoc" + i + ".xml");
+                            i++;
+                        } catch (IOException e) {
+                            e.printStackTrace(System.err);
+                        }
+                    }
+                    modelHandler.ChangeGuard(edge, guards.get(0));
                 }
             }
         }
@@ -91,7 +74,7 @@ public class Main {
     }
 
 
-    /*public static void LoadTestCases() throws IOException {
+    public static void LoadTestCases() throws IOException {
         File file = new File("CarSystemModelTest\\test\\CarSystemTests.java");
         int numberOfTestCases = new File("testCases").listFiles().length;
         StringBuilder sb = new StringBuilder();
@@ -115,6 +98,4 @@ public class Main {
         writer.write(sb.toString());
         writer.close();
     }
-         */
-
 }

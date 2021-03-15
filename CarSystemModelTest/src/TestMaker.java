@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class TestMaker {
 
-
     public ArrayList<String> guardMaker(StringBuilder sb) {
         Parser ps = new Parser(new Lexer(sb.toString()));
         ArrayList<String> guardList = new ArrayList<>();

@@ -98,7 +98,7 @@ public class ModelHandler {
         return dv.testCode.toString();
     }
 
-    public void ChangeProperty(SystemEdge edge, String newGuard){
+    public void ChangeGuard(SystemEdge edge, String newGuard){
         edge.getEdge().setProperty("guard", newGuard);
     }
 
