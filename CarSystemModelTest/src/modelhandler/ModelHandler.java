@@ -1,17 +1,24 @@
 package modelhandler;
 
 import com.uppaal.engine.*;
-import com.uppaal.model.core2.*;
-import com.uppaal.model.system.*;
-import com.uppaal.model.system.Process;
+import com.uppaal.model.core2.Document;
+import com.uppaal.model.core2.PrototypeDocument;
+import com.uppaal.model.core2.Query;
+import com.uppaal.model.core2.Template;
+import com.uppaal.model.system.SystemEdge;
+import com.uppaal.model.system.SystemEdgeSelect;
+import com.uppaal.model.system.UppaalSystem;
 import com.uppaal.model.system.concrete.ConcreteTrace;
 import com.uppaal.model.system.symbolic.SymbolicState;
 import com.uppaal.model.system.symbolic.SymbolicTrace;
 import com.uppaal.model.system.symbolic.SymbolicTransition;
-import com.uppaal.engine.QueryFeedback;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+
+// "C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe"
+// "D:\\AAU\\Programmer\\Uppaal\\uppaal-4.1.24\\bin-Windows\\server.exe"
 
 public class ModelHandler {
     URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS_final(hopefully).xml");
@@ -23,11 +30,11 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
+        engine.setServerPath("D:\\AAU\\Programmer\\Uppaal\\uppaal-4.1.24\\bin-Windows\\server.exe");
         engine.connect();
         ArrayList<Problem> problems = new ArrayList<Problem>();
         system = engine.getSystem(document, problems);
-        state = engine.getInitialState(system);
+       //state = engine.getInitialState(system);
     }
 
     public String getTrace() throws EngineException, IOException {

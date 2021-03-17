@@ -1,29 +1,26 @@
-import java.io.*;
+import com.uppaal.engine.CannotEvaluateException;
+import com.uppaal.engine.EngineException;
+import com.uppaal.model.core2.Document;
+import com.uppaal.model.system.Process;
+import com.uppaal.model.system.SystemEdge;
+import modelhandler.ModelHandler;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import ast.BoundaryVisitor;
-import com.uppaal.engine.CannotEvaluateException;
-import com.uppaal.engine.EngineException;
-import com.uppaal.model.core2.Document;
-import com.uppaal.model.core2.Template;
-import com.uppaal.model.system.Process;
-import com.uppaal.model.system.SystemEdge;
-import com.uppaal.model.system.UppaalSystem;
-import com.uppaal.model.system.symbolic.SymbolicTransition;
-import lexer.Lexer;
-import modelhandler.ModelHandler;
-import org.junit.jupiter.params.provider.EnumSource;
-import parser.Parser;
-import token.Token;
-
 public class Main {
 
     public static void main(String[] args) throws Exception {
+        insertBoundaries();
+    }
 
+    public static void insertBoundaries() throws CannotEvaluateException, EngineException, IOException {
         ModelHandler modelHandler = new ModelHandler();
         TestMaker tm = new TestMaker();
 
@@ -36,12 +33,13 @@ public class Main {
                 if (!edge.getEdge().getPropertyValue("guard").equals("")) {
                     sb.append(edge.getEdge().getPropertyValue("guard"));
                 }
-                if (!sb.isEmpty()) {
+                if (!(sb.length() == 0)) {
                     guards = tm.guardMaker(sb);
                     Document newDocument = modelHandler.document;
                     for (String str : guards) {
                         modelHandler.ChangeGuard(edge, str);
                         System.out.println(edge.getEdge().getName() + " - " + str);
+                        //System.out.println(edge.getEdge().getTarget().getPropertyValue("testcodeEnter") + "\n");
                         try {
                             newDocument.save("sampledoc" + i + ".xml");
                             i++;
