@@ -108,13 +108,13 @@ public class BoundaryVisitor implements ASTVisitor {
             boundaries.add(parseInt(gtr.getRight().getValue()));
             boundaries.add(parseInt(gtr.getRight().getValue()));
             boundaries.add(parseInt(gtr.getRight().getValue())+1);
-            boundaries.add(parseInt(gtr.getRight().getValue())+2);
+            boundaries.add(parseInt(gtr.getRight().getValue())-1);
         }
         if (gtr.getLeft().getType().equals(TokenType.NUMBER.toString())){  //Boundary > Clock
             boundaries.add(parseInt(gtr.getLeft().getValue()));
             boundaries.add(parseInt(gtr.getLeft().getValue()));
             boundaries.add(parseInt(gtr.getLeft().getValue())-1);
-            boundaries.add(parseInt(gtr.getLeft().getValue())-2);
+            boundaries.add(parseInt(gtr.getLeft().getValue())+1);
         }
 
         if (boundaries != null) {
@@ -154,14 +154,14 @@ public class BoundaryVisitor implements ASTVisitor {
         if (lss.getLeft().getType().equals(TokenType.NUMBER.toString())){  //Clock < Boundary
             boundaries.add(parseInt(lss.getLeft().getValue()));
             boundaries.add(parseInt(lss.getLeft().getValue()));
+            boundaries.add(parseInt(lss.getLeft().getValue())+1);
             boundaries.add(parseInt(lss.getLeft().getValue())-1);
-            boundaries.add(parseInt(lss.getLeft().getValue())-2);
         }
         if (lss.getRight().getType().equals(TokenType.NUMBER.toString())){  //Boundary < Clock
             boundaries.add(parseInt(lss.getRight().getValue()));
             boundaries.add(parseInt(lss.getRight().getValue()));
             boundaries.add(parseInt(lss.getRight().getValue())+1);
-            boundaries.add(parseInt(lss.getRight().getValue())+2);
+            boundaries.add(parseInt(lss.getRight().getValue())-1);
         }
 
         if (boundaries != null) {
