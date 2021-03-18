@@ -30,15 +30,15 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("D:\\AAU\\Programmer\\Uppaal\\uppaal-4.1.24\\bin-Windows\\server.exe");
+        engine.setServerPath("C:\\\\Users\\\\Esben\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe");
         engine.connect();
         ArrayList<Problem> problems = new ArrayList<Problem>();
         system = engine.getSystem(document, problems);
-       //state = engine.getInitialState(system);
+        state = engine.getInitialState(system);
     }
 
     public String getTrace() throws EngineException, IOException {
-        Query q = new Query("A[] Spec.weird", "");
+        Query q = new Query("E<> Spec.weird", "");
         QueryFeedback qf = new QueryFeedback() {
             @Override
             public void setProgressAvail(boolean b) {
@@ -103,6 +103,21 @@ public class ModelHandler {
         };
         QueryResult qr = engine.query(system, "trace 1", q, qf);
         return dv.testCode.toString();
+    }
+
+    public void ChangeTestCode(SystemEdge edge){
+        String testcode = edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString();
+        int iend = testcode.indexOf("(");
+        String[] testcodes = testcode.split("[(]");
+        for (String s : testcodes){
+            System.out.println(s);
+        }
+
+        String subString;
+        if (iend != -1){
+            subString = testcode.substring(0, iend);
+            //System.out.println(subString);
+        }
     }
 
     public void ChangeGuard(SystemEdge edge, String newGuard){

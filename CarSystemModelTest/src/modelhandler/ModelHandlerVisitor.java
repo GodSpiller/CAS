@@ -43,7 +43,6 @@ public class ModelHandlerVisitor implements Visitor {
 
     @Override
     public void visitLocation(Location location) throws Exception {
-
         testCode.append(location.getPropertyValue("testcodeEnter") + "\n");
     }
 

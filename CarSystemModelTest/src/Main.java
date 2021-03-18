@@ -17,11 +17,10 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        LoadTestCases();
-        insertBoundaries();
 
         ModelHandler mh = new ModelHandler();
-        mh.getTrace();
+
+        insertBoundaries();
     }
 
     public static void insertBoundaries() throws CannotEvaluateException, EngineException, IOException {
@@ -52,6 +51,8 @@ public class Main {
                         }
                     }
                     modelHandler.ChangeGuard(edge, guards.get(0));
+                    System.out.println(edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString());
+                    modelHandler.ChangeTestCode(edge);
                 }
             }
         }
@@ -77,9 +78,6 @@ public class Main {
 
         }
     }
-
-
-
 
     public static void makeUnitTest(StringBuilder testCode) throws Exception {
         ModelHandler modelHandler = new ModelHandler();
