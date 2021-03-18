@@ -30,7 +30,7 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("C:\\\\Users\\\\Esben\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe");
+        engine.setServerPath("E:\\Uni\\6. semester\\MTCPS\\uppaal-4.1.24\\bin-Windows\\server.exe");
         engine.connect();
         ArrayList<Problem> problems = new ArrayList<Problem>();
         system = engine.getSystem(document, problems);
@@ -107,25 +107,25 @@ public class ModelHandler {
 
     public void ChangeTestCode(SystemEdge edge){
         String testcode = edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString();
-        String[] testcodes = testcode.split("(?=[(])");
+        String[] testcodes = testcode.split("(?<=[(;])", -1);
+        int j = 0;
         for (String s : testcodes){
-            if (s.equals("assertTrue")){
-                s = "assertFalse";
+            if (s.equals("assertTrue(")){
+                testcodes[j] = "assertFalse(";
             }
-            else if (s.equals("assertFalse")){
-                s ="assertTrue";
+            else if (s.equals("assertFalse(")){
+                testcodes[j] ="assertTrue(";
             }
-            //System.out.print("testcode: "+testcode);
-            //System.out.print("\n");
-            for (int i = 0; i < testcodes.length; i++){
-                if (i%2 == 0){
-                    System.out.println(i);
-                    s = testcodes[i] + testcodes[i+1];
-                    System.out.print("new testcode: "+s);
-                }
-            }
+            j++;
         }
 
+        for (int i = 0; i < testcodes.length-1; i++){
+            if (i%2 == 0){
+                testcodes[i] = testcodes[i]+testcodes[i+1];
+                System.out.println(testcodes[i]);
+            }
+
+        }
 
     }
 
