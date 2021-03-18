@@ -2,17 +2,17 @@ package carsystem;
 
 public class CarSystem implements ICarAlarmSystem {
 
-    boolean closed = false;
-    boolean locked = false;
-    boolean flash = false;
-    boolean sound = false;
-    boolean armed = false;
+    public boolean closed = false;
+    public boolean locked = false;
+    public boolean flash = false;
+    public boolean sound = false;
+    public boolean armed = false;
 
-    int c = 0;
-    int g = 0;
-    int e = 0;
-    int d = 0;
-    int f = 0;
+    public int c = 0;
+    public int g = 0;
+    public int e = 0;
+    public int d = 0;
+    public int f = 0;
 
 
     @Override

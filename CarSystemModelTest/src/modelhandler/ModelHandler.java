@@ -38,7 +38,7 @@ public class ModelHandler {
     }
 
     public String getTrace() throws EngineException, IOException {
-        Query q = new Query("E<> Spec.weird", "");
+        Query q = new Query("A[] Spec.weird", "");
         QueryFeedback qf = new QueryFeedback() {
             @Override
             public void setProgressAvail(boolean b) {
