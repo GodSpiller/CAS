@@ -109,12 +109,13 @@ public class ModelHandler {
         String testcode = edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString();
         String[] testcodes = testcode.split("(?<=[(;])", -1);
         int j = 0;
+
         for (String s : testcodes){
-            if (s.equals("assertTrue(")){
+            if (s.equals("assertTrue(") || s.equals("\nassertTrue(")){
                 testcodes[j] = "assertFalse(";
             }
-            else if (s.equals("assertFalse(")){
-                testcodes[j] ="assertTrue(";
+            else if (s.equals("assertFalse(") || s.equals("\nassertFalse(")){
+                testcodes[j] = "assertTrue(";
             }
             j++;
         }
