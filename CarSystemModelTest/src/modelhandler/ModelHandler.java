@@ -107,17 +107,26 @@ public class ModelHandler {
 
     public void ChangeTestCode(SystemEdge edge){
         String testcode = edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString();
-        int iend = testcode.indexOf("(");
-        String[] testcodes = testcode.split("[(]");
+        String[] testcodes = testcode.split("(?=[(])");
         for (String s : testcodes){
-            System.out.println(s);
+            if (s.equals("assertTrue")){
+                s = "assertFalse";
+            }
+            else if (s.equals("assertFalse")){
+                s ="assertTrue";
+            }
+            //System.out.print("testcode: "+testcode);
+            //System.out.print("\n");
+            for (int i = 0; i < testcodes.length; i++){
+                if (i%2 == 0){
+                    System.out.println(i);
+                    s = testcodes[i] + testcodes[i+1];
+                    System.out.print("new testcode: "+s);
+                }
+            }
         }
 
-        String subString;
-        if (iend != -1){
-            subString = testcode.substring(0, iend);
-            //System.out.println(subString);
-        }
+
     }
 
     public void ChangeGuard(SystemEdge edge, String newGuard){

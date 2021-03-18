@@ -51,8 +51,9 @@ public class Main {
                         }
                     }
                     modelHandler.ChangeGuard(edge, guards.get(0));
-                    System.out.println(edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString());
+                    //System.out.println(edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString());
                     modelHandler.ChangeTestCode(edge);
+                    System.out.println("\n");
                 }
             }
         }
