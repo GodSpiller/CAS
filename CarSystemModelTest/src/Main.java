@@ -20,7 +20,7 @@ public class Main {
 
         ModelHandler mh = new ModelHandler();
 
-        insertBoundaries();
+        LoadTestCases();
     }
 
     public static void insertBoundaries() throws CannotEvaluateException, EngineException, IOException {
@@ -41,8 +41,7 @@ public class Main {
                     Document newDocument = modelHandler.document;
                     for (String str : guards) {
                         modelHandler.ChangeGuard(edge, str);
-                        //System.out.println(edge.getEdge().getName() + " - " + str);
-                        //System.out.println(edge.getEdge().getTarget().getPropertyValue("testcodeEnter") + "\n");
+                        modelHandler.ChangeTestCode(edge);
                         try {
                             newDocument.save("sampledoc" + i + ".xml");
                             i++;
@@ -51,9 +50,8 @@ public class Main {
                         }
                     }
                     modelHandler.ChangeGuard(edge, guards.get(0));
-                    //System.out.println(edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString());
                     modelHandler.ChangeTestCode(edge);
-                    System.out.println("\n");
+
                 }
             }
         }

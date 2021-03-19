@@ -30,7 +30,7 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("E:\\Uni\\6. semester\\MTCPS\\uppaal-4.1.24\\bin-Windows\\server.exe");
+        engine.setServerPath("D:\\AAU\\Programmer\\Uppaal\\uppaal-4.1.24\\bin-Windows\\server.exe");
         engine.connect();
         ArrayList<Problem> problems = new ArrayList<Problem>();
         system = engine.getSystem(document, problems);
@@ -123,11 +123,18 @@ public class ModelHandler {
         for (int i = 0; i < testcodes.length-1; i++){
             if (i%2 == 0){
                 testcodes[i] = testcodes[i]+testcodes[i+1];
-                System.out.println(testcodes[i]);
             }
 
         }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < testcodes.length-1; i++){
+            if (i%2 == 0){
+                sb.append(testcodes[i] + "\n");
+            }
 
+        }
+        //System.out.println(sb.toString());
+        edge.getEdge().getTarget().setProperty("testcodeEnter", sb.toString());
     }
 
     public void ChangeGuard(SystemEdge edge, String newGuard){
