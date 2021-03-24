@@ -43,7 +43,7 @@ public class ModelHandlerVisitor implements Visitor {
 
     @Override
     public void visitLocation(Location location) throws Exception {
-        testCode.append(location.getPropertyValue("testcodeEnter") + "\n");
+        //testCode.append(location.getPropertyValue("testcodeEnter") + "\n");
     }
 
     @Override
@@ -53,7 +53,13 @@ public class ModelHandlerVisitor implements Visitor {
 
     @Override
     public void visitEdge(Edge edge) throws Exception {
-        testCode.append(edge.getPropertyValue("testcode") + "\n");
+        System.out.println(edge.getName().toString());
+        if (!edge.getPropertyValue("guard").equals("")) {
+            //kald boundary analyse
+            //LAV EN HELT NY MODEL/TEMPLATE
+            //ÆNDRE TEST KODE I LOKATION DER KOMMER EFTER DENNE EDGE
+        }
+        //testCode.append(edge.getPropertyValue("testcode") + "\n");
     }
 
     @Override

@@ -17,11 +17,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-// "C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe"
-// "D:\\AAU\\Programmer\\Uppaal\\uppaal-4.1.24\\bin-Windows\\server.exe"
+// Normale mennesker
+//  "C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe"
+// Kasper
+//  "D:\\AAU\\Programmer\\Uppaal\\uppaal-4.1.24\\bin-Windows\\server.exe"
 
 public class ModelHandler {
-    URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS_final(hopefully).xml");
+    URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS_FINAL_DESTINATION.xml");
     Engine engine = new Engine();
     public Document document;
     public UppaalSystem system;
@@ -30,7 +32,7 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("D:\\AAU\\Programmer\\Uppaal\\uppaal-4.1.24\\bin-Windows\\server.exe");
+        engine.setServerPath("C:\\Users\\Yann\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
         engine.connect();
         ArrayList<Problem> problems = new ArrayList<Problem>();
         system = engine.getSystem(document, problems);
@@ -38,7 +40,7 @@ public class ModelHandler {
     }
 
     public String getTrace() throws EngineException, IOException {
-        Query q = new Query("E<> Spec.weird", "");
+        Query q = new Query("E<> Spec.ArmedAndClosedAndLocked", "");
         QueryFeedback qf = new QueryFeedback() {
             @Override
             public void setProgressAvail(boolean b) {

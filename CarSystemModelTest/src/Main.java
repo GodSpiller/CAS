@@ -3,7 +3,9 @@ import com.uppaal.engine.EngineException;
 import com.uppaal.model.core2.Document;
 import com.uppaal.model.system.Process;
 import com.uppaal.model.system.SystemEdge;
+import lexer.Lexer;
 import modelhandler.ModelHandler;
+import parser.Parser;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -18,9 +20,19 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        ModelHandler mh = new ModelHandler();
+        // mh = new ModelHandler();
 
-        LoadTestCases();
+        Parser parser = new Parser(new Lexer("15<c && c<20"));
+
+        for (ArrayList<Integer> s : parser.getSuperList()){
+            for (Integer c : s) {
+                System.out.println(c);
+            }
+        }
+
+        //System.out.println(mh.getTrace());
+
+        //LoadTestCases();
     }
 
     public static void insertBoundaries() throws CannotEvaluateException, EngineException, IOException {
@@ -111,7 +123,7 @@ public class Main {
         sb.append("import static org.junit.jupiter.api.Assertions.*;\n" + "\n");
         sb.append("class CarSystemTests{\n\n");
         for (int i = 0; i < numberOfTestCases; i++){
-            filePath = "D:\\git\\Projekter\\CAS\\testCases\\test" + new DecimalFormat("000").format(i)+".txt";
+            filePath = "C:\\Users\\Yann\\Desktop\\Projekter\\CAS\\testCases\\test" + new DecimalFormat("000").format(i)+".txt";
             path = Paths.get(filePath);
             sb.append("\n@Test\nvoid testcase" +  new DecimalFormat("000").format(i) + "(){\n");
             sb.append("CarSystem cs = new CarSystem();\n");
