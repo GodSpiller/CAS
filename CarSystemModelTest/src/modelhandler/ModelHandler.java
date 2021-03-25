@@ -13,6 +13,7 @@ import com.uppaal.model.system.symbolic.SymbolicState;
 import com.uppaal.model.system.symbolic.SymbolicTrace;
 import com.uppaal.model.system.symbolic.SymbolicTransition;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -23,7 +24,8 @@ import java.util.ArrayList;
 //  "D:\\AAU\\Programmer\\Uppaal\\uppaal-4.1.24\\bin-Windows\\server.exe"
 
 public class ModelHandler {
-    URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS_FINAL_DESTINATION.xml");
+
+    URL url = new File("C:\\Users\\Yann\\Desktop\\Projekter\\CAS\\CAS_FINAL_DESTINATION.xml").toURI().toURL();
     Engine engine = new Engine();
     public Document document;
     public UppaalSystem system;
@@ -107,7 +109,7 @@ public class ModelHandler {
         return dv.testCode.toString();
     }
 
-    public void ChangeTestCode(SystemEdge edge){
+    public void changeTestCode(SystemEdge edge){
         String testcode = edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString();
         String[] testcodes = testcode.split("(?<=[(;])", -1);
         int j = 0;
@@ -139,7 +141,7 @@ public class ModelHandler {
         edge.getEdge().getTarget().setProperty("testcodeEnter", sb.toString());
     }
 
-    public void ChangeGuard(SystemEdge edge, String newGuard){
+    public void changeGuard(SystemEdge edge, String newGuard){
         edge.getEdge().setProperty("guard", newGuard);
     }
 
@@ -205,26 +207,6 @@ public class ModelHandler {
         QueryResult qr = engine.query(system,"trace 1",q, qf);
 
         return symbolicTransitions;
-    }
-
-    public Template CloneProcess() throws CloneNotSupportedException {
-        return (Template) document.getTemplate("Spec").clone();
-    }
-
-    public void SaveMutant(Template t, int i){
-        document.insert(t, null).setProperty("name", "mutant"+i);
-        document.setProperty("system", "system Spec, User, mutant" + i + ";");
-        try {
-            document.save("sampledoc.xml");
-        } catch (IOException e) {
-            e.printStackTrace(System.err);
-        }
-    }
-
-    public Template CreateMutant(int i) throws CloneNotSupportedException {
-        Template t = CloneProcess();
-
-        return t;
     }
 
 }

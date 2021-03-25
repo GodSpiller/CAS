@@ -3,9 +3,7 @@ import com.uppaal.engine.EngineException;
 import com.uppaal.model.core2.Document;
 import com.uppaal.model.system.Process;
 import com.uppaal.model.system.SystemEdge;
-import lexer.Lexer;
 import modelhandler.ModelHandler;
-import parser.Parser;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -20,24 +18,18 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        // mh = new ModelHandler();
+        ModelHandler modelHandler = new ModelHandler();
 
-        Parser parser = new Parser(new Lexer("15<c && c<20"));
-
-        for (ArrayList<Integer> s : parser.getSuperList()){
-            for (Integer c : s) {
-                System.out.println(c);
-            }
+        GuardMaker tm = new GuardMaker();
+        for (String s : tm.makeGuards(new StringBuilder("15<c && c<40"))){
+            System.out.println(s);
         }
 
-        //System.out.println(mh.getTrace());
-
-        //LoadTestCases();
     }
 
     public static void insertBoundaries() throws CannotEvaluateException, EngineException, IOException {
         ModelHandler modelHandler = new ModelHandler();
-        TestMaker tm = new TestMaker();
+        GuardMaker tm = new GuardMaker();
 
         for (Process process : modelHandler.system.getProcesses()){
             int i = 0;
@@ -49,11 +41,11 @@ public class Main {
                     sb.append(edge.getEdge().getPropertyValue("guard"));
                 }
                 if (!(sb.length() == 0)) {
-                    guards = tm.guardMaker(sb);
+                    guards = tm.makeGuards(sb);
                     Document newDocument = modelHandler.document;
                     for (String str : guards) {
-                        modelHandler.ChangeGuard(edge, str);
-                        modelHandler.ChangeTestCode(edge);
+                        modelHandler.changeGuard(edge, str);
+                        modelHandler.changeTestCode(edge);
                         try {
                             newDocument.save("sampledoc" + i + ".xml");
                             i++;
@@ -61,8 +53,8 @@ public class Main {
                             e.printStackTrace(System.err);
                         }
                     }
-                    modelHandler.ChangeGuard(edge, guards.get(0));
-                    modelHandler.ChangeTestCode(edge);
+                    modelHandler.changeGuard(edge, guards.get(0));
+                    modelHandler.changeTestCode(edge);
 
                 }
             }
@@ -110,7 +102,7 @@ public class Main {
 
         //"D:\\git\\Projekter\\CAS\\testCases\\test" - Kap
         //"D:\\repos\\CAS\\testCases\\test" - Esben
-    public static void LoadTestCases() throws IOException {
+    public static void loadTestCases() throws IOException {
         File file = new File("CarSystemModelTest\\test\\CarSystemTests.java");
         int numberOfTestCases = new File("testCases").listFiles().length;
         StringBuilder sb = new StringBuilder();

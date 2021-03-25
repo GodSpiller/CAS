@@ -13,19 +13,20 @@ import ast.nodes.operators.logical.Or;
 import token.TokenType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static java.lang.Integer.parseInt;
 
 public class BoundaryVisitor implements ASTVisitor {
 
-    public ArrayList<ArrayList<Integer>> superList = new ArrayList<>();
+    public HashMap<Integer, ArrayList<Integer>> boundaryValues = new HashMap<>();
 
     @Override
     public Object visit(Program program) {
         for (ASTNode node : program.getChildren()) {
             node.accept(this);
         }
-        return superList;
+        return boundaryValues;
     }
 
     @Override
@@ -56,23 +57,12 @@ public class BoundaryVisitor implements ASTVisitor {
 
     @Override
     public Object visit(EQL eql) {
-        ArrayList<Integer> boundaries = new ArrayList<>();
 
         if(eql.getRight().getType().equals(TokenType.NUMBER.toString())) {
-            boundaries.add(parseInt(eql.getRight().getValue()));
-            boundaries.add(parseInt(eql.getRight().getValue()));
-            boundaries.add(parseInt(eql.getRight().getValue()) - 1);
-            boundaries.add(parseInt(eql.getRight().getValue()) + 1);
+            boundaryValues.put(parseInt(eql.getRight().getValue()), makeValues(parseInt(eql.getRight().getValue())));
         }
         if(eql.getLeft().getType().equals(TokenType.NUMBER.toString())) {
-            boundaries.add(parseInt(eql.getLeft().getValue()));
-            boundaries.add(parseInt(eql.getLeft().getValue()));
-            boundaries.add(parseInt(eql.getLeft().getValue()) - 1);
-            boundaries.add(parseInt(eql.getLeft().getValue()) + 1);
-        }
-
-        if (boundaries != null) {
-            superList.add(boundaries);
+            boundaryValues.put(parseInt(eql.getLeft().getValue()), makeValues(parseInt(eql.getLeft().getValue())));
         }
 
         return null;
@@ -80,116 +70,66 @@ public class BoundaryVisitor implements ASTVisitor {
 
     @Override
     public Object visit(NEQ neq) {
-        ArrayList<Integer> boundaries = new ArrayList<>();
 
         if (neq.getRight().getType().equals(TokenType.NUMBER.toString())) {
-            boundaries.add(parseInt(neq.getRight().getValue()));
-            boundaries.add(parseInt(neq.getRight().getValue()) + 1);
-            boundaries.add(parseInt(neq.getRight().getValue()) - 1);
+            boundaryValues.put(parseInt(neq.getRight().getValue()), makeValues(parseInt(neq.getRight().getValue())));
         }
         if (neq.getLeft().getType().equals(TokenType.NUMBER.toString())) {
-            boundaries.add(parseInt(neq.getLeft().getValue()));
-            boundaries.add(parseInt(neq.getLeft().getValue()) + 1);
-            boundaries.add(parseInt(neq.getLeft().getValue()) - 1);
-
+            boundaryValues.put(parseInt(neq.getLeft().getValue()), makeValues(parseInt(neq.getLeft().getValue())));
         }
 
-        if (boundaries != null) {
-            superList.add(boundaries);
-        }
         return null;
     }
 
     @Override
     public Object visit(GTR gtr) {
-        ArrayList<Integer> boundaries = new ArrayList<>();
 
         if (gtr.getRight().getType().equals(TokenType.NUMBER.toString())){ //Clock > Boundary
-            boundaries.add(parseInt(gtr.getRight().getValue()));
-            boundaries.add(parseInt(gtr.getRight().getValue()));
-            boundaries.add(parseInt(gtr.getRight().getValue())+1);
-            boundaries.add(parseInt(gtr.getRight().getValue())-1);
+            boundaryValues.put(parseInt(gtr.getRight().getValue()), makeValues(parseInt(gtr.getRight().getValue())));
         }
         if (gtr.getLeft().getType().equals(TokenType.NUMBER.toString())){  //Boundary > Clock
-            boundaries.add(parseInt(gtr.getLeft().getValue()));
-            boundaries.add(parseInt(gtr.getLeft().getValue()));
-            boundaries.add(parseInt(gtr.getLeft().getValue())-1);
-            boundaries.add(parseInt(gtr.getLeft().getValue())+1);
+            boundaryValues.put(parseInt(gtr.getLeft().getValue()), makeValues(parseInt(gtr.getLeft().getValue())));
         }
 
-        if (boundaries != null) {
-            superList.add(boundaries);
-        }
         return null;
     }
 
     @Override
     public Object visit(GEQ geq) {
-        ArrayList<Integer> boundaries = new ArrayList<>();
 
         if (geq.getRight().getType().equals(TokenType.NUMBER.toString())){  //Clock >= Boundary
-            boundaries.add(parseInt(geq.getRight().getValue()));
-            boundaries.add(parseInt(geq.getRight().getValue()));
-            boundaries.add(parseInt(geq.getRight().getValue())-1);
-            boundaries.add(parseInt(geq.getRight().getValue())+1);
+            boundaryValues.put(parseInt(geq.getRight().getValue()), makeValues(parseInt(geq.getRight().getValue())));
         }
         if (geq.getLeft().getType().equals(TokenType.NUMBER.toString())){  //Boundary >= Clock
-            boundaries.add(parseInt(geq.getLeft().getValue()));
-            boundaries.add(parseInt(geq.getLeft().getValue()));
-            boundaries.add(parseInt(geq.getLeft().getValue())-1);
-            boundaries.add(parseInt(geq.getLeft().getValue())+1);
-
+            boundaryValues.put(parseInt(geq.getLeft().getValue()), makeValues(parseInt(geq.getLeft().getValue())));
         }
 
-        if (boundaries != null) {
-            superList.add(boundaries);
-        }
         return null;
     }
 
     @Override
     public Object visit(LSS lss) {
-        ArrayList<Integer> boundaries = new ArrayList<>();
 
         if (lss.getLeft().getType().equals(TokenType.NUMBER.toString())){  //Clock < Boundary
-            boundaries.add(parseInt(lss.getLeft().getValue()));
-            boundaries.add(parseInt(lss.getLeft().getValue()));
-            boundaries.add(parseInt(lss.getLeft().getValue())+1);
-            boundaries.add(parseInt(lss.getLeft().getValue())-1);
+            boundaryValues.put(parseInt(lss.getLeft().getValue()), makeValues(parseInt(lss.getLeft().getValue())));
         }
         if (lss.getRight().getType().equals(TokenType.NUMBER.toString())){  //Boundary < Clock
-            boundaries.add(parseInt(lss.getRight().getValue()));
-            boundaries.add(parseInt(lss.getRight().getValue()));
-            boundaries.add(parseInt(lss.getRight().getValue())+1);
-            boundaries.add(parseInt(lss.getRight().getValue())-1);
+            boundaryValues.put(parseInt(lss.getRight().getValue()), makeValues(parseInt(lss.getRight().getValue())));
         }
 
-        if (boundaries != null) {
-            superList.add(boundaries);
-        }
         return null;
     }
 
     @Override
     public Object visit(LEQ leq) {
-        ArrayList<Integer> boundaries = new ArrayList<>();
 
         if (leq.getRight().getType().equals(TokenType.NUMBER.toString())){  //Clock <= Boundary
-            boundaries.add(parseInt(leq.getRight().getValue()));
-            boundaries.add(parseInt(leq.getRight().getValue()));
-            boundaries.add(parseInt(leq.getRight().getValue())-1);
-            boundaries.add(parseInt(leq.getRight().getValue())+1);
+            boundaryValues.put(parseInt(leq.getRight().getValue()), makeValues(parseInt(leq.getRight().getValue())));
         }
         if (leq.getLeft().getType().equals(TokenType.NUMBER.toString())){  //Boundary <= Clock
-            boundaries.add(parseInt(leq.getLeft().getValue()));
-            boundaries.add(parseInt(leq.getLeft().getValue()));
-            boundaries.add(parseInt(leq.getLeft().getValue())-1);
-            boundaries.add(parseInt(leq.getLeft().getValue())+1);
+            boundaryValues.put(parseInt(leq.getLeft().getValue()), makeValues(parseInt(leq.getLeft().getValue())));
         }
 
-        if (boundaries != null) {
-            superList.add(boundaries);
-        }
         return null;
     }
 
@@ -211,6 +151,15 @@ public class BoundaryVisitor implements ASTVisitor {
     @Override
     public Object visit(Multiply multiply) {
         return null;
+    }
+
+    public ArrayList<Integer> makeValues(int x) {
+        ArrayList<Integer> temp = new ArrayList<>();
+        temp.add(x);
+        temp.add(x + 1);
+        temp.add(x - 1);
+
+        return temp;
     }
 }
 

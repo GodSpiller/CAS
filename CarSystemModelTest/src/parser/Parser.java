@@ -18,6 +18,7 @@ import token.TokenType;
 import ast.PrettyPrintVisitor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Parser {
 
@@ -27,15 +28,13 @@ public class Parser {
 
     private ASTNode program;
 
-    public ArrayList<ArrayList<Integer>> getSuperList() {
-        return superList;
-    }
+    public HashMap<Integer, ArrayList<Integer>> boundaryValues;
 
     public Parser(Lexer lexer){
         tokenStream = new TokenStream(lexer.getFilteredTokens());
         program = new Program(null);
         parse(program);
-        superList = (ArrayList<ArrayList<Integer>>) program.accept(new BoundaryVisitor());
+        boundaryValues = (HashMap)program.accept(new BoundaryVisitor());
     }
 
     public ASTNode getProgram() {
