@@ -1,9 +1,12 @@
+import ast.nodes.BoundaryValue;
 import com.uppaal.engine.CannotEvaluateException;
 import com.uppaal.engine.EngineException;
 import com.uppaal.model.core2.Document;
 import com.uppaal.model.system.Process;
 import com.uppaal.model.system.SystemEdge;
+import lexer.Lexer;
 import modelhandler.ModelHandler;
+import parser.Parser;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Main {
 
@@ -20,14 +24,20 @@ public class Main {
 
         ModelHandler modelHandler = new ModelHandler();
 
-        GuardMaker tm = new GuardMaker();
-        for (String s : tm.makeGuards(new StringBuilder("15<c && c<40"))){
-            System.out.println(s);
-        }
+        GuardMaker guardMaker = new GuardMaker();
+        HashMap<Integer, ArrayList<BoundaryValue>> hm = new HashMap<>();
 
+        hm = guardMaker.makeGuards(new StringBuilder("15 < c && c < 40"));
+
+        for (Integer i : hm.keySet()) {
+            for (BoundaryValue boundaryValue : hm.get(i)) {
+                System.out.format("%d : %s \n", boundaryValue.getValue(), boundaryValue.getValidity());
+            }
+
+        }
     }
 
-    public static void insertBoundaries() throws CannotEvaluateException, EngineException, IOException {
+   /* public static void insertBoundaries() throws CannotEvaluateException, EngineException, IOException {
         ModelHandler modelHandler = new ModelHandler();
         GuardMaker tm = new GuardMaker();
 
@@ -35,7 +45,7 @@ public class Main {
             int i = 0;
             for (SystemEdge edge : process.getEdges()) {
                 StringBuilder sb = new StringBuilder();
-                ArrayList<String> guards;
+                HashMap<Integer, ArrayList<BoundaryValue>> guards;
 
                 if (!edge.getEdge().getPropertyValue("guard").equals("")) {
                     sb.append(edge.getEdge().getPropertyValue("guard"));
@@ -126,4 +136,6 @@ public class Main {
         writer.write(sb.toString());
         writer.close();
     }
+    */
+
 }

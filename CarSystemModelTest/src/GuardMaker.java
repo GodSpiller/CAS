@@ -1,27 +1,29 @@
 import ast.BoundaryVisitor;
+import ast.nodes.BoundaryValue;
 import lexer.Lexer;
 import parser.Parser;
 import ast.ASTNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GuardMaker {
 
-    public ArrayList<String> makeGuards(StringBuilder sb) {
+    public HashMap<Integer, ArrayList<BoundaryValue>> makeGuards(StringBuilder sb) {
         Parser parser = new Parser(new Lexer(sb.toString()));
         ArrayList<String> guardList = new ArrayList<>();
 
         StringBuilder guard;
 
         for (Integer i : parser.boundaryValues.keySet()) {
-            for (Integer x : parser.boundaryValues.get(i)) {
+            for (BoundaryValue boundaryValue : parser.boundaryValues.get(i)) {
                 guard = new StringBuilder();
                 guard.append(sb);
-                guardList.add(replace(guard, i.toString(), x.toString()));
+                boundaryValue.setGuard(replace(sb, i.toString(),String.valueOf(boundaryValue.getValue())));
             }
         }
 
-        return removeDuplicates(guardList);
+        return parser.boundaryValues;
     }
 
     public static String replace(StringBuilder builder, String from, String to){

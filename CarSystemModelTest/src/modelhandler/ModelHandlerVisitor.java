@@ -55,7 +55,7 @@ public class ModelHandlerVisitor implements Visitor {
     public void visitEdge(Edge edge) throws Exception {
         System.out.println(edge.getName().toString());
         if (!edge.getPropertyValue("guard").equals("")) {
-            //kald boundary analyse
+
             //LAV EN HELT NY MODEL/TEMPLATE
             //ÆNDRE TEST KODE I LOKATION DER KOMMER EFTER DENNE EDGE
         }

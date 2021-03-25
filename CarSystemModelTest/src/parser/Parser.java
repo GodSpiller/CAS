@@ -3,6 +3,7 @@ package parser;
 import ast.ASTNode;
 import ast.BoundaryVisitor;
 import ast.PrettyPrintVisitor;
+import ast.nodes.BoundaryValue;
 import ast.nodes.Identifier;
 import ast.nodes.Program;
 import ast.nodes.literals.NumberLit;
@@ -28,7 +29,7 @@ public class Parser {
 
     private ASTNode program;
 
-    public HashMap<Integer, ArrayList<Integer>> boundaryValues;
+    public HashMap<Integer, ArrayList<BoundaryValue>> boundaryValues;
 
     public Parser(Lexer lexer){
         tokenStream = new TokenStream(lexer.getFilteredTokens());

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class ModelHandler {
 
-    URL url = new File("C:\\Users\\Yann\\Desktop\\Projekter\\CAS\\CAS_FINAL_DESTINATION.xml").toURI().toURL();
+    URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS_FINAL_DESTINATION.xml");
     Engine engine = new Engine();
     public Document document;
     public UppaalSystem system;
