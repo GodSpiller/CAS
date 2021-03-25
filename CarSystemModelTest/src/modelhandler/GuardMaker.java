@@ -1,3 +1,5 @@
+package modelhandler;
+
 import ast.BoundaryVisitor;
 import ast.nodes.BoundaryValue;
 import lexer.Lexer;
@@ -24,7 +26,7 @@ public class GuardMaker {
         return parser.boundaryValues;
     }
 
-    public static String replace(StringBuilder builder, String from, String to){
+    public String replace(StringBuilder builder, String from, String to){
         int index = builder.indexOf(from);
         while (index != -1) {
             builder.replace(index, index + from.length(), to);

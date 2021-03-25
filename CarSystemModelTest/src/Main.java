@@ -1,12 +1,6 @@
 import ast.nodes.BoundaryValue;
-import com.uppaal.engine.CannotEvaluateException;
-import com.uppaal.engine.EngineException;
-import com.uppaal.model.core2.Document;
-import com.uppaal.model.system.Process;
-import com.uppaal.model.system.SystemEdge;
-import lexer.Lexer;
+import modelhandler.GuardMaker;
 import modelhandler.ModelHandler;
-import parser.Parser;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -29,9 +23,11 @@ public class Main {
 
         hm = guardMaker.makeGuards(new StringBuilder("15 < c && c < 40"));
 
+        modelHandler.createTestCode();
+
         for (Integer i : hm.keySet()) {
             for (BoundaryValue boundaryValue : hm.get(i)) {
-                System.out.format("%s : %s \n",boundaryValue.getGuard(), boundaryValue.getValidity());
+                //System.out.format("%s : %s \n",boundaryValue.getGuard(), boundaryValue.getValidity());
             }
 
         }

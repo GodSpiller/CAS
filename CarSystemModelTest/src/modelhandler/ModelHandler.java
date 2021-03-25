@@ -15,6 +15,7 @@ import com.uppaal.model.system.symbolic.SymbolicState;
 import com.uppaal.model.system.symbolic.SymbolicTrace;
 import com.uppaal.model.system.symbolic.SymbolicTransition;
 import lexer.Lexer;
+import on.S;
 import parser.Parser;
 
 import java.io.File;
@@ -39,7 +40,7 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe");
+        engine.setServerPath("E:\\Uni\\6semester\\MTCPS\\uppaal-4.1.24\\bin-Windows\\server.exe");
         engine.connect();
         ArrayList<Problem> problems = new ArrayList<Problem>();
         system = engine.getSystem(document, problems);
@@ -49,11 +50,38 @@ public class ModelHandler {
     public void createTestCode() {
         //find edge
 
+        GuardMaker gm = new GuardMaker();
+        StringBuilder sb = new StringBuilder();
+
         for (Process p : system.getProcesses()) {
             for (SystemEdge edge : p.getEdges()) {
                 if (!edge.getEdge().getPropertyValue("guard").equals("")) {
                     Parser parser = new Parser(new Lexer(edge.getEdge().getPropertyValue("guard").toString()));
-                    
+
+                    HashMap<Integer, ArrayList<BoundaryValue>> guards;
+
+                    StringBuilder guard;
+
+                    sb.append(edge.getEdge().getPropertyValue("guard"));
+                    guards = gm.makeGuards(sb);
+
+                    for (Integer i : guards.keySet()) {
+                        System.out.println(guards.keySet());
+
+                        for (BoundaryValue bv : guards.get(i)){
+                            updateGuard(edge, bv.getGuard());
+                            guard = new StringBuilder();
+                            guard.append(edge.getEdge().getPropertyValue("guard"));
+
+                            bv.setGuard(gm.replace(guard, i.toString(), String.valueOf(bv.getValue())));
+                            //System.out.println(bv.getGuard() + " " + bv.getValidity());
+
+                            if (!bv.getValidity()) {
+                                edge.getEdge().getTarget().setProperty("testcodeEnter", "assertTrue(false)");
+                            }
+                            //System.out.println("testcode: " + edge.getEdge().getTarget().getPropertyValue("testcodeEnter"));
+                        }
+                    }
                 }
             }
         }
