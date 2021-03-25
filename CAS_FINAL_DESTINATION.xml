@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE nta 
+<!DOCTYPE nta>
+<nta>
 <!ELEMENT project (imports?, declaration?, template*, lsc*, instantiation?, system, queries?)>
 <!ELEMENT imports (#PCDATA)>
 <!ELEMENT declaration (#PCDATA)>
@@ -155,7 +156,7 @@
 <!ELEMENT query (comment,formula)>
 <!ELEMENT formula (#PCDATA)>
 <!ELEMENT comment (#PCDATA)>>
-<nta>
+</nta>
 	<declaration>// Place global declarations here.
 int __single__=0;
 int __reach__=0;
