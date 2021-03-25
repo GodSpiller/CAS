@@ -11,15 +11,13 @@ public class GuardMaker {
 
     public HashMap<Integer, ArrayList<BoundaryValue>> makeGuards(StringBuilder sb) {
         Parser parser = new Parser(new Lexer(sb.toString()));
-        ArrayList<String> guardList = new ArrayList<>();
-
         StringBuilder guard;
 
         for (Integer i : parser.boundaryValues.keySet()) {
             for (BoundaryValue boundaryValue : parser.boundaryValues.get(i)) {
                 guard = new StringBuilder();
                 guard.append(sb);
-                boundaryValue.setGuard(replace(sb, i.toString(),String.valueOf(boundaryValue.getValue())));
+                boundaryValue.setGuard(replace(guard, i.toString(), String.valueOf(boundaryValue.getValue())));
             }
         }
 
