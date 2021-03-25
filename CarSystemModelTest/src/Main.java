@@ -37,40 +37,6 @@ public class Main {
         }
     }
 
-   /* public static void insertBoundaries() throws CannotEvaluateException, EngineException, IOException {
-        ModelHandler modelHandler = new ModelHandler();
-        GuardMaker tm = new GuardMaker();
-
-        for (Process process : modelHandler.system.getProcesses()){
-            int i = 0;
-            for (SystemEdge edge : process.getEdges()) {
-                StringBuilder sb = new StringBuilder();
-                HashMap<Integer, ArrayList<BoundaryValue>> guards;
-
-                if (!edge.getEdge().getPropertyValue("guard").equals("")) {
-                    sb.append(edge.getEdge().getPropertyValue("guard"));
-                }
-                if (!(sb.length() == 0)) {
-                    guards = tm.makeGuards(sb);
-                    Document newDocument = modelHandler.document;
-                    for (String str : guards) {
-                        modelHandler.changeGuard(edge, str);
-                        modelHandler.changeTestCode(edge);
-                        try {
-                            newDocument.save("sampledoc" + i + ".xml");
-                            i++;
-                        } catch (IOException e) {
-                            e.printStackTrace(System.err);
-                        }
-                    }
-                    modelHandler.changeGuard(edge, guards.get(0));
-                    modelHandler.changeTestCode(edge);
-
-                }
-            }
-        }
-    }
-
     public static void makeUnitTests(ArrayList<StringBuilder> testCases) throws IOException {
         File file = new File("CarSystemModelTest\\test\\CarSystemTests.java");
         int numberOfTestCases = testCases.size();
@@ -136,6 +102,6 @@ public class Main {
         writer.write(sb.toString());
         writer.close();
     }
-    */
+
 
 }

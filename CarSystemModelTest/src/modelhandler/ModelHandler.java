@@ -30,7 +30,7 @@ public class ModelHandler {
     public Document document;
     public UppaalSystem system;
     SymbolicState state;
-    ModelHandlerVisitor dv = new ModelHandlerVisitor();
+    ModelHandlerVisitor modelHandlerVisitor = new ModelHandlerVisitor();
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
@@ -76,9 +76,9 @@ public class ModelHandler {
                     if (symbolicTransition.getEdges() != null) {
                         try {
                             for (SystemEdgeSelect edge : symbolicTransition.getEdges()){
-                                edge.getEdge().accept(dv);
+                                edge.getEdge().accept(modelHandlerVisitor);
                             }
-                            symbolicTransition.getTarget().getLocations()[0].getLocation().accept(dv);
+                            symbolicTransition.getTarget().getLocations()[0].getLocation().accept(modelHandlerVisitor);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -106,7 +106,7 @@ public class ModelHandler {
             }
         };
         QueryResult qr = engine.query(system, "trace 1", q, qf);
-        return dv.testCode.toString();
+        return modelHandlerVisitor.testCode.toString();
     }
 
     public void changeTestCode(SystemEdge edge){
@@ -141,7 +141,7 @@ public class ModelHandler {
         edge.getEdge().getTarget().setProperty("testcodeEnter", sb.toString());
     }
 
-    public void changeGuard(SystemEdge edge, String newGuard){
+    public void updateGuard(SystemEdge edge, String newGuard){
         edge.getEdge().setProperty("guard", newGuard);
     }
 
