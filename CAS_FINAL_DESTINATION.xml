@@ -156,7 +156,8 @@
 <!ELEMENT formula (#PCDATA)>
 <!ELEMENT comment (#PCDATA)>
 ]>
-	<declaration>// Place global declarations here.
+<nta>
+<declaration>// Place global declarations here.
 int __single__=0;
 int __reach__=0;
 
