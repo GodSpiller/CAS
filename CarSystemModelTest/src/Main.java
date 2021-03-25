@@ -31,7 +31,7 @@ public class Main {
 
         for (Integer i : hm.keySet()) {
             for (BoundaryValue boundaryValue : hm.get(i)) {
-                System.out.format("%s : %d : %s \n",boundaryValue.getGuard(), boundaryValue.getValue(), boundaryValue.getValidity());
+                System.out.format("%s : %s \n",boundaryValue.getGuard(), boundaryValue.getValidity());
             }
 
         }

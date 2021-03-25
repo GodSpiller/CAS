@@ -173,15 +173,15 @@ public class BoundaryVisitor implements ASTVisitor {
         switch(operator) {
             case "<L":
             case ">R":
-                temp.add(new BoundaryValue(x, false));
+                temp.add(new BoundaryValue(x, true));
                 temp.add(new BoundaryValue(x + 1, true));
-                temp.add(new BoundaryValue(x + 2, true));
+                temp.add(new BoundaryValue(x - 1, false));
                 break;
             case "<R":
             case ">L":
-                temp.add(new BoundaryValue(x,false ));
+                temp.add(new BoundaryValue(x,true ));
+                temp.add(new BoundaryValue(x + 1, false));
                 temp.add(new BoundaryValue(x - 1, true));
-                temp.add(new BoundaryValue(x - 2, true));
                 break;
             case "<=L":
             case ">=R":
