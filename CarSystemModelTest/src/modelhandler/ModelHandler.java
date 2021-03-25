@@ -1,10 +1,12 @@
 package modelhandler;
 
+import ast.nodes.BoundaryValue;
 import com.uppaal.engine.*;
 import com.uppaal.model.core2.Document;
 import com.uppaal.model.core2.PrototypeDocument;
 import com.uppaal.model.core2.Query;
 import com.uppaal.model.core2.Template;
+import com.uppaal.model.system.Process;
 import com.uppaal.model.system.SystemEdge;
 import com.uppaal.model.system.SystemEdgeSelect;
 import com.uppaal.model.system.UppaalSystem;
@@ -12,11 +14,14 @@ import com.uppaal.model.system.concrete.ConcreteTrace;
 import com.uppaal.model.system.symbolic.SymbolicState;
 import com.uppaal.model.system.symbolic.SymbolicTrace;
 import com.uppaal.model.system.symbolic.SymbolicTransition;
+import lexer.Lexer;
+import parser.Parser;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 // Normale mennesker
 //  "C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe"
@@ -39,6 +44,23 @@ public class ModelHandler {
         ArrayList<Problem> problems = new ArrayList<Problem>();
         system = engine.getSystem(document, problems);
         state = engine.getInitialState(system);
+    }
+
+    public void createTestCode() {
+        //find edge
+
+        for (Process p : system.getProcesses()) {
+            for (SystemEdge edge : p.getEdges()) {
+                if (!edge.getEdge().getPropertyValue("guard").equals("")) {
+                    Parser parser = new Parser(new Lexer(edge.getEdge().getPropertyValue("guard").toString()));
+                    
+                }
+            }
+        }
+        //boundary shit
+        //ændre guard og testcode
+        //få testcode
+        //repeat 2,3,4
     }
 
     public String getTrace() throws EngineException, IOException {
@@ -109,7 +131,11 @@ public class ModelHandler {
         return modelHandlerVisitor.testCode.toString();
     }
 
-    public void changeTestCode(SystemEdge edge){
+    public void changeTestCode(HashMap<Integer, ArrayList<BoundaryValue>> boundaryValues) {
+
+    }
+
+    public void changeTestCode1(SystemEdge edge){
         String testcode = edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString();
         String[] testcodes = testcode.split("(?<=[(;])", -1);
         int j = 0;
