@@ -1,17 +1,7 @@
 package modelhandler;
 
-import com.uppaal.engine.CannotEvaluateException;
-import com.uppaal.engine.Engine;
-import com.uppaal.engine.EngineException;
-import com.uppaal.engine.Problem;
 import com.uppaal.model.core2.*;
 import com.uppaal.model.core2.lsc.*;
-import com.uppaal.model.system.*;
-import com.uppaal.model.system.symbolic.SymbolicState;
-import com.uppaal.model.system.symbolic.SymbolicTransition;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
 
 public class ModelHandlerVisitor implements Visitor {
     public StringBuilder testCode = new StringBuilder();
