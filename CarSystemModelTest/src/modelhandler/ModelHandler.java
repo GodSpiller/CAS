@@ -13,6 +13,7 @@ import com.uppaal.model.system.concrete.ConcreteTrace;
 import com.uppaal.model.system.symbolic.SymbolicState;
 import com.uppaal.model.system.symbolic.SymbolicTrace;
 import com.uppaal.model.system.symbolic.SymbolicTransition;
+import on.Q;
 
 import java.io.IOException;
 import java.net.URL;
@@ -37,50 +38,93 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("D:\\AAU\\Programmer\\Uppaal\\uppaal-4.1.24\\bin-Windows\\server.exe");
+        engine.setServerPath("C:\\\\Users\\\\Esben\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe");
         engine.connect();
         ArrayList<Problem> problems = new ArrayList<Problem>();
         system = engine.getSystem(document, problems);
         state = engine.getInitialState(system);
     }
 
-    public void createTestCode() {
+    public void createTestCode() throws EngineException, IOException {
         //find edge
-
         GuardMaker gm = new GuardMaker();
         StringBuilder sb;
-
+        StringBuilder oldGuard;
 
         for (Process p : system.getProcesses()) {
+            int j = 0;
             for (SystemEdge edge : p.getEdges()) {
-                //System.out.println(edge.getEdge().getPropertyValue("guard"));
-
-
-
                 if (!edge.getEdge().getPropertyValue("guard").equals("")) {
-                    //Parser parser = new Parser(new Lexer(edge.getEdge().getPropertyValue("guard").toString()));
-
-                    HashMap<Integer, ArrayList<BoundaryValue>> guards = new HashMap<>();
-
-                    guards = gm.makeGuards(new StringBuilder(edge.getEdge().getPropertyValue("guard").toString()));
-
-
-
+                    oldGuard = new StringBuilder(); // resets the old guard
+                    HashMap<Integer, ArrayList<BoundaryValue>> guards;
                     sb = new StringBuilder();
-
                     sb.append(edge.getEdge().getPropertyValue("guard"));
                     guards = gm.makeGuards(sb);
-
-
+                    oldGuard.append(edge.getEdge().getPropertyValue("guard"));
                     for (Integer i : guards.keySet()){
                         for (BoundaryValue boundaryValue : guards.get(i)){
-                            System.out.format("%s : %s \n", boundaryValue.getGuard(), boundaryValue.getValidity());
+                            updateGuard(edge, boundaryValue.getGuard());
+                            Query q = new Query("E<> Spec." + edge.getEdge().getTarget().getName(), "");
+                            QueryFeedback queryFeedback = new QueryFeedback() {
+                                @Override
+                                public void setProgressAvail(boolean b) {
+
+                                }
+
+                                @Override
+                                public void setProgress(int i, long l, long l1, long l2, long l3, long l4, long l5, long l6, long l7, long l8) {
+
+                                }
+
+                                @Override
+                                public void setSystemInfo(long l, long l1, long l2) {
+
+                                }
+
+                                @Override
+                                public void setLength(int i) {
+
+                                }
+
+                                @Override
+                                public void setCurrent(int i) {
+
+                                }
+
+                                @Override
+                                public void setTrace(char c, String s, SymbolicTrace symbolicTrace, QueryResult queryResult) {
+
+                                }
+
+                                @Override
+                                public void setTrace(char c, String s, ConcreteTrace concreteTrace, QueryResult queryResult) {
+
+                                }
+
+                                @Override
+                                public void setFeedback(String s) {
+
+                                }
+
+                                @Override
+                                public void appendText(String s) {
+
+                                }
+
+                                @Override
+                                public void setResultText(String s) {
+
+                                }
+                            };
+                            QueryResult queryResult = engine.query(system, "order 1", q, queryFeedback);
+
+                            System.out.println(boundaryValue.getGuard() + " - " + queryResult.getResult());
                         }
                     }
+                    updateGuard(edge, oldGuard.toString());
                 }
             }
         }
-        //boundary shit
         //ændre guard og testcode
         //få testcode
         //repeat 2,3,4
