@@ -13,7 +13,6 @@ import com.uppaal.model.system.concrete.ConcreteTrace;
 import com.uppaal.model.system.symbolic.SymbolicState;
 import com.uppaal.model.system.symbolic.SymbolicTrace;
 import com.uppaal.model.system.symbolic.SymbolicTransition;
-import on.Q;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,8 +27,8 @@ import java.util.HashMap;
 //  "E:\\Uni\\6semester\\MTCPS\\uppaal-4.1.24\\bin-Windows\\server.exe"
 
 public class ModelHandler {
-
-    URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS_FINAL_DESTINATION.xml");
+    public ArrayList<Problem> problems = new ArrayList<Problem>();
+    URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS2.0.xml");
     Engine engine = new Engine();
     public Document document;
     public UppaalSystem system;
@@ -38,9 +37,8 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("C:\\\\Users\\\\Esben\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe");
+        engine.setServerPath("D:\\\\AAU\\\\Programmer\\\\Uppaal\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe");
         engine.connect();
-        ArrayList<Problem> problems = new ArrayList<Problem>();
         system = engine.getSystem(document, problems);
         state = engine.getInitialState(system);
     }
@@ -50,6 +48,7 @@ public class ModelHandler {
         GuardMaker gm = new GuardMaker();
         StringBuilder sb;
         StringBuilder oldGuard;
+        ArrayList<StringBuilder> testCases = new ArrayList<>();
 
         for (Process p : system.getProcesses()) {
             int j = 0;
@@ -64,74 +63,32 @@ public class ModelHandler {
                     for (Integer i : guards.keySet()){
                         for (BoundaryValue boundaryValue : guards.get(i)){
                             updateGuard(edge, boundaryValue.getGuard());
-                            Query q = new Query("E<> Spec." + edge.getEdge().getTarget().getName(), "");
-                            QueryFeedback queryFeedback = new QueryFeedback() {
-                                @Override
-                                public void setProgressAvail(boolean b) {
+                            testCases.add(getTrace(edge.getEdge().getTarget().getName()));
+                            //System.out.println(boundaryValue.getGuard() + " - " + boundaryValue.getValidity());
+                            if (!boundaryValue.getValidity()) {
+                                edge.getEdge().getTarget().setProperty("testcodeEnter", "assertTrue(false)");
+                                //System.out.println(edge.getEdge().getTarget().getPropertyValue("testcodeEnter") + "\n");
+                            }
 
-                                }
 
-                                @Override
-                                public void setProgress(int i, long l, long l1, long l2, long l3, long l4, long l5, long l6, long l7, long l8) {
 
-                                }
 
-                                @Override
-                                public void setSystemInfo(long l, long l1, long l2) {
-
-                                }
-
-                                @Override
-                                public void setLength(int i) {
-
-                                }
-
-                                @Override
-                                public void setCurrent(int i) {
-
-                                }
-
-                                @Override
-                                public void setTrace(char c, String s, SymbolicTrace symbolicTrace, QueryResult queryResult) {
-
-                                }
-
-                                @Override
-                                public void setTrace(char c, String s, ConcreteTrace concreteTrace, QueryResult queryResult) {
-
-                                }
-
-                                @Override
-                                public void setFeedback(String s) {
-
-                                }
-
-                                @Override
-                                public void appendText(String s) {
-
-                                }
-
-                                @Override
-                                public void setResultText(String s) {
-
-                                }
-                            };
-                            QueryResult queryResult = engine.query(system, "order 1", q, queryFeedback);
-
-                            System.out.println(boundaryValue.getGuard() + " - " + queryResult.getResult());
                         }
                     }
                     updateGuard(edge, oldGuard.toString());
                 }
             }
         }
+        System.out.println(testCases);
+
         //ændre guard og testcode
         //få testcode
         //repeat 2,3,4
     }
 
-    public String getTrace() throws EngineException, IOException {
-        Query q = new Query("E<> Spec.ArmedAndClosedAndLocked", "");
+    public StringBuilder getTrace(String location) throws EngineException, IOException {
+        system = engine.getSystem(document, problems);
+        Query q = new Query("E<> Spec." + location, "");
         QueryFeedback qf = new QueryFeedback() {
             @Override
             public void setProgressAvail(boolean b) {
@@ -195,7 +152,7 @@ public class ModelHandler {
             }
         };
         QueryResult qr = engine.query(system, "trace 1", q, qf);
-        return modelHandlerVisitor.testCode.toString();
+        return modelHandlerVisitor.testCode;
     }
 
     public void changeTestCode(HashMap<Integer, ArrayList<BoundaryValue>> boundaryValues) {
