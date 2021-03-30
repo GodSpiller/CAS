@@ -33,7 +33,9 @@ public class ModelHandlerVisitor implements Visitor {
 
     @Override
     public void visitLocation(Location location) throws Exception {
-        //testCode.append(location.getPropertyValue("testcodeEnter") + "\n");
+        if (!location.getPropertyValue("testcodeEnter").equals("")) {
+            testCode.append(location.getPropertyValue("testcodeEnter") + "\n");
+        }
     }
 
     @Override
@@ -43,13 +45,9 @@ public class ModelHandlerVisitor implements Visitor {
 
     @Override
     public void visitEdge(Edge edge) throws Exception {
-        System.out.println(edge.getName().toString());
-        if (!edge.getPropertyValue("guard").equals("")) {
-
-            //LAV EN HELT NY MODEL/TEMPLATE
-            //ÆNDRE TEST KODE I LOKATION DER KOMMER EFTER DENNE EDGE
+        if (!edge.getPropertyValue("testcode").toString().equals("")) {
+            testCode.append(edge.getPropertyValue("testcode") + "\n");
         }
-        //testCode.append(edge.getPropertyValue("testcode") + "\n");
     }
 
     @Override
@@ -95,5 +93,11 @@ public class ModelHandlerVisitor implements Visitor {
     @Override
     public void visitQuery(Query query) throws Exception {
 
+    }
+
+    public StringBuilder getStringBuilder() {
+        StringBuilder temp = testCode;
+        testCode = new StringBuilder();
+        return temp;
     }
 }
