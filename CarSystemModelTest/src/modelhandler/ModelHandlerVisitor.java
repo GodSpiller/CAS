@@ -2,6 +2,7 @@ package modelhandler;
 
 import com.uppaal.model.core2.*;
 import com.uppaal.model.core2.lsc.*;
+import com.uppaal.model.system.SystemEdge;
 
 public class ModelHandlerVisitor implements Visitor {
     public StringBuilder testCode = new StringBuilder();
@@ -33,7 +34,7 @@ public class ModelHandlerVisitor implements Visitor {
 
     @Override
     public void visitLocation(Location location) throws Exception {
-        if (!location.getPropertyValue("testcodeEnter").equals("")) {
+        if (hasProperty(location, "testcodeEnter")) {
             testCode.append(location.getPropertyValue("testcodeEnter") + "\n");
         }
     }
@@ -45,7 +46,7 @@ public class ModelHandlerVisitor implements Visitor {
 
     @Override
     public void visitEdge(Edge edge) throws Exception {
-        if (!edge.getPropertyValue("testcode").toString().equals("")) {
+        if (hasProperty(edge, "testcode")){
             testCode.append(edge.getPropertyValue("testcode") + "\n");
         }
     }
@@ -93,6 +94,20 @@ public class ModelHandlerVisitor implements Visitor {
     @Override
     public void visitQuery(Query query) throws Exception {
 
+    }
+
+    public boolean hasProperty(Edge edge, String property) {
+        if (!edge.getPropertyValue(property).equals("")) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean hasProperty(Location location, String property){
+        if (!location.getPropertyValue(property).equals("")){
+            return true;
+        }
+        return false;
     }
 
     public StringBuilder getStringBuilder() {

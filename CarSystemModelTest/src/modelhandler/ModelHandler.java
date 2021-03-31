@@ -3,6 +3,7 @@ package modelhandler;
 import ast.nodes.BoundaryValue;
 import com.uppaal.engine.*;
 import com.uppaal.model.core2.Document;
+import com.uppaal.model.core2.Location;
 import com.uppaal.model.core2.PrototypeDocument;
 import com.uppaal.model.core2.Query;
 import com.uppaal.model.system.Process;
@@ -37,7 +38,7 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("\"C:\\\\Users\\\\Yann\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
+        engine.setServerPath("\"C:\\\\Users\\\\Esben\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
         engine.connect();
         system = engine.getSystem(document, problems);
         state = engine.getInitialState(system);
@@ -52,7 +53,7 @@ public class ModelHandler {
         for (Process p : system.getProcesses()) {
             int j = 0;
             for (SystemEdge edge : p.getEdges()) {
-                if (!edge.getEdge().getPropertyValue("guard").equals("")) {
+                if (hasProperty(edge, "guard")) {
                     oldGuard = new StringBuilder(); // resets the old guard
                     HashMap<Integer, ArrayList<BoundaryValue>> guards;
                     sb = new StringBuilder();
@@ -79,7 +80,7 @@ public class ModelHandler {
         return testCases;
     }
 
-    public StringBuilder getTrace(String location) throws EngineException, IOException {
+    private StringBuilder getTrace(String location) throws EngineException, IOException {
         system = engine.getSystem(document, problems);
         Query q = new Query("E<> Spec." + location, "");
         QueryFeedback qf = new QueryFeedback() {
@@ -148,108 +149,23 @@ public class ModelHandler {
         return modelHandlerVisitor.getStringBuilder();
     }
 
-    public void changeTestCode(HashMap<Integer, ArrayList<BoundaryValue>> boundaryValues) {
-
-    }
-
-    public void changeTestCode1(SystemEdge edge){
-        String testcode = edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString();
-        String[] testcodes = testcode.split("(?<=[(;])", -1);
-        int j = 0;
-
-        for (String s : testcodes){
-            if (s.equals("assertTrue(") || s.equals("\nassertTrue(")){
-                testcodes[j] = "assertFalse(";
-            }
-            else if (s.equals("assertFalse(") || s.equals("\nassertFalse(")){
-                testcodes[j] = "assertTrue(";
-            }
-            j++;
-        }
-
-        for (int i = 0; i < testcodes.length-1; i++){
-            if (i%2 == 0){
-                testcodes[i] = testcodes[i]+testcodes[i+1];
-            }
-
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < testcodes.length-1; i++){
-            if (i%2 == 0){
-                sb.append(testcodes[i] + "\n");
-            }
-
-        }
-
-        edge.getEdge().getTarget().setProperty("testcodeEnter", sb.toString());
-    }
-
-    public void updateGuard(SystemEdge edge, String newGuard){
+    private void updateGuard(SystemEdge edge, String newGuard){
         edge.getEdge().setProperty("guard", newGuard);
     }
 
-    public ArrayList<SymbolicTransition> getTransitionInfo() throws EngineException {
 
-        ArrayList<SymbolicTransition> symbolicTransitions = new ArrayList<>();
-        Query q = new Query("E<> Spec.weird", " ");
-        QueryFeedback qf = new QueryFeedback() {
-            @Override
-            public void setProgressAvail(boolean b) {
+    private boolean hasProperty(SystemEdge edge, String property) {
+        if (!edge.getEdge().getPropertyValue(property).equals("")) {
+            return true;
+        }
+        return false;
+    }
 
-            }
-
-            @Override
-            public void setProgress(int i, long l, long l1, long l2, long l3, long l4, long l5, long l6, long l7, long l8) {
-
-            }
-
-            @Override
-            public void setSystemInfo(long l, long l1, long l2) {
-
-            }
-
-            @Override
-            public void setLength(int i) {
-
-            }
-
-            @Override
-            public void setCurrent(int i) {
-
-            }
-
-            @Override
-            public void setTrace(char c, String s, SymbolicTrace symbolicTrace, QueryResult queryResult) {
-
-                symbolicTrace.forEach(symbolicTransition -> {
-                    if (symbolicTransition.getEdges() != null) {
-                        symbolicTransitions.add(symbolicTransition);
-                    }
-                });
-            }
-
-            @Override
-            public void setTrace(char c, String s, ConcreteTrace concreteTrace, QueryResult queryResult) {
-
-            }
-
-            @Override
-            public void setFeedback(String s) {
-
-            }
-
-            @Override
-            public void appendText(String s) {
-            }
-
-            @Override
-            public void setResultText(String s) {
-
-            }
-        };
-        QueryResult qr = engine.query(system,"trace 1",q, qf);
-
-        return symbolicTransitions;
+    private boolean hasProperty(Location location, String property){
+        if (!location.getPropertyValue(property).equals("")){
+            return true;
+        }
+        return false;
     }
 
 }
