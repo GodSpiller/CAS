@@ -37,14 +37,13 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("D:\\\\AAU\\\\Programmer\\\\Uppaal\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe");
+        engine.setServerPath("\"C:\\\\Users\\\\Yann\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
         engine.connect();
         system = engine.getSystem(document, problems);
         state = engine.getInitialState(system);
     }
 
-    public void createTestCode() throws EngineException, IOException {
-        //find edge
+    public ArrayList<StringBuilder> createTestCode() throws EngineException, IOException {
         GuardMaker gm = new GuardMaker();
         StringBuilder sb;
         StringBuilder oldGuard;
@@ -63,27 +62,21 @@ public class ModelHandler {
                     for (Integer i : guards.keySet()){
                         for (BoundaryValue boundaryValue : guards.get(i)){
                             updateGuard(edge, boundaryValue.getGuard());
-                            testCases.add(getTrace(edge.getEdge().getTarget().getName()));
-                            //System.out.println(boundaryValue.getGuard() + " - " + boundaryValue.getValidity());
+                            String oldLocation = edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString();
                             if (!boundaryValue.getValidity()) {
-                                edge.getEdge().getTarget().setProperty("testcodeEnter", "assertTrue(false)");
-                                //System.out.println(edge.getEdge().getTarget().getPropertyValue("testcodeEnter") + "\n");
+                                edge.getEdge().getTarget().setProperty("testcodeEnter", "assertTrue(false);");
                             }
-
-
-
-
+                            testCases.add(getTrace(edge.getEdge().getTarget().getName()));
+                            if (!boundaryValue.getValidity()) {
+                                edge.getEdge().getTarget().setProperty("testcodeEnter", oldLocation);
+                            }
                         }
                     }
                     updateGuard(edge, oldGuard.toString());
                 }
             }
         }
-        System.out.println(testCases);
-
-        //ændre guard og testcode
-        //få testcode
-        //repeat 2,3,4
+        return testCases;
     }
 
     public StringBuilder getTrace(String location) throws EngineException, IOException {
@@ -148,11 +141,11 @@ public class ModelHandler {
 
             @Override
             public void setResultText(String s) {
-                System.out.println("setResultText");
             }
         };
         QueryResult qr = engine.query(system, "trace 1", q, qf);
-        return modelHandlerVisitor.testCode;
+
+        return modelHandlerVisitor.getStringBuilder();
     }
 
     public void changeTestCode(HashMap<Integer, ArrayList<BoundaryValue>> boundaryValues) {
@@ -187,7 +180,7 @@ public class ModelHandler {
             }
 
         }
-        //System.out.println(sb.toString());
+
         edge.getEdge().getTarget().setProperty("testcodeEnter", sb.toString());
     }
 
@@ -251,7 +244,7 @@ public class ModelHandler {
 
             @Override
             public void setResultText(String s) {
-                System.out.println("setResultText");
+
             }
         };
         QueryResult qr = engine.query(system,"trace 1",q, qf);

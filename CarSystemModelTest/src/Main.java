@@ -18,19 +18,8 @@ public class Main {
 
         ModelHandler modelHandler = new ModelHandler();
 
-        GuardMaker guardMaker = new GuardMaker();
-        HashMap<Integer, ArrayList<BoundaryValue>> hm = new HashMap<>();
+        makeUnitTests(modelHandler.createTestCode());
 
-        hm = guardMaker.makeGuards(new StringBuilder("15 < c && c < 40"));
-
-        modelHandler.createTestCode();
-
-        for (Integer i : hm.keySet()) {
-            for (BoundaryValue boundaryValue : hm.get(i)) {
-                //System.out.format("%s : %s \n",boundaryValue.getGuard(), boundaryValue.getValidity());
-            }
-
-        }
     }
 
     public static void makeUnitTests(ArrayList<StringBuilder> testCases) throws IOException {
@@ -43,15 +32,18 @@ public class Main {
         sb.append("import org.junit.jupiter.api.BeforeEach;\n");
         sb.append("import org.junit.jupiter.api.Test;\n");
         sb.append("import static org.junit.jupiter.api.Assertions.*;\n" + "\n");
+        sb.append("import carsystem.CarSystem;");
         sb.append("class CarSystemTests{\n\n");
-        sb.append("@BeforeEach\n void setup(){\n carSystem.CarSystem cs = new carSystem.CarSystem();\n}\n");
+        sb.append("@BeforeEach\n void setup(){\n CarSystem cs = new CarSystem();\n}\n");
         for (int i = 0; i < numberOfTestCases; i++){
             sb.append("\n@Test\nvoid testcase" +  new DecimalFormat("000").format(i) + "(){\n");
-            sb.append("carSystem.CarSystem cs = new carSystem.CarSystem();\n");
+            sb.append("CarSystem cs = new CarSystem();\n");
             sb.append(testCases.get(i));
             sb.append("}\n");
-
         }
+        sb.append("}");
+        writer.write(sb.toString());
+        writer.close();
     }
 
     public static void makeUnitTest(StringBuilder testCode) throws Exception {
