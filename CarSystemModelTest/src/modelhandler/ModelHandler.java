@@ -51,10 +51,9 @@ public class ModelHandler {
         ArrayList<StringBuilder> testCases = new ArrayList<>();
 
         for (Process p : system.getProcesses()) {
-            int j = 0;
             for (SystemEdge edge : p.getEdges()) {
                 if (hasProperty(edge, "guard")) {
-                    oldGuard = new StringBuilder(); // resets the old guard
+                    oldGuard = new StringBuilder(); // resets the oldGuard
                     HashMap<Integer, ArrayList<BoundaryValue>> guards;
                     sb = new StringBuilder();
                     sb.append(edge.getEdge().getPropertyValue("guard"));
@@ -73,6 +72,7 @@ public class ModelHandler {
                             }
                         }
                     }
+                    // update the edge's guard to the original before moving on the next edge
                     updateGuard(edge, oldGuard.toString());
                 }
             }
