@@ -96,6 +96,13 @@ public class ModelHandlerVisitor implements Visitor {
 
     }
 
+    /*
+     * checks if an edge has a property
+     *
+     * @param edge: the edge to be checked
+     * @param param property: the property
+     * @return true if the edge has the property, false if it does not
+     */
     public boolean hasProperty(Edge edge, String property) {
         if (!edge.getPropertyValue(property).equals("")) {
             return true;
@@ -103,6 +110,13 @@ public class ModelHandlerVisitor implements Visitor {
         return false;
     }
 
+    /*
+     * checks if a location has a property
+     *
+     * @param location: the location to be checked
+     * @param param property: the property
+     * @return true if the location has the property, false if it does not
+     */
     private boolean hasProperty(Location location, String property){
         if (!location.getPropertyValue(property).equals("")){
             return true;
@@ -110,6 +124,11 @@ public class ModelHandlerVisitor implements Visitor {
         return false;
     }
 
+    /*
+     * Clears the testcode StringBuilder, and returns the value
+     *
+     * @return a StringBuilder with the test code
+     */
     public StringBuilder getStringBuilder() {
         StringBuilder temp = testCode;
         testCode = new StringBuilder();

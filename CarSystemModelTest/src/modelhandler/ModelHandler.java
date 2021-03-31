@@ -44,23 +44,32 @@ public class ModelHandler {
         state = engine.getInitialState(system);
     }
 
+    /*
+     * Creates test code of test cases based on BVA
+     *
+     * @return an ArrayList of test cases
+     */
     public ArrayList<StringBuilder> createTestCode() throws EngineException, IOException {
         GuardMaker gm = new GuardMaker();
         StringBuilder sb;
         StringBuilder oldGuard;
         ArrayList<StringBuilder> testCases = new ArrayList<>();
 
-        for (Process p : system.getProcesses()) {
-            for (SystemEdge edge : p.getEdges()) {
+        for (Process p : system.getProcesses()) { // for each process in the system
+            for (SystemEdge edge : p.getEdges()) { // for each edge in the process
                 if (hasProperty(edge, "guard")) {
-                    oldGuard = new StringBuilder(); // resets the oldGuard
+                    // resets the oldGuard variable when we have a new edge
+                    oldGuard = new StringBuilder();
                     HashMap<Integer, ArrayList<BoundaryValue>> guards;
                     sb = new StringBuilder();
                     sb.append(edge.getEdge().getPropertyValue("guard"));
+                    // creates new guards for an edge
                     guards = gm.makeGuards(sb);
+                    // set the oldGuard variable to the guard of the edge
                     oldGuard.append(edge.getEdge().getPropertyValue("guard"));
                     for (Integer i : guards.keySet()){
                         for (BoundaryValue boundaryValue : guards.get(i)){
+                            // update the guard of an edge to a new boundary value
                             updateGuard(edge, boundaryValue.getGuard());
                             String oldLocation = edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString();
                             if (!boundaryValue.getValidity()) {
