@@ -80,6 +80,12 @@ public class ModelHandler {
         return testCases;
     }
 
+    /*
+     * get the test code from the start state to the location
+     *
+     * @param location: the target location of the query
+     * @return A StringBuilder with the test code of the trace
+     */
     private StringBuilder getTrace(String location) throws EngineException, IOException {
         system = engine.getSystem(document, problems);
         Query q = new Query("E<> Spec." + location, "");
@@ -149,11 +155,24 @@ public class ModelHandler {
         return modelHandlerVisitor.getStringBuilder();
     }
 
+    /*
+     * Update the guard of an edge
+     *
+     * @param edge: the edge to be updated
+     * @param newGuard: the new guard
+     */
     private void updateGuard(SystemEdge edge, String newGuard){
         edge.getEdge().setProperty("guard", newGuard);
     }
 
 
+    /*
+     * checks if an edge has a property
+     *
+     * @param edge: the edge to be checked
+     * @param param property: the property
+     * @return true if the edge has the property, false if it does not
+     */
     private boolean hasProperty(SystemEdge edge, String property) {
         if (!edge.getEdge().getPropertyValue(property).equals("")) {
             return true;
@@ -161,6 +180,13 @@ public class ModelHandler {
         return false;
     }
 
+    /*
+     * checks if a location has a property
+     *
+     * @param location: the location to be checked
+     * @param param property: the property
+     * @return true if the location has the property, false if it does not
+     */
     private boolean hasProperty(Location location, String property){
         if (!location.getPropertyValue(property).equals("")){
             return true;
