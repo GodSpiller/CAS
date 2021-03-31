@@ -10,7 +10,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class UnitTestFactory {
-
+    /*
+     * Creates a Unit Test for each element in the ArrayList
+     *
+     * @param testCases: Arraylist of testcode
+     */
     public static void makeUnitTests(ArrayList<StringBuilder> testCases) throws IOException {
         File file = new File("CarSystemModelTest\\test\\CarSystemTests.java");
         int numberOfTestCases = testCases.size();
@@ -32,7 +36,11 @@ public class UnitTestFactory {
         writer.write(sb.toString());
         writer.close();
     }
-
+    /*
+     * Creates a Unit Test based on the stringBuilder given
+     *
+     * @param testCase: testcode
+     */
     public static void makeUnitTest(StringBuilder testCode) throws Exception {
         ModelHandler modelHandler = new ModelHandler();
         StringBuilder sb = new StringBuilder();
@@ -54,6 +62,10 @@ public class UnitTestFactory {
 
     //"D:\\git\\Projekter\\CAS\\testCases\\test" - Kap
     //"D:\\repos\\CAS\\testCases\\test" - Esben
+
+    /*
+     * Takes trace.txt files from uppaal yo create testcases
+     */
     public static void loadTestCases() throws IOException {
         File file = new File("CarSystemModelTest\\test\\CarSystemTests.java");
         int numberOfTestCases = new File("testCases").listFiles().length;
