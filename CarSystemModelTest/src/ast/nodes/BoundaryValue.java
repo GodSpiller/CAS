@@ -4,10 +4,12 @@ public class BoundaryValue {
     private int value;
     private boolean validity;
     private String guard;
+    private String clock;
 
-    public BoundaryValue(int value, boolean validity) {
+    public BoundaryValue(int value, boolean validity, String clock) {
         this.value = value;
         this.validity = validity;
+        this.clock = clock;
     }
 
     public int getValue() {
@@ -24,5 +26,10 @@ public class BoundaryValue {
 
     public void setGuard(String guard) {
         this.guard = guard;
+    }
+
+
+    public String getClock() {
+        return clock;
     }
 }

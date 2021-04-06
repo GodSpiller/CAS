@@ -33,7 +33,7 @@ public class BoundaryVisitor implements ASTVisitor {
 
     @Override
     public Object visit(Identifier identifier) {
-        return null;
+        return identifier.getValue();
     }
 
     @Override
@@ -62,11 +62,11 @@ public class BoundaryVisitor implements ASTVisitor {
 
         if(eql.getRight().getType().equals(TokenType.NUMBER.toString())) {
             boundaryValues.put(parseInt(eql.getRight().getValue()),
-                    makeValues(parseInt(eql.getRight().getValue()), "==R"));
+                    makeValues(parseInt(eql.getRight().getValue()), eql.getLeft().getValue(), "==R"));
         }
         if(eql.getLeft().getType().equals(TokenType.NUMBER.toString())) {
             boundaryValues.put(parseInt(eql.getLeft().getValue()),
-                    makeValues(parseInt(eql.getLeft().getValue()), "==L"));
+                    makeValues(parseInt(eql.getLeft().getValue()), eql.getRight().getValue(), "==L"));
         }
 
         return null;
@@ -77,11 +77,11 @@ public class BoundaryVisitor implements ASTVisitor {
 
         if (neq.getRight().getType().equals(TokenType.NUMBER.toString())) {
             boundaryValues.put(parseInt(neq.getRight().getValue()),
-                    makeValues(parseInt(neq.getRight().getValue()), "!=R"));
+                    makeValues(parseInt(neq.getRight().getValue()), neq.getLeft().getValue(), "!=R"));
         }
         if (neq.getLeft().getType().equals(TokenType.NUMBER.toString())) {
             boundaryValues.put(parseInt(neq.getLeft().getValue()),
-                    makeValues(parseInt(neq.getLeft().getValue()), "!=L"));
+                    makeValues(parseInt(neq.getLeft().getValue()), neq.getRight().getValue(),"!=L"));
         }
 
         return null;
@@ -92,11 +92,11 @@ public class BoundaryVisitor implements ASTVisitor {
 
         if (gtr.getRight().getType().equals(TokenType.NUMBER.toString())){ //Clock > Boundary
             boundaryValues.put(parseInt(gtr.getRight().getValue()),
-                    makeValues(parseInt(gtr.getRight().getValue()), ">R"));
+                    makeValues(parseInt(gtr.getRight().getValue()), gtr.getLeft().getValue(), ">R"));
         }
         if (gtr.getLeft().getType().equals(TokenType.NUMBER.toString())){  //Boundary > Clock
             boundaryValues.put(parseInt(gtr.getLeft().getValue()),
-                    makeValues(parseInt(gtr.getLeft().getValue()), ">L"));
+                    makeValues(parseInt(gtr.getLeft().getValue()), gtr.getRight().getValue(), ">L"));
         }
 
         return null;
@@ -107,11 +107,11 @@ public class BoundaryVisitor implements ASTVisitor {
 
         if (geq.getRight().getType().equals(TokenType.NUMBER.toString())){  //Clock >= Boundary
             boundaryValues.put(parseInt(geq.getRight().getValue()),
-                    makeValues(parseInt(geq.getRight().getValue()), ">=R"));
+                    makeValues(parseInt(geq.getRight().getValue()), geq.getLeft().getValue(),">=R"));
         }
         if (geq.getLeft().getType().equals(TokenType.NUMBER.toString())){  //Boundary >= Clock
             boundaryValues.put(parseInt(geq.getLeft().getValue()),
-                    makeValues(parseInt(geq.getLeft().getValue()), ">=L"));
+                    makeValues(parseInt(geq.getLeft().getValue()), geq.getRight().getValue(),">=L"));
         }
 
         return null;
@@ -122,11 +122,11 @@ public class BoundaryVisitor implements ASTVisitor {
 
         if (lss.getLeft().getType().equals(TokenType.NUMBER.toString())){  //Clock < Boundary
             boundaryValues.put(parseInt(lss.getLeft().getValue()),
-                    makeValues(parseInt(lss.getLeft().getValue()), "<L"));
+                    makeValues(parseInt(lss.getLeft().getValue()), lss.getLeft().getValue(),"<L"));
         }
         if (lss.getRight().getType().equals(TokenType.NUMBER.toString())){  //Boundary < Clock
             boundaryValues.put(parseInt(lss.getRight().getValue()),
-                    makeValues(parseInt(lss.getRight().getValue()), "<R"));
+                    makeValues(parseInt(lss.getRight().getValue()), lss.getRight().getValue(),"<R"));
         }
 
         return null;
@@ -137,11 +137,11 @@ public class BoundaryVisitor implements ASTVisitor {
 
         if (leq.getRight().getType().equals(TokenType.NUMBER.toString())){  //Clock <= Boundary
             boundaryValues.put(parseInt(leq.getRight().getValue()),
-                    makeValues(parseInt(leq.getRight().getValue()), "<=R"));
+                    makeValues(parseInt(leq.getRight().getValue()), leq.getLeft().getValue(),"<=R"));
         }
         if (leq.getLeft().getType().equals(TokenType.NUMBER.toString())){  //Boundary <= Clock
             boundaryValues.put(parseInt(leq.getLeft().getValue()),
-                    makeValues(parseInt(leq.getLeft().getValue()), "<=L"));
+                    makeValues(parseInt(leq.getLeft().getValue()), leq.getRight().getValue(),"<=L"));
         }
 
         return null;
@@ -167,45 +167,45 @@ public class BoundaryVisitor implements ASTVisitor {
         return null;
     }
 
-    public ArrayList<BoundaryValue> makeValues(int x, String operator) {
+    public ArrayList<BoundaryValue> makeValues(int x, String clock, String operator) {
         ArrayList<BoundaryValue> temp = new ArrayList<>();
 
         switch(operator) {
             case "<L":
             case ">R":
-                temp.add(new BoundaryValue(x, true));
-                temp.add(new BoundaryValue(x + 1, true));
-                temp.add(new BoundaryValue(x - 1, false));
+                temp.add(new BoundaryValue(x, true, clock));
+                temp.add(new BoundaryValue(x + 1, true, clock));
+                temp.add(new BoundaryValue(x - 1, false, clock));
                 break;
             case "<R":
             case ">L":
-                temp.add(new BoundaryValue(x,true ));
-                temp.add(new BoundaryValue(x + 1, false));
-                temp.add(new BoundaryValue(x - 1, true));
+                temp.add(new BoundaryValue(x,true, clock));
+                temp.add(new BoundaryValue(x + 1, false, clock));
+                temp.add(new BoundaryValue(x - 1, true, clock));
                 break;
             case "<=L":
             case ">=R":
-                temp.add(new BoundaryValue(x,true ));
-                temp.add(new BoundaryValue(x - 1, false));
-                temp.add(new BoundaryValue(x + 1, true));
+                temp.add(new BoundaryValue(x,true, clock));
+                temp.add(new BoundaryValue(x - 1, false, clock));
+                temp.add(new BoundaryValue(x + 1, true, clock));
                 break;
             case "<=R":
             case ">=L":
-                temp.add(new BoundaryValue(x,true));
-                temp.add(new BoundaryValue(x - 1, true));
-                temp.add(new BoundaryValue(x + 1, false));
+                temp.add(new BoundaryValue(x,true, clock));
+                temp.add(new BoundaryValue(x - 1, true, clock));
+                temp.add(new BoundaryValue(x + 1, false, clock));
                 break;
             case "==L":
             case "==R":
-                temp.add(new BoundaryValue(x, true));
-                temp.add(new BoundaryValue(x - 1, false));
-                temp.add(new BoundaryValue(x + 1, false));
+                temp.add(new BoundaryValue(x, true, clock));
+                temp.add(new BoundaryValue(x - 1, false, clock));
+                temp.add(new BoundaryValue(x + 1, false, clock));
                 break;
             case "!=L":
             case "!=R":
-                temp.add(new BoundaryValue(x, false));
-                temp.add(new BoundaryValue(x - 1, true));
-                temp.add(new BoundaryValue(x + 1, true));
+                temp.add(new BoundaryValue(x, false, clock));
+                temp.add(new BoundaryValue(x - 1, true, clock));
+                temp.add(new BoundaryValue(x + 1, true, clock));
                 break;
             default:
                 System.out.println("wtf");

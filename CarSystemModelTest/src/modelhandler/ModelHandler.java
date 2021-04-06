@@ -73,9 +73,9 @@ public class ModelHandler {
                             updateGuard(edge, boundaryValue.getGuard());
                             String oldLocation = edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString();
                             if (!boundaryValue.getValidity()) {
-                                edge.getEdge().getTarget().setProperty("testcodeEnter", "assertTrue(false);");
+                                edge.getEdge().getTarget().setProperty("testcodeEnter", "fail();");
                             }
-                            testCases.add(getTrace(edge.getEdge().getTarget().getName()));
+                            testCases.add(getTrace(edge.getEdge().getTarget().getName(), String.valueOf(boundaryValue.getValue()), boundaryValue.getClock()));
                             if (!boundaryValue.getValidity()) {
                                 edge.getEdge().getTarget().setProperty("testcodeEnter", oldLocation);
                             }
@@ -93,11 +93,13 @@ public class ModelHandler {
      * get the test code from the start state to the location
      *
      * @param location: the target location of the query
+     * @param clockValue: the clock value of the query
+     * @param clockVariable: the clock variable of the query
      * @return A StringBuilder with the test code of the trace
      */
-    private StringBuilder getTrace(String location) throws EngineException, IOException {
+    private StringBuilder getTrace(String location, String clockValue, String clockVariable) throws EngineException, IOException {
         system = engine.getSystem(document, problems);
-        Query q = new Query("E<> Spec." + location, "");
+        Query q = new Query("E<> Spec." + location + " && " + clockVariable + " == " + clockValue, "");
         QueryFeedback qf = new QueryFeedback() {
             @Override
             public void setProgressAvail(boolean b) {
