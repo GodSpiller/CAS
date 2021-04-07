@@ -56,6 +56,7 @@ public class ModelHandler {
         ArrayList<StringBuilder> testCases = new ArrayList<>();
 
         for (Process p : system.getProcesses()) { // for each process in the system
+            int j = 0;
             for (SystemEdge edge : p.getEdges()) { // for each edge in the process
                 if (hasProperty(edge, "guard")) {
                     // resets the oldGuard variable when we have a new edge
@@ -79,6 +80,7 @@ public class ModelHandler {
                             if (!boundaryValue.getValidity()) {
                                 edge.getEdge().getTarget().setProperty("testcodeEnter", oldLocation);
                             }
+                            System.out.println(j++ + " - " + boundaryValue.getValidity());
                         }
                     }
                     // update the edge's guard to the original before moving on the next edge

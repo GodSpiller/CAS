@@ -22,7 +22,6 @@ public class BoundaryVisitor implements ASTVisitor {
 
     public HashMap<Integer, ArrayList<BoundaryValue>> boundaryValues = new HashMap<>();
 
-
     @Override
     public Object visit(Program program) {
         for (ASTNode node : program.getChildren()) {
@@ -122,11 +121,11 @@ public class BoundaryVisitor implements ASTVisitor {
 
         if (lss.getLeft().getType().equals(TokenType.NUMBER.toString())){  //Clock < Boundary
             boundaryValues.put(parseInt(lss.getLeft().getValue()),
-                    makeValues(parseInt(lss.getLeft().getValue()), lss.getLeft().getValue(),"<L"));
+                    makeValues(parseInt(lss.getLeft().getValue()), lss.getRight().getValue(),"<L"));
         }
         if (lss.getRight().getType().equals(TokenType.NUMBER.toString())){  //Boundary < Clock
             boundaryValues.put(parseInt(lss.getRight().getValue()),
-                    makeValues(parseInt(lss.getRight().getValue()), lss.getRight().getValue(),"<R"));
+                    makeValues(parseInt(lss.getRight().getValue()), lss.getLeft().getValue(),"<R"));
         }
 
         return null;
@@ -170,45 +169,38 @@ public class BoundaryVisitor implements ASTVisitor {
     public ArrayList<BoundaryValue> makeValues(int x, String clock, String operator) {
         ArrayList<BoundaryValue> temp = new ArrayList<>();
 
-        switch(operator) {
-            case "<L":
-            case ">R":
+        switch (operator) {
+            case "<L", ">R" -> {
+                temp.add(new BoundaryValue(x, false, clock));
+                temp.add(new BoundaryValue(x + 1, true, clock));
+                temp.add(new BoundaryValue(x - 1, false, clock));
+            }
+            case "<R", ">L" -> {
+                temp.add(new BoundaryValue(x, false, clock));
+                temp.add(new BoundaryValue(x + 1, false, clock));
+                temp.add(new BoundaryValue(x - 1, true, clock));
+            }
+            case "<=L", ">=R" -> {
                 temp.add(new BoundaryValue(x, true, clock));
-                temp.add(new BoundaryValue(x + 1, true, clock));
-                temp.add(new BoundaryValue(x - 1, false, clock));
-                break;
-            case "<R":
-            case ">L":
-                temp.add(new BoundaryValue(x,true, clock));
-                temp.add(new BoundaryValue(x + 1, false, clock));
-                temp.add(new BoundaryValue(x - 1, true, clock));
-                break;
-            case "<=L":
-            case ">=R":
-                temp.add(new BoundaryValue(x,true, clock));
                 temp.add(new BoundaryValue(x - 1, false, clock));
                 temp.add(new BoundaryValue(x + 1, true, clock));
-                break;
-            case "<=R":
-            case ">=L":
-                temp.add(new BoundaryValue(x,true, clock));
+            }
+            case "<=R", ">=L" -> {
+                temp.add(new BoundaryValue(x, true, clock));
                 temp.add(new BoundaryValue(x - 1, true, clock));
                 temp.add(new BoundaryValue(x + 1, false, clock));
-                break;
-            case "==L":
-            case "==R":
+            }
+            case "==L", "==R" -> {
                 temp.add(new BoundaryValue(x, true, clock));
                 temp.add(new BoundaryValue(x - 1, false, clock));
                 temp.add(new BoundaryValue(x + 1, false, clock));
-                break;
-            case "!=L":
-            case "!=R":
+            }
+            case "!=L", "!=R" -> {
                 temp.add(new BoundaryValue(x, false, clock));
                 temp.add(new BoundaryValue(x - 1, true, clock));
                 temp.add(new BoundaryValue(x + 1, true, clock));
-                break;
-            default:
-                System.out.println("wtf");
+            }
+            default -> System.out.println("wtf");
         }
 
         return temp;

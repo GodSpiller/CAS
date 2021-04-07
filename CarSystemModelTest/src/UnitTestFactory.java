@@ -29,6 +29,9 @@ public class UnitTestFactory {
         for (int i = 0; i < numberOfTestCases; i++){
             sb.append("\n@Test\nvoid testcase" +  new DecimalFormat("000").format(i) + "(){\n");
             sb.append("CarSystem cs = new CarSystem();\n");
+            if (testCases.get(i).isEmpty()){
+                sb.append("fail();\n");
+            }
             sb.append(testCases.get(i));
             sb.append("}\n");
         }
