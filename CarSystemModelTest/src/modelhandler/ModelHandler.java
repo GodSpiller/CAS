@@ -2,14 +2,9 @@ package modelhandler;
 
 import ast.nodes.BoundaryValue;
 import com.uppaal.engine.*;
-import com.uppaal.model.core2.Document;
-import com.uppaal.model.core2.Location;
-import com.uppaal.model.core2.PrototypeDocument;
-import com.uppaal.model.core2.Query;
+import com.uppaal.model.core2.*;
+import com.uppaal.model.system.*;
 import com.uppaal.model.system.Process;
-import com.uppaal.model.system.SystemEdge;
-import com.uppaal.model.system.SystemEdgeSelect;
-import com.uppaal.model.system.UppaalSystem;
 import com.uppaal.model.system.concrete.ConcreteTrace;
 import com.uppaal.model.system.symbolic.SymbolicState;
 import com.uppaal.model.system.symbolic.SymbolicTrace;
@@ -35,10 +30,10 @@ public class ModelHandler {
     public UppaalSystem system;
     SymbolicState state;
     ModelHandlerVisitor modelHandlerVisitor = new ModelHandlerVisitor();
-
+    public Template template;
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("\"C:\\\\Users\\\\Esben\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
+        engine.setServerPath("\"C:\\\\Users\\\\Yann\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
         engine.connect();
         system = engine.getSystem(document, problems);
         state = engine.getInitialState(system);
@@ -49,11 +44,12 @@ public class ModelHandler {
      *
      * @return an ArrayList of test cases
      */
-    public ArrayList<StringBuilder> createTestCode() throws EngineException, IOException {
+    public ArrayList<StringBuilder> createTestCode() throws EngineException, IOException, CloneNotSupportedException {
         GuardMaker gm = new GuardMaker();
         StringBuilder sb;
         StringBuilder oldGuard;
         ArrayList<StringBuilder> testCases = new ArrayList<>();
+        template = (Template) document.getTemplate("Spec").clone();
 
         for (Process p : system.getProcesses()) { // for each process in the system
             int j = 0;
@@ -71,16 +67,21 @@ public class ModelHandler {
                     for (Integer i : guards.keySet()){
                         for (BoundaryValue boundaryValue : guards.get(i)){
                             // update the guard of an edge to a new boundary value
-                            updateGuard(edge, boundaryValue.getGuard());
                             String oldLocation = edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString();
                             if (!boundaryValue.getValidity()) {
-                                edge.getEdge().getTarget().setProperty("testcodeEnter", "fail();");
+                                makeEdge(edge.getEdge().getSource(), edge.getEdge().getTarget(), boundaryValue);
+                                //edge.getEdge().getTarget().setProperty("testcodeEnter", "fail();");
+                                try {
+                                    document.save("sampledoc" + j + ".xml");
+                                } catch (IOException e) {
+                                    e.printStackTrace(System.err);
+                                }
                             }
                             testCases.add(getTrace(edge.getEdge().getTarget().getName(), String.valueOf(boundaryValue.getValue()), boundaryValue.getClock()));
                             if (!boundaryValue.getValidity()) {
                                 edge.getEdge().getTarget().setProperty("testcodeEnter", oldLocation);
                             }
-                            System.out.println(j++ + " - " + boundaryValue.getValidity());
+                            System.out.println(j++ + " - " + boundaryValue.getGuard() + " - " + boundaryValue.getValidity());
                         }
                     }
                     // update the edge's guard to the original before moving on the next edge
@@ -89,6 +90,16 @@ public class ModelHandler {
             }
         }
         return testCases;
+    }
+
+    private void makeEdge(AbstractLocation source, AbstractLocation target, BoundaryValue boundaryValue) {
+        Edge edge = template.createEdge();
+        edge.setSource(source);
+        edge.setTarget(target);
+        edge.setProperty("guard", boundaryValue.getClock() + "==" + boundaryValue.getValue());
+        edge.setProperty("testcode", "fail(); ");
+        template.insert(edge,null);
+        document.insert(template, null).setProperty("name", "template");
     }
 
     /*
