@@ -48,6 +48,9 @@ public class ModelHandlerVisitor implements Visitor {
     public void visitEdge(Edge edge) throws Exception {
         if (hasProperty(edge, "testcode")){
             testCode.append(edge.getPropertyValue("testcode") + "\n");
+            if (edge.getName().equals("removeMe")) {
+                edge.remove();
+            }
         }
     }
 

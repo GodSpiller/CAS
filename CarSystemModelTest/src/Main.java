@@ -18,7 +18,8 @@ public class Main {
 
         ModelHandler modelHandler = new ModelHandler();
 
-        modelHandler.createTestCode();
+        UnitTestFactory.makeUnitTests(modelHandler.createTestCode());
+        modelHandler.engine.disconnect();
 
     }
 }

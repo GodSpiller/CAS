@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
+
 // Normale mennesker
 //  "C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe"
 // Kasper
@@ -26,10 +28,8 @@ import java.util.List;
 public class ModelHandler {
     public ArrayList<Problem> problems = new ArrayList<Problem>();
     URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS2.0.xml");
-    Engine engine = new Engine();
-    public Document document;
-    public UppaalSystem system;
-    SymbolicState state;
+    public Engine engine = new Engine();
+    public Document document;;
     ModelHandlerVisitor modelHandlerVisitor = new ModelHandlerVisitor();
     Template template;
 
@@ -37,17 +37,6 @@ public class ModelHandler {
         document = new PrototypeDocument().load(url);
         engine.setServerPath("\"C:\\\\Users\\\\Yann\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
         engine.connect();
-        system = engine.getSystem(document, problems);
-        state = engine.getInitialState(system);
-    }
-
-    public void hmm() throws CloneNotSupportedException {
-        makeEdge(system.getProcess(0).getEdge(10).getEdge().getSource(), system.getProcess(0).getEdge(10).getEdge().getTarget());
-        try {
-            document.save("sampledoc0.xml");
-        } catch (IOException e) {
-            e.printStackTrace(System.err);
-        }
     }
 
     /*
@@ -60,7 +49,7 @@ public class ModelHandler {
         StringBuilder sb;
         StringBuilder oldGuard;
         ArrayList<StringBuilder> testCases = new ArrayList<>();
-
+        UppaalSystem system = engine.getSystem(document, problems);
         int j = 0;
         for (SystemEdge edge : system.getProcess(0).getEdges()) { // for each edge in the process
             if (hasProperty(edge, "guard")) {
@@ -75,11 +64,16 @@ public class ModelHandler {
                 oldGuard.append(edge.getEdge().getPropertyValue("guard"));
                 for (Integer i : guards.keySet()){
                     for (BoundaryValue boundaryValue : guards.get(i)){
+
                         makeEdge(edge.getEdge().getSource(), edge.getEdge().getTarget());
+                        /*try {
+                            document.save("sampledoc" + j++ + ".xml");
+                        } catch (IOException e) {
+                            e.printStackTrace(System.err);
+                        }
+                        */
 
-                        testCases.add(getTrace(edge.getEdge().getTarget().getName(), String.valueOf(boundaryValue.getValue()), boundaryValue.getClock()));
-
-                        document.getTemplate("Negative").remove();
+                        testCases.add(getTrace(edge.getEdge().getTarget().getName(), String.valueOf(boundaryValue.getValue()), boundaryValue.getClock(), document));
 
                     }
                 }
@@ -90,14 +84,17 @@ public class ModelHandler {
 
     private void makeEdge(AbstractLocation source, AbstractLocation target) throws CloneNotSupportedException {
         template = (Template) document.getTemplate("Spec").clone();
-        document.insert(template, document.getTemplate("Spec")).setProperty("name", "Negative");
+        //document.insert(template, document.getTemplate("Spec")).setProperty("name", "Spec");
         Edge edge = template.createEdge();
-        template.insert(edge, null);
+        document.getTemplate("Spec").insert(edge, document.getTemplate("Spec").getLast());
+        //template.insert(edge, template.getLast());
         edge.setSource(source);
         edge.setTarget(target);
         edge.setProperty("assignment", "x=10000");
+        edge.setProperty("name", "removeMe");
         //edge.setProperty("guard", boundaryValue.getClock() + "==" + boundaryValue.getValue());
         edge.setProperty("testcode", "fail(); ");
+
     }
 
     /*
@@ -108,9 +105,10 @@ public class ModelHandler {
      * @param clockVariable: the clock variable of the query
      * @return A StringBuilder with the test code of the trace
      */
-    private StringBuilder getTrace(String location, String clockValue, String clockVariable) throws EngineException, IOException {
-        system = engine.getSystem(document, problems);
-        Query q = new Query("E<> Negative." + location + " && " + clockVariable + " == " + clockValue, "");
+    private StringBuilder getTrace(String location, String clockValue, String clockVariable, Document doc) throws EngineException, IOException {
+        UppaalSystem bitch = engine.getSystem(doc,problems);
+
+        Query q = new Query("E<> Spec." + location + " && " + clockVariable + " == " + clockValue, "");
         QueryFeedback qf = new QueryFeedback() {
             @Override
             public void setProgressAvail(boolean b) {
@@ -172,7 +170,7 @@ public class ModelHandler {
             public void setResultText(String s) {
             }
         };
-        QueryResult qr = engine.query(system, "trace 1", q, qf);
+        QueryResult qr = engine.query(bitch, "trace 1", q, qf);
 
         return modelHandlerVisitor.getStringBuilder();
     }
