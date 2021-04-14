@@ -18,7 +18,7 @@ public class Main {
 
         ModelHandler modelHandler = new ModelHandler();
 
-        UnitTestFactory.makeUnitTests(modelHandler.createTestCode());
+        modelHandler.createTestCode();
 
     }
 }

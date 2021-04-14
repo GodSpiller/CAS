@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 // Normale mennesker
 //  "C:\\Users\\Esben\\Desktop\\uppaal-4.1.24\\bin-Windows\\server.exe"
@@ -30,13 +31,23 @@ public class ModelHandler {
     public UppaalSystem system;
     SymbolicState state;
     ModelHandlerVisitor modelHandlerVisitor = new ModelHandlerVisitor();
-    public Template template;
+    Template template;
+
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("\"C:\\\\Users\\\\Yann\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
+        engine.setServerPath("\"C:\\\\Users\\\\Esben\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
         engine.connect();
         system = engine.getSystem(document, problems);
         state = engine.getInitialState(system);
+    }
+
+    public void hmm() throws CloneNotSupportedException {
+        makeEdge(system.getProcess(0).getEdge(10).getEdge().getSource(), system.getProcess(0).getEdge(10).getEdge().getTarget());
+        try {
+            document.save("sampledoc0.xml");
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+        }
     }
 
     /*
@@ -49,57 +60,47 @@ public class ModelHandler {
         StringBuilder sb;
         StringBuilder oldGuard;
         ArrayList<StringBuilder> testCases = new ArrayList<>();
-        template = (Template) document.getTemplate("Spec").clone();
 
-        for (Process p : system.getProcesses()) { // for each process in the system
-            int j = 0;
-            for (SystemEdge edge : p.getEdges()) { // for each edge in the process
-                if (hasProperty(edge, "guard")) {
-                    // resets the oldGuard variable when we have a new edge
-                    oldGuard = new StringBuilder();
-                    HashMap<Integer, ArrayList<BoundaryValue>> guards;
-                    sb = new StringBuilder();
-                    sb.append(edge.getEdge().getPropertyValue("guard"));
-                    // creates new guards for an edge
-                    guards = gm.makeGuards(sb);
-                    // set the oldGuard variable to the guard of the edge
-                    oldGuard.append(edge.getEdge().getPropertyValue("guard"));
-                    for (Integer i : guards.keySet()){
-                        for (BoundaryValue boundaryValue : guards.get(i)){
-                            // update the guard of an edge to a new boundary value
-                            String oldLocation = edge.getEdge().getTarget().getPropertyValue("testcodeEnter").toString();
-                            if (!boundaryValue.getValidity()) {
-                                makeEdge(edge.getEdge().getSource(), edge.getEdge().getTarget(), boundaryValue);
-                                //edge.getEdge().getTarget().setProperty("testcodeEnter", "fail();");
-                                try {
-                                    document.save("sampledoc" + j + ".xml");
-                                } catch (IOException e) {
-                                    e.printStackTrace(System.err);
-                                }
-                            }
-                            testCases.add(getTrace(edge.getEdge().getTarget().getName(), String.valueOf(boundaryValue.getValue()), boundaryValue.getClock()));
-                            if (!boundaryValue.getValidity()) {
-                                edge.getEdge().getTarget().setProperty("testcodeEnter", oldLocation);
-                            }
-                            System.out.println(j++ + " - " + boundaryValue.getGuard() + " - " + boundaryValue.getValidity());
+        int j = 0;
+        for (SystemEdge edge : system.getProcess(0).getEdges()) { // for each edge in the process
+            if (hasProperty(edge, "guard")) {
+                // resets the oldGuard variable when we have a new edge
+                oldGuard = new StringBuilder();
+                HashMap<Integer, ArrayList<BoundaryValue>> guards;
+                sb = new StringBuilder();
+                sb.append(edge.getEdge().getPropertyValue("guard"));
+                // creates new guards for an edge
+                guards = gm.makeGuards(sb);
+                // set the oldGuard variable to the guard of the edge
+                oldGuard.append(edge.getEdge().getPropertyValue("guard"));
+                for (Integer i : guards.keySet()){
+                    for (BoundaryValue boundaryValue : guards.get(i)){
+                        Document OGdoc = document;
+                        makeEdge(edge.getEdge().getSource(), edge.getEdge().getTarget());
+                        try {
+                            document.save("sampledoc" + j++ + ".xml");
+                        } catch (IOException e) {
+                            e.printStackTrace(System.err);
                         }
+                        testCases.add(getTrace(edge.getEdge().getTarget().getName(), String.valueOf(boundaryValue.getValue()), boundaryValue.getClock()));
+                        document = OGdoc;
                     }
-                    // update the edge's guard to the original before moving on the next edge
-                    updateGuard(edge, oldGuard.toString());
                 }
             }
         }
         return testCases;
     }
 
-    private void makeEdge(AbstractLocation source, AbstractLocation target, BoundaryValue boundaryValue) {
+    private void makeEdge(AbstractLocation source, AbstractLocation target) throws CloneNotSupportedException {
+        template = (Template) document.getTemplate("Spec");
+        document.insert(template, null).setProperty("name", "Spec");
         Edge edge = template.createEdge();
+        template.insert(edge, null);
         edge.setSource(source);
         edge.setTarget(target);
-        edge.setProperty("guard", boundaryValue.getClock() + "==" + boundaryValue.getValue());
+        edge.setProperty("assignment", "x=10000");
+        //edge.setProperty("guard", boundaryValue.getClock() + "==" + boundaryValue.getValue());
         edge.setProperty("testcode", "fail(); ");
-        template.insert(edge,null);
-        document.insert(template, null).setProperty("name", "template");
     }
 
     /*
