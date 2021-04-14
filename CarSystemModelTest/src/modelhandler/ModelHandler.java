@@ -35,7 +35,7 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("\"C:\\\\Users\\\\Esben\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
+        engine.setServerPath("\"C:\\\\Users\\\\Yann\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
         engine.connect();
         system = engine.getSystem(document, problems);
         state = engine.getInitialState(system);
@@ -75,15 +75,12 @@ public class ModelHandler {
                 oldGuard.append(edge.getEdge().getPropertyValue("guard"));
                 for (Integer i : guards.keySet()){
                     for (BoundaryValue boundaryValue : guards.get(i)){
-                        Document OGdoc = document;
                         makeEdge(edge.getEdge().getSource(), edge.getEdge().getTarget());
-                        try {
-                            document.save("sampledoc" + j++ + ".xml");
-                        } catch (IOException e) {
-                            e.printStackTrace(System.err);
-                        }
+
                         testCases.add(getTrace(edge.getEdge().getTarget().getName(), String.valueOf(boundaryValue.getValue()), boundaryValue.getClock()));
-                        document = OGdoc;
+
+                        document.getTemplate("Negative").remove();
+
                     }
                 }
             }
@@ -92,8 +89,8 @@ public class ModelHandler {
     }
 
     private void makeEdge(AbstractLocation source, AbstractLocation target) throws CloneNotSupportedException {
-        template = (Template) document.getTemplate("Spec");
-        document.insert(template, null).setProperty("name", "Spec");
+        template = (Template) document.getTemplate("Spec").clone();
+        document.insert(template, document.getTemplate("Spec")).setProperty("name", "Negative");
         Edge edge = template.createEdge();
         template.insert(edge, null);
         edge.setSource(source);
@@ -113,7 +110,7 @@ public class ModelHandler {
      */
     private StringBuilder getTrace(String location, String clockValue, String clockVariable) throws EngineException, IOException {
         system = engine.getSystem(document, problems);
-        Query q = new Query("E<> Spec." + location + " && " + clockVariable + " == " + clockValue, "");
+        Query q = new Query("E<> Negative." + location + " && " + clockVariable + " == " + clockValue, "");
         QueryFeedback qf = new QueryFeedback() {
             @Override
             public void setProgressAvail(boolean b) {
