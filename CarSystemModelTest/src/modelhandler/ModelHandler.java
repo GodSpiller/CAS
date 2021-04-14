@@ -35,19 +35,10 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("\"C:\\\\Users\\\\Yann\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
+        engine.setServerPath("\"C:\\\\Users\\\\Esben\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
         engine.connect();
         system = engine.getSystem(document, problems);
         state = engine.getInitialState(system);
-    }
-
-    public void hmm() throws CloneNotSupportedException {
-        makeEdge(system.getProcess(0).getEdge(10).getEdge().getSource(), system.getProcess(0).getEdge(10).getEdge().getTarget());
-        try {
-            document.save("sampledoc0.xml");
-        } catch (IOException e) {
-            e.printStackTrace(System.err);
-        }
     }
 
     /*
@@ -76,8 +67,12 @@ public class ModelHandler {
                 for (Integer i : guards.keySet()){
                     for (BoundaryValue boundaryValue : guards.get(i)){
                         makeEdge(edge.getEdge().getSource(), edge.getEdge().getTarget());
-
-                        testCases.add(getTrace(edge.getEdge().getTarget().getName(), String.valueOf(boundaryValue.getValue()), boundaryValue.getClock()));
+                        try {
+                            document.save("sampledoc"+j++ +".xml");
+                        } catch (IOException e) {
+                            e.printStackTrace(System.err);
+                        }
+                        //testCases.add(getTrace(edge.getEdge().getTarget().getName(), String.valueOf(boundaryValue.getValue()), boundaryValue.getClock()));
 
                         document.getTemplate("Negative").remove();
 
@@ -92,7 +87,7 @@ public class ModelHandler {
         template = (Template) document.getTemplate("Spec").clone();
         document.insert(template, document.getTemplate("Spec")).setProperty("name", "Negative");
         Edge edge = template.createEdge();
-        template.insert(edge, null);
+        template.insert(edge, template.getLast());
         edge.setSource(source);
         edge.setTarget(target);
         edge.setProperty("assignment", "x=10000");
