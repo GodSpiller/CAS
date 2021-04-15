@@ -4,17 +4,13 @@ import ast.nodes.BoundaryValue;
 import com.uppaal.engine.*;
 import com.uppaal.model.core2.*;
 import com.uppaal.model.system.*;
-import com.uppaal.model.system.Process;
 import com.uppaal.model.system.concrete.ConcreteTrace;
-import com.uppaal.model.system.symbolic.SymbolicState;
 import com.uppaal.model.system.symbolic.SymbolicTrace;
-import com.uppaal.model.system.symbolic.SymbolicTransition;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
@@ -27,7 +23,7 @@ import static java.lang.Integer.parseInt;
 
 public class ModelHandler {
     public ArrayList<Problem> problems = new ArrayList<Problem>();
-    URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS2.0.xml");
+    URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS2.1.xml");
     public Engine engine = new Engine();
     public Document document;;
     ModelHandlerVisitor modelHandlerVisitor = new ModelHandlerVisitor();
@@ -35,7 +31,7 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("\"C:\\\\Users\\\\Yann\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
+        engine.setServerPath("\"C:\\\\Users\\\\Esben\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
         engine.connect();
     }
 
@@ -44,13 +40,12 @@ public class ModelHandler {
      *
      * @return an ArrayList of test cases
      */
-    public ArrayList<StringBuilder> createTestCode() throws EngineException, IOException, CloneNotSupportedException {
+    public ArrayList<StringBuilder> createTestCode() throws EngineException, CloneNotSupportedException {
         GuardMaker gm = new GuardMaker();
         StringBuilder sb;
         StringBuilder oldGuard;
         ArrayList<StringBuilder> testCases = new ArrayList<>();
         UppaalSystem system = engine.getSystem(document, problems);
-
 
         int j = 0;
         for (SystemEdge edge : system.getProcess(0).getEdges()) {
@@ -73,13 +68,13 @@ public class ModelHandler {
 
                         testCases.add(getTrace(edge.getEdge().getTarget().getName(), boundaryValue, engine.getSystem(document, problems)));
 
-                        removeNegativeEdge(system);
-
                         try {
                             document.save("sampledoc" + j++ + ".xml");
                         } catch (IOException e) {
                             e.printStackTrace(System.err);
                         }
+
+                        removeNegativeEdge();
 
                     }
                 }
@@ -88,8 +83,8 @@ public class ModelHandler {
         return testCases;
     }
 
-    private void removeNegativeEdge(UppaalSystem system) throws EngineException {
-        system = engine.getSystem(document, problems);
+    private void removeNegativeEdge() throws EngineException {
+        UppaalSystem system = engine.getSystem(document, problems);
         for (SystemEdge edge : system.getProcess(0).getEdges()) {
             if (edge.getEdge().getPropertyValue("testcode").equals("fail();")) {
                 edge.getEdge().remove();
@@ -104,8 +99,9 @@ public class ModelHandler {
         document.getTemplate("Spec").insert(edge, doc.getTemplate("Spec").getLast());
         edge.setSource(source);
         edge.setTarget(target);
-        edge.setProperty("guard", boundaryValue.getClock() + "==" + boundaryValue.getValue());
+        edge.setProperty("guard", boundaryValue.getGuard());
         edge.setProperty("testcode", "fail();");
+        edge.setProperty("assignment", "testgoal = true");
         edge.setProperty("name", "negativeEdge");
     }
 
@@ -117,17 +113,8 @@ public class ModelHandler {
      * @param clockVariable: the clock variable of the query
      * @return A StringBuilder with the test code of the trace
      */
-    private StringBuilder getTrace(String location, BoundaryValue boundaryValue, UppaalSystem system) throws EngineException, IOException {
-        String temp;
-
-        if (!boundaryValue.getValidity()) {
-            temp = makeRestriction(boundaryValue);
-        }
-        else {
-            temp = "";
-        }
-
-        Query q = new Query("E<> Spec." + location + temp, "");
+    private StringBuilder getTrace(String location, BoundaryValue boundaryValue, UppaalSystem system) throws EngineException {
+        Query q = new Query("E<> testgoal", "");
         QueryFeedback qf = new QueryFeedback() {
             @Override
             public void setProgressAvail(boolean b) {
@@ -195,11 +182,7 @@ public class ModelHandler {
     }
 
     private String makeRestriction(BoundaryValue boundaryValue) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(" && " + (boundaryValue.getValue() - 1) + " < " + boundaryValue.getClock() + " && " + boundaryValue.getClock() + " < " + boundaryValue.getValue());
-
-        return sb.toString();
+        return " && " + (boundaryValue.getValue() - 1) + " < " + boundaryValue.getClock() + " && " + boundaryValue.getClock() + " < " + boundaryValue.getValue();
     }
 
     /*
