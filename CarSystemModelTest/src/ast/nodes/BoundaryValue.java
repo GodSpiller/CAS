@@ -28,7 +28,6 @@ public class BoundaryValue {
         this.guard = guard;
     }
 
-
     public String getClock() {
         return clock;
     }

@@ -35,7 +35,7 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("\"C:\\\\Users\\\\Esben\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
+        engine.setServerPath("\"C:\\\\Users\\\\Yann\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
         engine.connect();
     }
 
@@ -50,8 +50,11 @@ public class ModelHandler {
         StringBuilder oldGuard;
         ArrayList<StringBuilder> testCases = new ArrayList<>();
         UppaalSystem system = engine.getSystem(document, problems);
+
+
         int j = 0;
-        for (SystemEdge edge : system.getProcess(0).getEdges()) { // for each edge in the process
+        for (SystemEdge edge : system.getProcess(0).getEdges()) {
+            // for each edge in the process
             if (hasProperty(edge, "guard")) {
                 // resets the oldGuard variable when we have a new edge
                 oldGuard = new StringBuilder();
@@ -64,16 +67,19 @@ public class ModelHandler {
                 oldGuard.append(edge.getEdge().getPropertyValue("guard"));
                 for (Integer i : guards.keySet()){
                     for (BoundaryValue boundaryValue : guards.get(i)){
+                        if (!boundaryValue.getValidity()) {
+                            makeNegativeEdge(edge.getEdge().getSource(), edge.getEdge().getTarget(), boundaryValue, document);
+                        }
 
-                        makeEdge(edge.getEdge().getSource(), edge.getEdge().getTarget());
-                        /*try {
+                        testCases.add(getTrace(edge.getEdge().getTarget().getName(), boundaryValue, engine.getSystem(document, problems)));
+
+                        removeNegativeEdge(system);
+
+                        try {
                             document.save("sampledoc" + j++ + ".xml");
                         } catch (IOException e) {
                             e.printStackTrace(System.err);
                         }
-                        */
-
-                        testCases.add(getTrace(edge.getEdge().getTarget().getName(), String.valueOf(boundaryValue.getValue()), boundaryValue.getClock(), document));
 
                     }
                 }
@@ -82,19 +88,25 @@ public class ModelHandler {
         return testCases;
     }
 
-    private void makeEdge(AbstractLocation source, AbstractLocation target) throws CloneNotSupportedException {
-        template = (Template) document.getTemplate("Spec").clone();
-        //document.insert(template, document.getTemplate("Spec")).setProperty("name", "Spec");
+    private void removeNegativeEdge(UppaalSystem system) throws EngineException {
+        system = engine.getSystem(document, problems);
+        for (SystemEdge edge : system.getProcess(0).getEdges()) {
+            if (edge.getEdge().getPropertyValue("testcode").equals("fail();")) {
+                edge.getEdge().remove();
+            }
+        }
+
+    }
+
+    private void makeNegativeEdge(AbstractLocation source, AbstractLocation target, BoundaryValue boundaryValue, Document doc) throws CloneNotSupportedException {
+        template = (Template) doc.getTemplate("Spec").clone();
         Edge edge = template.createEdge();
-        document.getTemplate("Spec").insert(edge, document.getTemplate("Spec").getLast());
-        //template.insert(edge, template.getLast());
+        document.getTemplate("Spec").insert(edge, doc.getTemplate("Spec").getLast());
         edge.setSource(source);
         edge.setTarget(target);
-        edge.setProperty("assignment", "x=10000");
-        edge.setProperty("name", "removeMe");
-        //edge.setProperty("guard", boundaryValue.getClock() + "==" + boundaryValue.getValue());
-        edge.setProperty("testcode", "fail(); ");
-
+        edge.setProperty("guard", boundaryValue.getClock() + "==" + boundaryValue.getValue());
+        edge.setProperty("testcode", "fail();");
+        edge.setProperty("name", "negativeEdge");
     }
 
     /*
@@ -105,10 +117,17 @@ public class ModelHandler {
      * @param clockVariable: the clock variable of the query
      * @return A StringBuilder with the test code of the trace
      */
-    private StringBuilder getTrace(String location, String clockValue, String clockVariable, Document doc) throws EngineException, IOException {
-        UppaalSystem bitch = engine.getSystem(doc,problems);
+    private StringBuilder getTrace(String location, BoundaryValue boundaryValue, UppaalSystem system) throws EngineException, IOException {
+        String temp;
 
-        Query q = new Query("E<> Spec." + location + " && " + clockVariable + " == " + clockValue, "");
+        if (!boundaryValue.getValidity()) {
+            temp = makeRestriction(boundaryValue);
+        }
+        else {
+            temp = "";
+        }
+
+        Query q = new Query("E<> Spec." + location + temp, "");
         QueryFeedback qf = new QueryFeedback() {
             @Override
             public void setProgressAvail(boolean b) {
@@ -170,9 +189,17 @@ public class ModelHandler {
             public void setResultText(String s) {
             }
         };
-        QueryResult qr = engine.query(bitch, "trace 1", q, qf);
+        QueryResult qr = engine.query(system, "trace 1", q, qf);
 
         return modelHandlerVisitor.getStringBuilder();
+    }
+
+    private String makeRestriction(BoundaryValue boundaryValue) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(" && " + (boundaryValue.getValue() - 1) + " < " + boundaryValue.getClock() + " && " + boundaryValue.getClock() + " < " + boundaryValue.getValue());
+
+        return sb.toString();
     }
 
     /*
