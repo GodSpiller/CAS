@@ -160,6 +160,7 @@
 <declaration>// Place global declarations here.
 int __single__=0;
 int __reach__=0;
+bool testgoal = false;
 
 clock c;
 clock g;
