@@ -157,10 +157,10 @@
 <!ELEMENT comment (#PCDATA)>
 ]>
 <nta>
-<declaration>// Place global declarations here.
+	<declaration>// Place global declarations here.
 int __single__=0;
 int __reach__=0;
-bool testgoal = false;
+bool testgoal;
 
 clock c;
 clock g;
@@ -182,6 +182,7 @@ broadcast chan flashOff;
 	<template>
 		<name x="5" y="5">Spec</name>
 		<declaration>// Place local declarations here.
+bool local_testgoal;
 </declaration>
 		<location id="id0" x="40" y="-256">
 			<name x="93" y="-297">AlarmTriggered</name>
@@ -242,6 +243,14 @@ broadcast chan flashOff;
 			<name x="30" y="78">Start</name>
 		</location>
 		<init ref="id15"/>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id2"/>
+			<label kind="guard" x="248" y="-426">e == 301</label>
+			<label kind="assignment" x="248" y="-392">testgoal = true,
+local_testgoal = true</label>
+			<nail x="518" y="-323"/>
+		</transition>
 		<transition>
 			<source ref="id0"/>
 			<target ref="id10"/>
@@ -313,6 +322,7 @@ assertFalse(cs.locked);</label>
 assertTrue(cs.e == 300);
 cs.soundOff();
 assertFalse(cs.sound);</label>
+			<nail x="382" y="-323"/>
 		</transition>
 		<transition>
 			<source ref="id8"/>
@@ -552,5 +562,10 @@ system Spec, User;
 			<formula>E&lt;&gt; Spec.SilentAndOpened</formula>
 			<comment></comment>
 		</query>
+		<query>
+			<formula>E&lt;&gt; Spec.local_testgoal == true &amp;&amp; testgoal == true</formula>
+			<comment></comment>
+		</query>
 	</queries>
 </nta>
+
