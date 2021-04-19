@@ -193,7 +193,7 @@ bool local_testgoal;
 			<label kind="testcodeEnter">assertTrue(cs.g &lt;= 0);</label>
 		</location>
 		<location id="id2" x="231" y="-211">
-			<name x="238" y="-255">SilentAndFlashing2</name>
+			<name x="246" y="-348">SilentAndFlashing2</name>
 			<label kind="testcodeEnter">assertTrue(cs.e &lt;= 300);</label>
 		</location>
 		<location id="id3" x="141" y="-194">
@@ -243,14 +243,6 @@ bool local_testgoal;
 			<name x="30" y="78">Start</name>
 		</location>
 		<init ref="id15"/>
-		<transition>
-			<source ref="id6"/>
-			<target ref="id2"/>
-			<label kind="guard" x="248" y="-426">e == 301</label>
-			<label kind="assignment" x="248" y="-392">testgoal = true,
-local_testgoal = true</label>
-			<nail x="518" y="-323"/>
-		</transition>
 		<transition>
 			<source ref="id0"/>
 			<target ref="id10"/>
@@ -322,7 +314,7 @@ assertFalse(cs.locked);</label>
 assertTrue(cs.e == 300);
 cs.soundOff();
 assertFalse(cs.sound);</label>
-			<nail x="382" y="-323"/>
+			<nail x="229" y="-340"/>
 		</transition>
 		<transition>
 			<source ref="id8"/>
@@ -568,4 +560,3 @@ system Spec, User;
 		</query>
 	</queries>
 </nta>
-
