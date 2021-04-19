@@ -49,10 +49,6 @@ public class ModelHandlerVisitor implements Visitor {
         if (hasProperty(edge, "testcode")){
             testCode.append(edge.getPropertyValue("testcode") + "\n");
         }
-        if (edge.getPropertyValue("comments").equals("remove me")) {
-            edge.remove();
-        }
-
     }
 
     @Override

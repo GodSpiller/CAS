@@ -31,7 +31,7 @@ public class ModelHandler {
 
     public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
         document = new PrototypeDocument().load(url);
-        engine.setServerPath("\"C:\\\\Users\\\\Esben\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
+        engine.setServerPath("\"C:\\\\Users\\\\Yann\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
         engine.connect();
     }
 
@@ -40,7 +40,7 @@ public class ModelHandler {
      *
      * @return an ArrayList of test cases
      */
-    public ArrayList<StringBuilder> createTestCode() throws EngineException, CloneNotSupportedException {
+    public ArrayList<StringBuilder> createTestCode() throws EngineException, CloneNotSupportedException, IOException {
         GuardMaker gm = new GuardMaker();
         StringBuilder sb;
         StringBuilder oldGuard;
@@ -63,10 +63,11 @@ public class ModelHandler {
                 for (Integer i : guards.keySet()){
                     for (BoundaryValue boundaryValue : guards.get(i)){
                         if (!boundaryValue.getValidity()) {
-                            makeNegativeEdge(edge.getEdge().getSource(), edge.getEdge().getTarget(), boundaryValue, document);
+                            makeNegativeEdge(edge.getEdge(), boundaryValue, document);
                         }
 
-                        testCases.add(getTrace(edge.getEdge().getTarget().getName(), boundaryValue, engine.getSystem(document, problems)));
+
+                        testCases.add(getTrace(edge.getEdge().getTarget().getName(), boundaryValue));
 
                         try {
                             document.save("sampledoc" + j++ + ".xml");
@@ -89,20 +90,24 @@ public class ModelHandler {
             if (edge.getEdge().getPropertyValue("testcode").equals("fail();")) {
                 edge.getEdge().remove();
             }
+            else if(edge.getEdge().getPropertyValue("assignment").equals("testgoal = true")) {
+                edge.getEdge().setProperty("assignment", "");
+            }
         }
 
     }
 
-    private void makeNegativeEdge(AbstractLocation source, AbstractLocation target, BoundaryValue boundaryValue, Document doc) throws CloneNotSupportedException {
+    private void makeNegativeEdge(Edge edge, BoundaryValue boundaryValue, Document doc) throws CloneNotSupportedException {
         template = (Template) doc.getTemplate("Spec").clone();
-        Edge edge = template.createEdge();
-        document.getTemplate("Spec").insert(edge, doc.getTemplate("Spec").getLast());
-        edge.setSource(source);
-        edge.setTarget(target);
-        edge.setProperty("guard", boundaryValue.getGuard());
-        edge.setProperty("testcode", "fail();");
-        edge.setProperty("assignment", "testgoal = true");
-        edge.setProperty("name", "negativeEdge");
+        Edge newEdge = template.createEdge();
+        document.getTemplate("Spec").insert(newEdge, doc.getTemplate("Spec").getLast());
+        newEdge.setSource(edge.getSource());
+        newEdge.setTarget(edge.getTarget());
+        newEdge.setProperty("guard", boundaryValue.getGuard());
+        newEdge.setProperty("testcode", "fail();");
+        newEdge.setProperty("assignment", "local_testgoal = true, testgoal = true");
+        newEdge.setProperty("name", "negativeEdge");
+        newEdge.setProperty("synchronisation", edge.getPropertyValue("synchronisation").toString());
     }
 
     /*
@@ -113,8 +118,16 @@ public class ModelHandler {
      * @param clockVariable: the clock variable of the query
      * @return A StringBuilder with the test code of the trace
      */
-    private StringBuilder getTrace(String location, BoundaryValue boundaryValue, UppaalSystem system) throws EngineException {
-        Query q = new Query("E<> testgoal", "");
+    private StringBuilder getTrace(String location, BoundaryValue boundaryValue) throws EngineException {
+        UppaalSystem system = engine.getSystem(document, problems);
+        Query q;
+        if(!boundaryValue.getValidity()) {
+            q = new Query("E<> testgoal == true", "");
+        }
+        else {
+            q = new Query("E<> Spec." + location, "");
+        }
+
         QueryFeedback qf = new QueryFeedback() {
             @Override
             public void setProgressAvail(boolean b) {
