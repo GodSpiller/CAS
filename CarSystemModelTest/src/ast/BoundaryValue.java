@@ -1,4 +1,4 @@
-package ast.nodes;
+package ast;
 
 public class BoundaryValue {
     private int value;

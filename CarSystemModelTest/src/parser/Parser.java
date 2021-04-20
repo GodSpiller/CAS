@@ -2,8 +2,7 @@ package parser;
 
 import ast.ASTNode;
 import ast.BoundaryVisitor;
-import ast.PrettyPrintVisitor;
-import ast.nodes.BoundaryValue;
+import ast.BoundaryValue;
 import ast.nodes.Identifier;
 import ast.nodes.Program;
 import ast.nodes.literals.NumberLit;
@@ -16,7 +15,6 @@ import ast.nodes.operators.logical.Or;
 import lexer.Lexer;
 import token.TokenStream;
 import token.TokenType;
-import ast.PrettyPrintVisitor;
 
 import java.util.ArrayList;
 import java.util.HashMap;

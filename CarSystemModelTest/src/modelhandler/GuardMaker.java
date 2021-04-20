@@ -1,10 +1,8 @@
 package modelhandler;
 
-import ast.BoundaryVisitor;
-import ast.nodes.BoundaryValue;
+import ast.BoundaryValue;
 import lexer.Lexer;
 import parser.Parser;
-import ast.ASTNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,14 +15,11 @@ public class GuardMaker {
      * @param sb: StringBuilder to create new guards of
      * @return a HashMap containing the boundary values of a guard
      */
-    public HashMap<Integer, ArrayList<BoundaryValue>> makeGuards(StringBuilder sb) {
-        Parser parser = new Parser(new Lexer(sb.toString()));
-        StringBuilder guard;
+    public HashMap<Integer, ArrayList<BoundaryValue>> makeGuards(String guard) {
+        Parser parser = new Parser(new Lexer(guard));
 
         for (Integer i : parser.boundaryValues.keySet()) {
             for (BoundaryValue boundaryValue : parser.boundaryValues.get(i)) {
-                guard = new StringBuilder();
-                guard.append(sb);
                 boundaryValue.setGuard(replace(guard, i.toString(), String.valueOf(boundaryValue.getValue())));
             }
         }
@@ -39,7 +34,8 @@ public class GuardMaker {
      * @param from: the string to be replaced
      * @param to: the string that replaces the 'from' string
      */
-    private String replace(StringBuilder builder, String from, String to){
+    private String replace(String guard, String from, String to){
+        StringBuilder builder = new StringBuilder(guard);
         int index = builder.indexOf(from);
         while (index != -1) {
             builder.replace(index, index + from.length(), to);

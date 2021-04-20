@@ -2,7 +2,6 @@ package modelhandler;
 
 import com.uppaal.model.core2.*;
 import com.uppaal.model.core2.lsc.*;
-import com.uppaal.model.system.SystemEdge;
 
 public class ModelHandlerVisitor implements Visitor {
     public StringBuilder testCode = new StringBuilder();

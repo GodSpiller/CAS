@@ -45,11 +45,6 @@ public class CarSystem implements ICarAlarmSystem {
     }
 
     @Override
-    public void wait20seconds() {
-        tick(20);
-    }
-
-    @Override
     public void armedOn() {
         armed = true;
     }

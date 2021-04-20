@@ -1,6 +1,6 @@
 package modelhandler;
 
-import ast.nodes.BoundaryValue;
+import ast.BoundaryValue;
 import com.uppaal.engine.*;
 import com.uppaal.model.core2.*;
 import com.uppaal.model.system.*;
@@ -22,14 +22,15 @@ import static java.lang.Integer.parseInt;
 //  "E:\\Uni\\6semester\\MTCPS\\uppaal-4.1.24\\bin-Windows\\server.exe"
 
 public class ModelHandler {
-    public ArrayList<Problem> problems = new ArrayList<Problem>();
-    URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS2.1.xml");
     public Engine engine = new Engine();
-    public Document document;;
+
+    ArrayList<Problem> problems = new ArrayList<Problem>();
+    URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS2.1.xml");
+    Document document;;
     ModelHandlerVisitor modelHandlerVisitor = new ModelHandlerVisitor();
     Template template;
 
-    public ModelHandler() throws IOException, EngineException, CannotEvaluateException {
+    public ModelHandler() throws IOException, EngineException {
         document = new PrototypeDocument().load(url);
         engine.setServerPath("\"C:\\\\Users\\\\Yann\\\\Desktop\\\\uppaal-4.1.24\\\\bin-Windows\\\\server.exe\"");
         engine.connect();
@@ -40,43 +41,26 @@ public class ModelHandler {
      *
      * @return an ArrayList of test cases
      */
-    public ArrayList<StringBuilder> createTestCode() throws EngineException, CloneNotSupportedException, IOException {
+    public ArrayList<StringBuilder> createTestCode() throws EngineException, CloneNotSupportedException {
         GuardMaker gm = new GuardMaker();
         StringBuilder sb;
-        StringBuilder oldGuard;
         ArrayList<StringBuilder> testCases = new ArrayList<>();
         UppaalSystem system = engine.getSystem(document, problems);
 
-        int j = 0;
         for (SystemEdge edge : system.getProcess(0).getEdges()) {
-            // for each edge in the process
             if (hasProperty(edge, "guard")) {
-                // resets the oldGuard variable when we have a new edge
-                oldGuard = new StringBuilder();
                 HashMap<Integer, ArrayList<BoundaryValue>> guards;
                 sb = new StringBuilder();
                 sb.append(edge.getEdge().getPropertyValue("guard"));
                 // creates new guards for an edge
-                guards = gm.makeGuards(sb);
-                // set the oldGuard variable to the guard of the edge
-                oldGuard.append(edge.getEdge().getPropertyValue("guard"));
+                guards = gm.makeGuards(edge.getEdge().getPropertyValue("guard").toString());
                 for (Integer i : guards.keySet()){
                     for (BoundaryValue boundaryValue : guards.get(i)){
                         if (!boundaryValue.getValidity()) {
                             makeNegativeEdge(edge.getEdge(), boundaryValue, document);
                         }
-
-
                         testCases.add(getTrace(edge.getEdge().getTarget().getName(), boundaryValue));
-
-                        try {
-                            document.save("sampledoc" + j++ + ".xml");
-                        } catch (IOException e) {
-                            e.printStackTrace(System.err);
-                        }
-
                         removeNegativeEdge();
-
                     }
                 }
             }
@@ -90,11 +74,7 @@ public class ModelHandler {
             if (edge.getEdge().getPropertyValue("testcode").equals("fail();")) {
                 edge.getEdge().remove();
             }
-            else if(edge.getEdge().getPropertyValue("assignment").equals("testgoal = true")) {
-                edge.getEdge().setProperty("assignment", "");
-            }
         }
-
     }
 
     private void makeNegativeEdge(Edge edge, BoundaryValue boundaryValue, Document doc) throws CloneNotSupportedException {
@@ -105,8 +85,7 @@ public class ModelHandler {
         newEdge.setTarget(edge.getTarget());
         newEdge.setProperty("guard", boundaryValue.getGuard());
         newEdge.setProperty("testcode", "fail();");
-        newEdge.setProperty("assignment", "local_testgoal = true, testgoal = true");
-        newEdge.setProperty("name", "negativeEdge");
+        newEdge.setProperty("assignment", "testgoal = true");
         newEdge.setProperty("synchronisation", edge.getPropertyValue("synchronisation").toString());
     }
 
@@ -189,25 +168,10 @@ public class ModelHandler {
             public void setResultText(String s) {
             }
         };
-        QueryResult qr = engine.query(system, "trace 1", q, qf);
+        engine.query(system, "trace 1", q, qf);
 
         return modelHandlerVisitor.getStringBuilder();
     }
-
-    private String makeRestriction(BoundaryValue boundaryValue) {
-        return " && " + (boundaryValue.getValue() - 1) + " < " + boundaryValue.getClock() + " && " + boundaryValue.getClock() + " < " + boundaryValue.getValue();
-    }
-
-    /*
-     * Update the guard of an edge
-     *
-     * @param edge: the edge to be updated
-     * @param newGuard: the new guard
-     */
-    private void updateGuard(SystemEdge edge, String newGuard){
-        edge.getEdge().setProperty("guard", newGuard);
-    }
-
 
     /*
      * checks if an edge has a property

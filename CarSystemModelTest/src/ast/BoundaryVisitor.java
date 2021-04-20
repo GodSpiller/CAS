@@ -1,6 +1,5 @@
 package ast;
 
-import ast.nodes.BoundaryValue;
 import ast.nodes.Identifier;
 import ast.nodes.Program;
 import ast.nodes.literals.NumberLit;
@@ -200,7 +199,7 @@ public class BoundaryVisitor implements ASTVisitor {
                 temp.add(new BoundaryValue(x - 1, true, clock));
                 temp.add(new BoundaryValue(x + 1, true, clock));
             }
-            default -> System.out.println("wtf");
+            default -> System.out.println("Error");
         }
 
         return temp;
