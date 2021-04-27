@@ -4,6 +4,7 @@ import ast.BoundaryValue;
 import com.uppaal.engine.*;
 import com.uppaal.model.core2.*;
 import com.uppaal.model.system.*;
+import com.uppaal.model.system.Process;
 import com.uppaal.model.system.concrete.ConcreteTrace;
 import com.uppaal.model.system.symbolic.SymbolicTrace;
 
@@ -41,26 +42,35 @@ public class ModelHandler {
      *
      * @return an ArrayList of test cases
      */
-    public ArrayList<StringBuilder> createTestCode() throws EngineException, CloneNotSupportedException {
+    public ArrayList<StringBuilder> createTestCode(String processName) throws EngineException, CloneNotSupportedException {
         GuardMaker gm = new GuardMaker();
         StringBuilder sb;
         ArrayList<StringBuilder> testCases = new ArrayList<>();
         UppaalSystem system = engine.getSystem(document, problems);
-
-        for (SystemEdge edge : system.getProcess(0).getEdges()) {
-            if (hasProperty(edge, "guard")) {
-                HashMap<Integer, ArrayList<BoundaryValue>> guards;
-                sb = new StringBuilder();
-                sb.append(edge.getEdge().getPropertyValue("guard"));
-                // creates new guards for an edge
-                guards = gm.makeGuards(edge.getEdge().getPropertyValue("guard").toString());
-                for (Integer i : guards.keySet()){
-                    for (BoundaryValue boundaryValue : guards.get(i)){
-                        if (!boundaryValue.getValidity()) {
-                            makeNegativeEdge(edge.getEdge(), boundaryValue, document);
+        int j = 0;
+        for (Process process : system.getProcesses()) {
+            if(process.getTemplate().getPropertyValue("name").equals(processName)) {
+                for (SystemEdge edge : process.getEdges()) {
+                    if (hasProperty(edge, "guard")) {
+                        HashMap<Integer, ArrayList<BoundaryValue>> guards;
+                        sb = new StringBuilder();
+                        sb.append(edge.getEdge().getPropertyValue("guard"));
+                        // creates new guards for an edge
+                        guards = gm.makeGuards(edge.getEdge().getPropertyValue("guard").toString());
+                        for (Integer i : guards.keySet()){
+                            for (BoundaryValue boundaryValue : guards.get(i)){
+                                if (!boundaryValue.getValidity()) {
+                                    makeNegativeEdge(edge.getEdge(), boundaryValue, document, processName);
+                                }
+                                try {
+                                    document.save("sampledoc" + j++ + ".xml");
+                                } catch (IOException e) {
+                                    e.printStackTrace(System.err);
+                                }
+                                testCases.add(getTrace(edge.getEdge().getTarget().getName(), boundaryValue, processName));
+                                removeNegativeEdge(processName);
+                            }
                         }
-                        testCases.add(getTrace(edge.getEdge().getTarget().getName(), boundaryValue));
-                        removeNegativeEdge();
                     }
                 }
             }
@@ -68,19 +78,23 @@ public class ModelHandler {
         return testCases;
     }
 
-    private void removeNegativeEdge() throws EngineException {
+    private void removeNegativeEdge(String processName) throws EngineException {
         UppaalSystem system = engine.getSystem(document, problems);
-        for (SystemEdge edge : system.getProcess(0).getEdges()) {
-            if (edge.getEdge().getPropertyValue("testcode").equals("fail();")) {
-                edge.getEdge().remove();
+        for (Process process : system.getProcesses()) {
+            if(process.getTemplate().getPropertyValue("name").equals(processName)) {
+                for (SystemEdge edge : process.getEdges()) {
+                    if (edge.getEdge().getPropertyValue("testcode").equals("fail();")) {
+                        edge.getEdge().remove();
+                    }
+                }
             }
         }
     }
 
-    private void makeNegativeEdge(Edge edge, BoundaryValue boundaryValue, Document doc) throws CloneNotSupportedException {
-        template = (Template) doc.getTemplate("Spec").clone();
+    private void makeNegativeEdge(Edge edge, BoundaryValue boundaryValue, Document doc, String processName) throws CloneNotSupportedException {
+        template = (Template) doc.getTemplate(processName).clone();
         Edge newEdge = template.createEdge();
-        document.getTemplate("Spec").insert(newEdge, doc.getTemplate("Spec").getLast());
+        document.getTemplate(processName).insert(newEdge, doc.getTemplate(processName).getLast());
         newEdge.setSource(edge.getSource());
         newEdge.setTarget(edge.getTarget());
         newEdge.setProperty("guard", boundaryValue.getGuard());
@@ -97,15 +111,17 @@ public class ModelHandler {
      * @param clockVariable: the clock variable of the query
      * @return A StringBuilder with the test code of the trace
      */
-    private StringBuilder getTrace(String location, BoundaryValue boundaryValue) throws EngineException {
+    private StringBuilder getTrace(String location, BoundaryValue boundaryValue, String processName) throws EngineException {
         UppaalSystem system = engine.getSystem(document, problems);
         Query q;
         if(!boundaryValue.getValidity()) {
             q = new Query("E<> testgoal == true", "");
         }
         else {
-            q = new Query("E<> Spec." + location, "");
+            return new StringBuilder();
+            //q = new Query("E<> " + processName + "." + location, "");
         }
+
 
         QueryFeedback qf = new QueryFeedback() {
             @Override

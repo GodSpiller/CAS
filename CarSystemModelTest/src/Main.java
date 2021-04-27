@@ -10,13 +10,13 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
 
-       /* ModelHandler modelHandler = new ModelHandler();
+        ModelHandler modelHandler = new ModelHandler();
 
-        UnitTestFactory.makeUnitTests(modelHandler.createTestCode());
+        UnitTestFactory.makeUnitTests(modelHandler.createTestCode("Spec"));
         modelHandler.engine.disconnect();
-*/
 
-        GuardMaker gm = new GuardMaker();
+
+        /*GuardMaker gm = new GuardMaker();
 
         HashMap<Integer, ArrayList<BoundaryValue>> guards = gm.makeGuards("a == x + 10");
 
@@ -25,7 +25,7 @@ public class Main {
                 System.out.println(bv.getGuard() + " " + bv.getValidity());
             }
         }
-
+*/
 
     }
 }

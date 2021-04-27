@@ -12,35 +12,7 @@ import carsystem.CarSystem;class CarSystemTests{
 @Test
 void testcase000(){
 CarSystem cs = new CarSystem();
-cs.close();
-assertTrue(cs.closed);
-cs.lock();
-cs.c = 0;
-assertTrue(cs.locked);
-assertTrue(cs.c == 0);
-cs.tick(20);
-cs.armedOn();
-assertTrue(cs.armed);
-cs.e = 0;
-cs.open();
-assertFalse(cs.closed);
-assertTrue(cs.e == 0);
-cs.armedOff();
-assertFalse(cs.armed);
-assertTrue(cs.e == 0);
-cs.flashOn();
-assertTrue(cs.flash);
-cs.soundOn();
-assertTrue(cs.sound);
-cs.tick(30);
-cs.soundOff();
-assertFalse(cs.sound);
-assertTrue(cs.e == 30);
-cs.tick(270);
-assertTrue(cs.e == 300);
-cs.soundOff();
-assertFalse(cs.sound);
-assertTrue(cs.e == 300);
+fail();
 }
 
 @Test
@@ -108,30 +80,7 @@ assertTrue(cs.e == 300);
 @Test
 void testcase003(){
 CarSystem cs = new CarSystem();
-cs.close();
-assertTrue(cs.closed);
-cs.lock();
-cs.c = 0;
-assertTrue(cs.locked);
-assertTrue(cs.c == 0);
-cs.tick(20);
-cs.armedOn();
-assertTrue(cs.armed);
-cs.e = 0;
-cs.open();
-assertFalse(cs.closed);
-assertTrue(cs.e == 0);
-cs.armedOff();
-assertFalse(cs.armed);
-assertTrue(cs.e == 0);
-cs.flashOn();
-assertTrue(cs.flash);
-cs.soundOn();
-assertTrue(cs.sound);
-cs.tick(30);
-cs.soundOff();
-assertFalse(cs.sound);
-assertTrue(cs.e == 30);
+fail();
 }
 
 @Test
@@ -218,31 +167,7 @@ assertTrue(cs.g == 0);
 @Test
 void testcase007(){
 CarSystem cs = new CarSystem();
-cs.close();
-assertTrue(cs.closed);
-cs.lock();
-cs.c = 0;
-assertTrue(cs.locked);
-assertTrue(cs.c == 0);
-cs.tick(20);
-cs.armedOn();
-assertTrue(cs.armed);
-cs.e = 0;
-cs.open();
-assertFalse(cs.closed);
-assertTrue(cs.e == 0);
-cs.armedOff();
-assertFalse(cs.armed);
-assertTrue(cs.e == 0);
-cs.flashOn();
-assertTrue(cs.flash);
-cs.soundOn();
-assertTrue(cs.sound);
-assertTrue(cs.e < 30);
-cs.g = 0;
-cs.unlock();
-assertFalse(cs.locked);
-assertTrue(cs.g == 0);
+fail();
 }
 
 @Test
@@ -329,45 +254,13 @@ assertTrue(cs.g == 0);
 @Test
 void testcase011(){
 CarSystem cs = new CarSystem();
-cs.close();
-assertTrue(cs.closed);
-cs.lock();
-cs.c = 0;
-assertTrue(cs.locked);
-assertTrue(cs.c == 0);
-cs.tick(20);
-cs.armedOn();
-assertTrue(cs.armed);
-cs.e = 0;
-cs.open();
-assertFalse(cs.closed);
-assertTrue(cs.e == 0);
-cs.armedOff();
-assertFalse(cs.armed);
-assertTrue(cs.e == 0);
-cs.flashOn();
-assertTrue(cs.flash);
-cs.soundOn();
-assertTrue(cs.sound);
-assertTrue(cs.e < 30);
-cs.g = 0;
-cs.unlock();
-assertFalse(cs.locked);
-assertTrue(cs.g == 0);
+fail();
 }
 
 @Test
 void testcase012(){
 CarSystem cs = new CarSystem();
-cs.close();
-assertTrue(cs.closed);
-cs.lock();
-cs.c = 0;
-assertTrue(cs.locked);
-assertTrue(cs.c == 0);
-cs.tick(20);
-cs.armedOn();
-assertTrue(cs.armed);
+fail();
 }
 
 @Test
@@ -409,8 +302,7 @@ fail();
 @Test
 void testcase016(){
 CarSystem cs = new CarSystem();
-cs.lock();
-assertTrue(cs.locked);
+fail();
 }
 
 @Test
@@ -452,8 +344,7 @@ fail();
 @Test
 void testcase020(){
 CarSystem cs = new CarSystem();
-cs.lock();
-assertTrue(cs.locked);
+fail();
 }
 
 @Test
@@ -471,8 +362,7 @@ fail();
 @Test
 void testcase022(){
 CarSystem cs = new CarSystem();
-cs.close();
-assertTrue(cs.closed);
+fail();
 }
 
 @Test
@@ -514,7 +404,6 @@ fail();
 @Test
 void testcase026(){
 CarSystem cs = new CarSystem();
-cs.close();
-assertTrue(cs.closed);
+fail();
 }
 }
