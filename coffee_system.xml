@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta [
+<!ELEMENT project (imports?, declaration?, template*, lsc*, instantiation?, system, queries?)>
+<!ELEMENT imports (#PCDATA)>
+<!ELEMENT declaration (#PCDATA)>
+<!ELEMENT template (name, parameter?, declaration?, location*, init?, transition*)>
+<!ELEMENT name (#PCDATA)>
+<!ATTLIST name x   CDATA #IMPLIED
+               y   CDATA #IMPLIED>
+<!ELEMENT parameter (#PCDATA)>
+<!ATTLIST parameter x   CDATA #IMPLIED
+                    y   CDATA #IMPLIED>
+<!ELEMENT location (name?, label*, urgent?, committed?)>
+<!ATTLIST location id ID #REQUIRED
+		   x  CDATA #IMPLIED
+		   y  CDATA #IMPLIED
+		   color CDATA #IMPLIED>
+<!ELEMENT init EMPTY>
+<!ATTLIST init ref IDREF #IMPLIED>
+<!ELEMENT urgent EMPTY>
+<!ELEMENT committed EMPTY>
+<!ELEMENT transition (source, target, label*, nail*)>
+<!ATTLIST transition id  ID #IMPLIED
+                     x   CDATA #IMPLIED
+                     y   CDATA #IMPLIED
+		     color CDATA #IMPLIED>
+<!ELEMENT source EMPTY>
+<!ATTLIST source ref IDREF #REQUIRED>
+<!ELEMENT target EMPTY>
+<!ATTLIST target ref IDREF #REQUIRED>
+<!ELEMENT label (#PCDATA)>
+<!ATTLIST label	kind CDATA #REQUIRED
+		x    CDATA #IMPLIED
+		y    CDATA #IMPLIED>
+<!ELEMENT nail EMPTY>
+<!ATTLIST nail x   CDATA #REQUIRED
+               y   CDATA #REQUIRED>
+               
+<!-- LSC template -->
+<!ELEMENT lsc (name, parameter?, type, mode, declaration?, yloccoord+, instance+, prechart?, message*, condition*, update*, cut*, scope*, coregion*, subchart*, loop*, ifthenelse*)>
+
+<!-- type: existential | universal -->
+<!ELEMENT type (#PCDATA)>
+<!ATTLIST type      x   CDATA #IMPLIED
+                    y   CDATA #IMPLIED>
+<!-- mode: initial | iterative | invariant -->
+<!ELEMENT mode (#PCDATA)>
+<!ATTLIST mode      x   CDATA #IMPLIED
+                    y   CDATA #IMPLIED>
+<!-- role: specification | property -->
+<!ELEMENT role (#PCDATA)>
+<!ATTLIST role      x   CDATA #IMPLIED
+                    y   CDATA #IMPLIED>
+<!-- yloccoord: Y coordinate for location on all instances (same loc number => same Y coord) -->
+<!ELEMENT yloccoord EMPTY>
+<!ATTLIST yloccoord number CDATA #REQUIRED
+                    y      CDATA #REQUIRED>
+
+
+<!-- instance: carries unique ID, label(which can change during run), and temperatures of the locations -->
+<!ELEMENT instance (name)>
+<!ATTLIST instance id ID #REQUIRED
+           x  CDATA #REQUIRED
+           y  CDATA #IMPLIED>
+<!-- temperature = hot | cold, identified by location_number (or, if location numbers not present, count from 1 on) -->
+<!ELEMENT temperature (#PCDATA)>
+<!ATTLIST temperature y CDATA #IMPLIED>
+
+
+<!-- message: refs of src, trg instances; location; label=name -->
+<!ELEMENT message (source, target, lsclocation, label)>
+<!ATTLIST message    id  ID #IMPLIED
+                     x   CDATA #IMPLIED
+                     y   CDATA #IMPLIED
+             color CDATA #IMPLIED>
+    <!-- source points to ID of instance line -->
+    <!-- target points to ID of instance line -->
+<!ELEMENT lsclocation (#PCDATA)>
+
+    <!-- anchor refers to instance ID and optionally carries the location number (y)-->
+<!ELEMENT anchor EMPTY>
+<!ATTLIST anchor     instanceid IDREF #REQUIRED
+                     y CDATA #IMPLIED>
+
+<!-- condition: anchors+ (= {x,y} with y being the same);  temperature; label=expression -->
+<!ELEMENT condition (anchor+, lsclocation, temperature, label)>
+<!ATTLIST condition  id  ID #IMPLIED
+                     x   CDATA #IMPLIED
+                     y   CDATA #IMPLIED
+             color CDATA #IMPLIED>
+
+<!-- update: anchor; location; label=expression -->
+<!ELEMENT update (anchor, lsclocation, label)>
+<!ATTLIST update     id  ID #IMPLIED
+                     x   CDATA #IMPLIED
+                     y   CDATA #IMPLIED
+             color CDATA #IMPLIED>
+
+<!-- prechart: spans over ALL instances by default, only need to specify its bottom location -->
+<!ELEMENT prechart  (lsclocation)>
+<!ATTLIST prechart   id  ID #IMPLIED
+                     x   CDATA #IMPLIED
+                     y   CDATA #IMPLIED
+             color CDATA #IMPLIED>
+
+<!-- the following LSC constructs are deemed optional - may be ignored in the first version of LSC editor -->
+
+<!-- cut: nothing but a set of anchors (=pair {x,y}) -->
+<!ELEMENT cut  (anchor+)>
+<!ATTLIST cut        id  ID #IMPLIED
+                     x   CDATA #IMPLIED
+                     y   CDATA #IMPLIED
+             color CDATA #IMPLIED>
+
+<!-- scope: upper & lower locations, temperature; reference to the IDs of 2 cuts -->
+<!ELEMENT scope (lsclocation, lsclocation, temperature)>
+<!ATTLIST scope      id  ID #IMPLIED
+                     x   CDATA #IMPLIED
+                     y   CDATA #IMPLIED
+             cut1ref IDREF #REQUIRED
+             cut2ref IDREF #REQUIRED
+             color CDATA #IMPLIED>
+
+<!-- coregion: instance (by anchor(s)), locations deduced from anchors -->
+<!ELEMENT coregion (anchor, anchor)>
+<!ATTLIST coregion   id  ID #IMPLIED
+                     x   CDATA #IMPLIED
+                     y   CDATA #IMPLIED
+             color CDATA #IMPLIED>
+
+<!-- loop: anchors over instances, upper and lower location, and label=expression -->
+<!ELEMENT loop (anchor+, lsclocation, lsclocation, label)>
+<!ATTLIST loop       id  ID #IMPLIED
+                     x   CDATA #IMPLIED
+                     y   CDATA #IMPLIED
+             color CDATA #IMPLIED>
+
+<!-- subchart: anchors over instances, upper and lower location -->
+<!ELEMENT subchart   (anchor+, lsclocation, lsclocation)>
+<!ATTLIST subchart   id  ID #IMPLIED
+                     x   CDATA #IMPLIED
+                     y   CDATA #IMPLIED
+             color CDATA #IMPLIED>
+
+<!-- ifThenElse: anchors over instances, top/middle/bottom locations and label=expression -->
+<!ELEMENT ifthenelse (anchor+, lsclocation, lsclocation, lsclocation, label)>
+<!ATTLIST ifthenelse id  ID #IMPLIED
+                     x   CDATA #IMPLIED
+                     y   CDATA #IMPLIED
+             color CDATA #IMPLIED>
+               
+<!ELEMENT instantiation (#PCDATA)>
+<!ELEMENT system (#PCDATA)>
+<!ELEMENT queries (query*)>
+<!ELEMENT query (comment,formula)>
+<!ELEMENT formula (#PCDATA)>
+<!ELEMENT comment (#PCDATA)>
+]>
+<nta>
+	<declaration>// Place global declarations here.
+bool testgoal = false;
+broadcast chan coin, coffee, refund, tea;</declaration>
+	<template>
+		<name x="5" y="5">machine</name>
+		<declaration>// Place local declarations here.
+clock x;</declaration>
+		<location id="id0" x="-8" y="-110">
+			<name x="-25" y="-144">initial</name>
+		</location>
+		<location id="id1" x="-8" y="0">
+			<name x="-17" y="17">wait</name>
+			<label kind="invariant" x="-17" y="34">x&lt;5</label>
+		</location>
+		<location id="id2" x="-102" y="119">
+			<name x="-112" y="127">cof</name>
+			<label kind="invariant" x="-112" y="144">x&lt;6</label>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-68" y="-68">x&gt;=3</label>
+			<label kind="synchronisation" x="-76" y="-51">refund!</label>
+			<nail x="-34" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="17" y="-68">coin?</label>
+			<label kind="assignment" x="17" y="-51">x := 0</label>
+			<nail x="17" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-144" y="-34">x&gt;=3</label>
+			<label kind="synchronisation" x="-153" y="-17">coffee!</label>
+			<nail x="-102" y="-76"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-85" y="17">coffee?</label>
+			<label kind="assignment" x="-76" y="34">x:=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>user</name>
+		<location id="id3" x="0" y="0">
+		</location>
+		<location id="id4" x="144" y="-8">
+		</location>
+		<location id="id5" x="263" y="-8">
+		</location>
+		<init ref="id3"/>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="120" y="-119">coffee?</label>
+			<nail x="255" y="-17"/>
+			<nail x="102" y="-187"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="162" y="-25">coffee!</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="77" y="-72">refund?</label>
+			<nail x="144" y="-17"/>
+			<nail x="59" y="-93"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="51" y="-34">coin!</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+user1 = user();
+machine1 = machine();
+// List one or more processes to be composed into a system.
+system user1, machine1;
+    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
