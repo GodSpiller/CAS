@@ -158,7 +158,7 @@
 ]>
 <nta>
 	<declaration>// Place global declarations here.
-
+bool testgoal = false;
 broadcast chan coin, coffee, refund, tea;</declaration>
 	<template>
 		<name x="5" y="5">machine</name>
