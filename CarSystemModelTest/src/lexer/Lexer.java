@@ -36,7 +36,7 @@ public class Lexer {
 
             if (m.find()) {
                 index += m.end();
-                return new Token(type, m.group(0));
+                return new Token(type, m.group(0), index);
             }
         }
         return null;

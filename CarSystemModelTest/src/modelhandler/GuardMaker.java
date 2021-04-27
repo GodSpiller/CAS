@@ -20,7 +20,8 @@ public class GuardMaker {
 
         for (Integer i : parser.boundaryValues.keySet()) {
             for (BoundaryValue boundaryValue : parser.boundaryValues.get(i)) {
-                boundaryValue.setGuard(replace(guard, i.toString(), String.valueOf(boundaryValue.getValue())));
+                boundaryValue.setGuard(newGuard(guard, boundaryValue));
+                //boundaryValue.setGuard(replace(guard, i.toString(), String.valueOf(boundaryValue.getValue())));
             }
         }
 
@@ -28,7 +29,7 @@ public class GuardMaker {
     }
 
     /*
-     * Replaces a string with another in a StrinBuilder
+     * Replaces a string with another in a StringBuilder
      *
      * @param builder: StringBuilder to be modified
      * @param from: the string to be replaced
@@ -43,6 +44,13 @@ public class GuardMaker {
             index = builder.indexOf(from, index);
         }
         return builder.toString();
+    }
+
+    private String newGuard(String guard, BoundaryValue boundaryValue) {
+        String sub1 = guard.substring(0, boundaryValue.getIndexStart());
+        String sub2 = guard.substring(boundaryValue.getIndexEnd());
+
+        return sub1 + boundaryValue.getValue() + sub2;
     }
 
     private ArrayList<String> removeDuplicates(ArrayList<String> guardList) {
