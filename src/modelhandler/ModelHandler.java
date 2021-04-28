@@ -59,6 +59,7 @@ public class ModelHandler {
                         guards = gm.makeGuards(edge.getEdge().getPropertyValue("guard").toString());
                         for (Integer i : guards.keySet()){
                             for (BoundaryValue boundaryValue : guards.get(i)){
+                                System.out.println(boundaryValue.getValidity());
                                 if (!boundaryValue.getValidity()) {
                                     makeNegativeEdge(edge.getEdge(), boundaryValue, document, processName);
                                 }
@@ -118,7 +119,7 @@ public class ModelHandler {
             q = new Query("E<> testgoal == true", "");
         }
         else {
-            return new StringBuilder();
+            q = new Query("E<>" + processName + "." + location, "");
             //q = new Query("E<> " + processName + "." + location, "");
         }
 

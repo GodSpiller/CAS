@@ -3,7 +3,6 @@ package ast.nodes.literals;
 import ast.ASTNode;
 import ast.ASTVisitor;
 import token.Token;
-import token.TokenType;
 
 public class NumberLit extends ASTNode {
 

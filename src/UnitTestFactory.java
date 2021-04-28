@@ -20,13 +20,9 @@ public class UnitTestFactory {
         sb.append("import static org.junit.jupiter.api.Assertions.*;\n" + "\n");
         sb.append("import carsystem.CarSystem;");
         sb.append("class CarSystemTests{\n\n");
-        sb.append("@BeforeEach\n void setup(){\n CarSystem cs = new CarSystem();\n}\n");
         for (int i = 0; i < numberOfTestCases; i++){
             sb.append("\n@Test\nvoid testcase" +  new DecimalFormat("000").format(i) + "(){\n");
-            sb.append("CarSystem cs = new CarSystem();\n");
-            if (testCases.get(i).isEmpty()){
-                sb.append("fail();\n");
-            }
+            sb.append("CarSystem1 cs = new CarSystem();\n");
             sb.append(testCases.get(i));
             sb.append("}\n");
         }
