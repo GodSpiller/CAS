@@ -1,161 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE nta [
-<!ELEMENT project (imports?, declaration?, template*, lsc*, instantiation?, system, queries?)>
-<!ELEMENT imports (#PCDATA)>
-<!ELEMENT declaration (#PCDATA)>
-<!ELEMENT template (name, parameter?, declaration?, location*, init?, transition*)>
-<!ELEMENT name (#PCDATA)>
-<!ATTLIST name x   CDATA #IMPLIED
-               y   CDATA #IMPLIED>
-<!ELEMENT parameter (#PCDATA)>
-<!ATTLIST parameter x   CDATA #IMPLIED
-                    y   CDATA #IMPLIED>
-<!ELEMENT location (name?, label*, urgent?, committed?)>
-<!ATTLIST location id ID #REQUIRED
-		   x  CDATA #IMPLIED
-		   y  CDATA #IMPLIED
-		   color CDATA #IMPLIED>
-<!ELEMENT init EMPTY>
-<!ATTLIST init ref IDREF #IMPLIED>
-<!ELEMENT urgent EMPTY>
-<!ELEMENT committed EMPTY>
-<!ELEMENT transition (source, target, label*, nail*)>
-<!ATTLIST transition id  ID #IMPLIED
-                     x   CDATA #IMPLIED
-                     y   CDATA #IMPLIED
-		     color CDATA #IMPLIED>
-<!ELEMENT source EMPTY>
-<!ATTLIST source ref IDREF #REQUIRED>
-<!ELEMENT target EMPTY>
-<!ATTLIST target ref IDREF #REQUIRED>
-<!ELEMENT label (#PCDATA)>
-<!ATTLIST label	kind CDATA #REQUIRED
-		x    CDATA #IMPLIED
-		y    CDATA #IMPLIED>
-<!ELEMENT nail EMPTY>
-<!ATTLIST nail x   CDATA #REQUIRED
-               y   CDATA #REQUIRED>
-               
-<!-- LSC template -->
-<!ELEMENT lsc (name, parameter?, type, mode, declaration?, yloccoord+, instance+, prechart?, message*, condition*, update*, cut*, scope*, coregion*, subchart*, loop*, ifthenelse*)>
-
-<!-- type: existential | universal -->
-<!ELEMENT type (#PCDATA)>
-<!ATTLIST type      x   CDATA #IMPLIED
-                    y   CDATA #IMPLIED>
-<!-- mode: initial | iterative | invariant -->
-<!ELEMENT mode (#PCDATA)>
-<!ATTLIST mode      x   CDATA #IMPLIED
-                    y   CDATA #IMPLIED>
-<!-- role: specification | property -->
-<!ELEMENT role (#PCDATA)>
-<!ATTLIST role      x   CDATA #IMPLIED
-                    y   CDATA #IMPLIED>
-<!-- yloccoord: Y coordinate for location on all instances (same loc number => same Y coord) -->
-<!ELEMENT yloccoord EMPTY>
-<!ATTLIST yloccoord number CDATA #REQUIRED
-                    y      CDATA #REQUIRED>
-
-
-<!-- instance: carries unique ID, label(which can change during run), and temperatures of the locations -->
-<!ELEMENT instance (name)>
-<!ATTLIST instance id ID #REQUIRED
-           x  CDATA #REQUIRED
-           y  CDATA #IMPLIED>
-<!-- temperature = hot | cold, identified by location_number (or, if location numbers not present, count from 1 on) -->
-<!ELEMENT temperature (#PCDATA)>
-<!ATTLIST temperature y CDATA #IMPLIED>
-
-
-<!-- message: refs of src, trg instances; location; label=name -->
-<!ELEMENT message (source, target, lsclocation, label)>
-<!ATTLIST message    id  ID #IMPLIED
-                     x   CDATA #IMPLIED
-                     y   CDATA #IMPLIED
-             color CDATA #IMPLIED>
-    <!-- source points to ID of instance line -->
-    <!-- target points to ID of instance line -->
-<!ELEMENT lsclocation (#PCDATA)>
-
-    <!-- anchor refers to instance ID and optionally carries the location number (y)-->
-<!ELEMENT anchor EMPTY>
-<!ATTLIST anchor     instanceid IDREF #REQUIRED
-                     y CDATA #IMPLIED>
-
-<!-- condition: anchors+ (= {x,y} with y being the same);  temperature; label=expression -->
-<!ELEMENT condition (anchor+, lsclocation, temperature, label)>
-<!ATTLIST condition  id  ID #IMPLIED
-                     x   CDATA #IMPLIED
-                     y   CDATA #IMPLIED
-             color CDATA #IMPLIED>
-
-<!-- update: anchor; location; label=expression -->
-<!ELEMENT update (anchor, lsclocation, label)>
-<!ATTLIST update     id  ID #IMPLIED
-                     x   CDATA #IMPLIED
-                     y   CDATA #IMPLIED
-             color CDATA #IMPLIED>
-
-<!-- prechart: spans over ALL instances by default, only need to specify its bottom location -->
-<!ELEMENT prechart  (lsclocation)>
-<!ATTLIST prechart   id  ID #IMPLIED
-                     x   CDATA #IMPLIED
-                     y   CDATA #IMPLIED
-             color CDATA #IMPLIED>
-
-<!-- the following LSC constructs are deemed optional - may be ignored in the first version of LSC editor -->
-
-<!-- cut: nothing but a set of anchors (=pair {x,y}) -->
-<!ELEMENT cut  (anchor+)>
-<!ATTLIST cut        id  ID #IMPLIED
-                     x   CDATA #IMPLIED
-                     y   CDATA #IMPLIED
-             color CDATA #IMPLIED>
-
-<!-- scope: upper & lower locations, temperature; reference to the IDs of 2 cuts -->
-<!ELEMENT scope (lsclocation, lsclocation, temperature)>
-<!ATTLIST scope      id  ID #IMPLIED
-                     x   CDATA #IMPLIED
-                     y   CDATA #IMPLIED
-             cut1ref IDREF #REQUIRED
-             cut2ref IDREF #REQUIRED
-             color CDATA #IMPLIED>
-
-<!-- coregion: instance (by anchor(s)), locations deduced from anchors -->
-<!ELEMENT coregion (anchor, anchor)>
-<!ATTLIST coregion   id  ID #IMPLIED
-                     x   CDATA #IMPLIED
-                     y   CDATA #IMPLIED
-             color CDATA #IMPLIED>
-
-<!-- loop: anchors over instances, upper and lower location, and label=expression -->
-<!ELEMENT loop (anchor+, lsclocation, lsclocation, label)>
-<!ATTLIST loop       id  ID #IMPLIED
-                     x   CDATA #IMPLIED
-                     y   CDATA #IMPLIED
-             color CDATA #IMPLIED>
-
-<!-- subchart: anchors over instances, upper and lower location -->
-<!ELEMENT subchart   (anchor+, lsclocation, lsclocation)>
-<!ATTLIST subchart   id  ID #IMPLIED
-                     x   CDATA #IMPLIED
-                     y   CDATA #IMPLIED
-             color CDATA #IMPLIED>
-
-<!-- ifThenElse: anchors over instances, top/middle/bottom locations and label=expression -->
-<!ELEMENT ifthenelse (anchor+, lsclocation, lsclocation, lsclocation, label)>
-<!ATTLIST ifthenelse id  ID #IMPLIED
-                     x   CDATA #IMPLIED
-                     y   CDATA #IMPLIED
-             color CDATA #IMPLIED>
-               
-<!ELEMENT instantiation (#PCDATA)>
-<!ELEMENT system (#PCDATA)>
-<!ELEMENT queries (query*)>
-<!ELEMENT query (comment,formula)>
-<!ELEMENT formula (#PCDATA)>
-<!ELEMENT comment (#PCDATA)>
-]>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
 <nta>
 	<declaration>// Place global declarations here.
 int __single__=0;
@@ -185,30 +29,24 @@ broadcast chan flashOff;
 </declaration>
 		<location id="id0" x="40" y="-256">
 			<name x="93" y="-297">AlarmTriggered</name>
-			<label kind="testcodeEnter">assertTrue(cs.e == 0);</label>
 		</location>
 		<location id="id1" x="-160" y="-192">
 			<name x="-246" y="-246">SilentAndFlashingAndUnlocked</name>
-			<label kind="testcodeEnter">assertTrue(cs.g == 0);</label>
 		</location>
 		<location id="id2" x="231" y="-211">
 			<name x="246" y="-348">SilentAndFlashing2</name>
-			<label kind="testcodeEnter">assertTrue(cs.e == 300);</label>
 		</location>
 		<location id="id3" x="141" y="-194">
 			<name x="93" y="-229">ClosedAndLocked</name>
-			<label kind="testcodeEnter">assertTrue(cs.f == 0);</label>
 		</location>
 		<location id="id4" x="-161" y="-459">
 			<name x="-178" y="-501">weird</name>
-			<label kind="testcodeEnter">assertTrue(cs.g == 0);</label>
 		</location>
 		<location id="id5" x="231" y="0">
 			<name x="168" y="24">SilentAndOpened</name>
 		</location>
 		<location id="id6" x="230" y="-462">
 			<name x="220" y="-496">SilentAndFlashing1</name>
-			<label kind="testcodeEnter">assertTrue(cs.e == 30);</label>
 		</location>
 		<location id="id7" x="-104" y="-192">
 			<name x="-42" y="-187">ArmedAndClosedAndUnlocked</name>
@@ -221,10 +59,9 @@ broadcast chan flashOff;
 		</location>
 		<location id="id10" x="42" y="-306">
 			<name x="61" y="-342">ArmedOff</name>
-			<label kind="testcodeEnter">assertTrue(cs.e == 0);</label>
 		</location>
-		<location id="id11" x="144" y="16">
-			<name x="134" y="-18">LockedAndOpened</name>
+		<location id="id11" x="144" y="17">
+			<name x="134" y="-17">LockedAndOpened</name>
 		</location>
 		<location id="id12" x="40" y="-192">
 			<name x="-153" y="-178">ArmedAndClosedAndLocked</name>
@@ -274,6 +111,7 @@ assertTrue(cs.armed);</label>
 			<label kind="synchronisation" x="116" y="-150">close?</label>
 			<label kind="assignment" x="118" y="-165">f:=0</label>
 			<label kind="testcode">cs.f = 0;
+assertTrue(cs.f == 0);
 cs.close();
 assertTrue(cs.closed);</label>
 		</transition>
@@ -291,6 +129,7 @@ assertTrue(cs.closed);</label>
 			<label kind="synchronisation" x="-40" y="-480">unlock?</label>
 			<label kind="assignment" x="-41" y="-496">g:=0</label>
 			<label kind="testcode">cs.g = 0;
+assertTrue(cs.g == 0);
 cs.unlock();
 assertFalse(cs.locked);</label>
 		</transition>
@@ -319,6 +158,7 @@ assertFalse(cs.sound);</label>
 			<label kind="guard" x="136" y="-419">e==30</label>
 			<label kind="synchronisation" x="134" y="-434">soundOff!</label>
 			<label kind="testcode">cs.tick(30);
+assertTrue(cs.e == 30);
 cs.soundOff();
 assertFalse(cs.sound);</label>
 		</transition>
@@ -330,6 +170,7 @@ assertFalse(cs.sound);</label>
 			<label kind="assignment" x="-101" y="-436">g:=0</label>
 			<label kind="testcode">assertTrue(cs.e &lt; 30);
 cs.g = 0;
+assertTrue(cs.g == 0);
 cs.unlock();
 assertFalse(cs.locked);</label>
 		</transition>
@@ -339,6 +180,7 @@ assertFalse(cs.locked);</label>
 			<label kind="guard" x="-16" y="-143">c==20</label>
 			<label kind="synchronisation" x="-31" y="-159">armedOn!</label>
 			<label kind="testcode">cs.tick(20);
+assertTrue(cs.c == 20);
 cs.armedOn();
 assertTrue(cs.armed);</label>
 		</transition>
@@ -346,7 +188,9 @@ assertTrue(cs.armed);</label>
 			<source ref="id7"/>
 			<target ref="id14"/>
 			<label kind="synchronisation" x="-100" y="-132">armedOff!</label>
-			<label kind="testcode">cs.armedOff();
+			<label kind="testcode">cs.tick(16);
+assertTrue(15&lt;cs.c &amp;&amp; cs.c &lt; 20); 
+cs.armedOff();
 assertFalse(cs.armed);</label>
 			<nail x="-104" y="-48"/>
 		</transition>
@@ -355,7 +199,9 @@ assertFalse(cs.armed);</label>
 			<target ref="id7"/>
 			<label kind="synchronisation" x="-74" y="-209">unlock?</label>
 			<label kind="assignment" x="-74" y="-225">d:=0</label>
-			<label kind="testcode">cs.unlock();
+			<label kind="testcode">cs.d = 0;
+assertTrue(cs.d == 0);
+cs.unlock();
 assertFalse(cs.locked);</label>
 		</transition>
 		<transition>
@@ -370,7 +216,9 @@ assertFalse(cs.locked);</label>
 			<target ref="id11"/>
 			<label kind="guard" x="101" y="-76">15&lt;c &amp;&amp; c&lt;20</label>
 			<label kind="synchronisation" x="95" y="-92">open?</label>
-			<label kind="testcode">cs.open();
+			<label kind="testcode">cs.tick(16);
+assertTrue(15&lt;cs.e &amp;&amp; cs.e&lt;20); 
+cs.open();
 assertFalse(cs.closed);</label>
 			<nail x="144" y="-96"/>
 		</transition>
@@ -403,6 +251,7 @@ assertTrue(cs.flash);</label>
 			<label kind="synchronisation" x="-7" y="-224">open?</label>
 			<label kind="assignment" x="-8" y="-239">e:=0</label>
 			<label kind="testcode">cs.e = 0;
+assertTrue(cs.e == 0);
 cs.open();
 assertFalse(cs.closed);</label>
 		</transition>
@@ -413,6 +262,7 @@ assertFalse(cs.closed);</label>
 			<label kind="assignment" x="50" y="-48">c:=0</label>
 			<label kind="testcode">cs.close();
 cs.c = 0;
+assertTrue(cs.c == 0);
 assertTrue(cs.closed);</label>
 		</transition>
 		<transition>
@@ -438,6 +288,7 @@ assertFalse(cs.locked);</label>
 			<label kind="assignment" x="-13" y="-44">c:=0</label>
 			<label kind="testcode">cs.lock();
 cs.c = 0;
+assertTrue(cs.c == 0);
 assertTrue(cs.locked);</label>
 		</transition>
 		<transition>
