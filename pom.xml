@@ -21,10 +21,10 @@
                 <version>1.6.5</version>
                 <configuration>
                     <targetClasses>
-                        <param>carsystem</param>
+                        <param>carsystem.*</param>
                     </targetClasses>
                     <targetTests>
-                        <param>mutant</param>
+                        <param>carsystem.*</param>
                     </targetTests>
                 </configuration>
             </plugin>
