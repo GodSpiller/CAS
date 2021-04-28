@@ -21,19 +21,4 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-*.xml
-sampledoc0.xml
-sampledoc1.xml
-sampledoc10.xml
-sampledoc11.xml
-sampledoc12.xml
-sampledoc13.xml
-sampledoc14.xml
-sampledoc2.xml
-sampledoc3.xml
-sampledoc4.xml
-sampledoc5.xml
-sampledoc6.xml
-sampledoc7.xml
-sampledoc8.xml
-sampledoc9.xml
+
