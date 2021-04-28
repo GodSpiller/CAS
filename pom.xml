@@ -4,31 +4,28 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>SW601</groupId>
-    <artifactId>CAS</artifactId>
+    <groupId>CAS</groupId>
+    <artifactId>123</artifactId>
     <version>0.1</version>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <properties>
         <maven.compiler.source>15</maven.compiler.source>
         <maven.compiler.target>15</maven.compiler.target>
     </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <version>1.6.5</version>
-                <configuration>
-                    <targetClasses>
-                        <param>carsystem.*</param>
-                    </targetClasses>
-                    <targetTests>
-                        <param>carsystem.*</param>
-                    </targetTests>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    
+
 </project>

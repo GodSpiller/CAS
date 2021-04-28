@@ -11,17 +11,17 @@ public class UnitTestFactory {
      * @param testCases: Arraylist of testcode
      */
     public static void makeUnitTests(ArrayList<StringBuilder> testCases) throws IOException {
-        File file = new File("test\\carsystem\\CarSystemTests.java");
+        File file = new File("test\\carsystem\\CarSystemTest.java");
         int numberOfTestCases = testCases.size();
         StringBuilder sb = new StringBuilder();
         FileWriter writer = new FileWriter(file);
-        sb.append("import org.junit.jupiter.api.BeforeEach;\n");
-        sb.append("import org.junit.jupiter.api.Test;\n");
-        sb.append("import static org.junit.jupiter.api.Assertions.*;\n" + "\n");
-        sb.append("import carsystem.CarSystem;");
-        sb.append("class CarSystemTests{\n\n");
+
+        sb.append("package carsystem;\n");
+        sb.append("import org.junit.Test;\n");
+        sb.append("import static org.junit.Assert.*;\n" + "\n");
+        sb.append("public class CarSystemTest{\n\n");
         for (int i = 0; i < numberOfTestCases; i++){
-            sb.append("\n@Test\nvoid testcase" +  new DecimalFormat("000").format(i) + "(){\n");
+            sb.append("\n@Test\npublic void testcase" +  new DecimalFormat("000").format(i) + "(){\n");
             sb.append("CarSystem cs = new CarSystem();\n");
             sb.append(testCases.get(i));
             sb.append("}\n");
