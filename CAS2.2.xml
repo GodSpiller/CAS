@@ -7,10 +7,7 @@ int __reach__=0;
 bool testgoal;
 
 clock c;
-clock g;
 clock e;
-clock d;
-clock f;
 
 broadcast chan open;
 broadcast chan close;
@@ -109,10 +106,7 @@ assertTrue(cs.armed);</label>
 			<source ref="id5"/>
 			<target ref="id3"/>
 			<label kind="synchronisation" x="116" y="-150">close?</label>
-			<label kind="assignment" x="119" y="-161">f:=0</label>
-			<label kind="testcode">cs.f = 0;
-assertTrue(cs.f == 0);
-cs.close();
+			<label kind="testcode">cs.close();
 assertTrue(cs.closed);</label>
 		</transition>
 		<transition>
@@ -128,10 +122,7 @@ assertFalse(cs.locked);</label>
 			<source ref="id6"/>
 			<target ref="id4"/>
 			<label kind="synchronisation" x="-40" y="-480">unlock?</label>
-			<label kind="assignment" x="-41" y="-496">g:=0</label>
-			<label kind="testcode">cs.g = 0;
-assertTrue(cs.g == 0);
-cs.unlock();
+			<label kind="testcode">cs.unlock();
 assertFalse(cs.locked);</label>
 		</transition>
 		<transition>
@@ -169,11 +160,8 @@ assertFalse(cs.sound);</label>
 			<target ref="id4"/>
 			<label kind="guard" x="-99" y="-403">25&lt;e &amp;&amp; e&lt;30</label>
 			<label kind="synchronisation" x="-101" y="-420">unlock?</label>
-			<label kind="assignment" x="-101" y="-436">g:=0</label>
 			<label kind="testcode">cs.tick(26);
 assertTrue(25&lt;cs.e &amp;&amp; cs.e&lt;30);
-cs.g = 0;
-assertTrue(cs.g == 0);
 cs.unlock();
 assertFalse(cs.locked);</label>
 		</transition>
@@ -199,10 +187,7 @@ assertFalse(cs.armed);</label>
 			<source ref="id12"/>
 			<target ref="id7"/>
 			<label kind="synchronisation" x="-74" y="-209">unlock?</label>
-			<label kind="assignment" x="-74" y="-225">d:=0</label>
-			<label kind="testcode">cs.d = 0;
-assertTrue(cs.d == 0);
-cs.unlock();
+			<label kind="testcode">cs.unlock();
 assertFalse(cs.locked);</label>
 		</transition>
 		<transition>
