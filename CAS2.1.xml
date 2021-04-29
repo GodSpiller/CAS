@@ -265,7 +265,7 @@ assertTrue(cs.armed);</label>
 			<source ref="id5"/>
 			<target ref="id3"/>
 			<label kind="synchronisation" x="116" y="-150">close?</label>
-			<label kind="assignment" x="118" y="-165">f:=0</label>
+			<label kind="assignment" x="119" y="-161">f:=0</label>
 			<label kind="testcode">cs.f = 0;
 assertTrue(cs.f == 0);
 cs.close();
@@ -275,7 +275,8 @@ assertTrue(cs.closed);</label>
 			<source ref="id5"/>
 			<target ref="id15"/>
 			<label kind="synchronisation" x="164" y="95">unlock?</label>
-			<label kind="testcode">cs.unlock();</label>
+			<label kind="testcode">cs.unlock();
+assertFalse(cs.locked);</label>
 			<nail x="231" y="125"/>
 			<nail x="146" y="126"/>
 		</transition>
@@ -293,7 +294,8 @@ assertFalse(cs.locked);</label>
 			<source ref="id1"/>
 			<target ref="id15"/>
 			<label kind="synchronisation" x="-148" y="72">flashOff!</label>
-			<label kind="testcode">cs.flashOff();</label>
+			<label kind="testcode">cs.flashOff();
+assertFalse(cs.flash);</label>
 			<nail x="-160" y="125"/>
 			<nail x="-61" y="124"/>
 		</transition>
@@ -324,7 +326,8 @@ assertFalse(cs.sound);</label>
 			<label kind="guard" x="-99" y="-403">25&lt;e &amp;&amp; e&lt;30</label>
 			<label kind="synchronisation" x="-101" y="-420">unlock?</label>
 			<label kind="assignment" x="-101" y="-436">g:=0</label>
-			<label kind="testcode">assertTrue(cs.e &lt; 30);
+			<label kind="testcode">cs.tick(26);
+assertTrue(25&lt;cs.e &amp;&amp; cs.e&lt;30);
 cs.g = 0;
 assertTrue(cs.g == 0);
 cs.unlock();
@@ -344,9 +347,7 @@ assertTrue(cs.armed);</label>
 			<source ref="id7"/>
 			<target ref="id14"/>
 			<label kind="synchronisation" x="-100" y="-132">armedOff!</label>
-			<label kind="testcode">cs.tick(16);
-assertTrue(15&lt;cs.c &amp;&amp; cs.c &lt; 20); 
-cs.armedOff();
+			<label kind="testcode">cs.armedOff();
 assertFalse(cs.armed);</label>
 			<nail x="-104" y="-48"/>
 		</transition>
@@ -364,7 +365,8 @@ assertFalse(cs.locked);</label>
 			<source ref="id14"/>
 			<target ref="id15"/>
 			<label kind="synchronisation" x="-61" y="90">open?</label>
-			<label kind="testcode">cs.open();</label>
+			<label kind="testcode">cs.open();
+assertFalse(cs.closed);</label>
 			<nail x="-64" y="112"/>
 		</transition>
 		<transition>
@@ -382,7 +384,8 @@ assertFalse(cs.closed);</label>
 			<source ref="id11"/>
 			<target ref="id15"/>
 			<label kind="synchronisation" x="87" y="91">unlock?</label>
-			<label kind="testcode">cs.unlock();</label>
+			<label kind="testcode">cs.unlock();
+assertFalse(cs.locked);</label>
 			<nail x="144" y="112"/>
 		</transition>
 		<transition>
@@ -416,9 +419,9 @@ assertFalse(cs.closed);</label>
 			<target ref="id13"/>
 			<label kind="synchronisation" x="50" y="-33">close?</label>
 			<label kind="assignment" x="50" y="-48">c:=0</label>
-			<label kind="testcode">cs.close();
-cs.c = 0;
+			<label kind="testcode">cs.c = 0;
 assertTrue(cs.c == 0);
+cs.close();
 assertTrue(cs.closed);</label>
 		</transition>
 		<transition>
@@ -431,9 +434,11 @@ assertTrue(cs.locked);</label>
 		<transition>
 			<source ref="id13"/>
 			<target ref="id14"/>
-			<label kind="guard" x="-102" y="-119">15&lt;c &amp;&amp; c&lt;20</label>
+			<label kind="guard" x="-93" y="-76">15&lt;c &amp;&amp; c&lt;20</label>
 			<label kind="synchronisation" x="-59" y="-94">unlock?</label>
-			<label kind="testcode">cs.unlock();
+			<label kind="testcode">cs.tick(16);
+assertTrue(15&lt;cs.c &amp;&amp; cs.c &lt; 20);
+cs.unlock();
 assertFalse(cs.locked);</label>
 			<nail x="-64" y="-96"/>
 		</transition>
@@ -442,9 +447,9 @@ assertFalse(cs.locked);</label>
 			<target ref="id13"/>
 			<label kind="synchronisation" x="-13" y="-28">lock?</label>
 			<label kind="assignment" x="-13" y="-44">c:=0</label>
-			<label kind="testcode">cs.lock();
-cs.c = 0;
+			<label kind="testcode">cs.c = 0;
 assertTrue(cs.c == 0);
+cs.lock();
 assertTrue(cs.locked);</label>
 		</transition>
 		<transition>
