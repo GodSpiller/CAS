@@ -157,142 +157,215 @@
 <!ELEMENT comment (#PCDATA)>
 ]>
 <nta>
-	<declaration>// Place global declarations here.
-
-chan up;
-chan down;
-
-int MAX = 10;
-
-bool testgoal = false;
-		
-int __reach__ = 0;
-int __single__ = 0;
-</declaration>
-	<template>
-		<name x="5" y="5">System</name>
-		<declaration>// Place local declarations here.
-
-int val = 0;</declaration>
-		<location id="id0" x="263" y="-153">
-			<name x="280" y="-179">Max</name>
-			<label kind="testcodeEnter">expect_max();</label>
-		</location>
-		<location id="id1" x="136" y="-93">
-			<name x="119" y="-76">On</name>
-			<label kind="testcodeEnter">expect_on($(System.val));</label>
-		</location>
-		<location id="id2" x="8" y="-17">
-			<name x="-26" y="-17">Off</name>
-			<label kind="testcodeEnter">expect_off();</label>
-		</location>
-		<init ref="id2"/>
-		<transition>
-			<source ref="id1"/>
-			<target ref="id1"/>
-			<label kind="guard" x="212" y="-42">val&lt;9</label>
-			<label kind="synchronisation" x="212" y="-25">up?</label>
-			<label kind="assignment" x="212" y="-8">val++</label>
-			<label kind="testcode">assertTrue(state&lt;9);
-up();</label>
-			<nail x="203" y="-42"/>
-			<nail x="263" y="-42"/>
-		</transition>
-		<transition>
-			<source ref="id1"/>
-			<target ref="id1"/>
-			<label kind="guard" x="51" y="-178">val&gt;1</label>
-			<label kind="synchronisation" x="51" y="-161">down?</label>
-			<label kind="assignment" x="51" y="-144">val--</label>
-			<label kind="testcode">assertTrue(state&gt;1);
-down();</label>
-			<nail x="51" y="-127"/>
-			<nail x="102" y="-127"/>
-		</transition>
-		<transition>
-			<source ref="id0"/>
-			<target ref="id1"/>
-			<label kind="synchronisation" x="238" y="-136">down?</label>
-			<label kind="assignment" x="238" y="-119">val--</label>
-			<label kind="testcode">down();</label>
-			<nail x="187" y="-93"/>
-		</transition>
-		<transition>
-			<source ref="id1"/>
-			<target ref="id0"/>
-			<label kind="guard" x="153" y="-195">val == 9</label>
-			<label kind="synchronisation" x="153" y="-178">up?</label>
-			<label kind="assignment" x="153" y="-161">val++</label>
-			<label kind="testcode">assertTrue(state == 9);
-up();</label>
-			<nail x="221" y="-153"/>
-		</transition>
-		<transition>
-			<source ref="id1"/>
-			<target ref="id2"/>
-			<label kind="guard" x="51" y="17">val==1</label>
-			<label kind="synchronisation" x="51" y="-17">down?</label>
-			<label kind="assignment" x="51" y="0">val--</label>
-			<label kind="testcode">assertTrue(state == 1);
-down();</label>
-			<nail x="42" y="-17"/>
-		</transition>
-		<transition>
-			<source ref="id2"/>
-			<target ref="id1"/>
-			<label kind="synchronisation" x="-34" y="-68">up?</label>
-			<label kind="assignment" x="-34" y="-51">val++</label>
-			<label kind="testcode">up();</label>
-			<nail x="102" y="-93"/>
-		</transition>
-	</template>
-	<template>
-		<name>User</name>
-		<location id="id3" x="-17" y="-17">
-		</location>
-		<init ref="id3"/>
-		<transition>
-			<source ref="id3"/>
-			<target ref="id3"/>
-			<label kind="synchronisation" x="-25" y="34">down!</label>
-			<nail x="-42" y="34"/>
-			<nail x="9" y="34"/>
-		</transition>
-		<transition>
-			<source ref="id3"/>
-			<target ref="id3"/>
-			<label kind="synchronisation" x="-26" y="-85">up!</label>
-			<nail x="-43" y="-68"/>
-			<nail x="8" y="-68"/>
-		</transition>
-	</template>
-	<system>// Place template instantiations here.
-
-// List one or more processes to be composed into a system.
-system System, User;
+	<declaration>// Place global declarations here. chan up; chan down; int MAX = 10; int __reach__ = 0; int __single__ = 0; </declaration>
 
 
-/** TEST_PREFIX
-package app;
-import app.App;
+-<template>
 
-class Test extends App {
+<name y="5" x="5">System</name>
 
-    public static void main(String[] args) {
+<declaration>// Place local declarations here. int val = 0;</declaration>
 
-*/
 
-/** TEST_POSTFIX
-    }
-}
-*/
-</system>
-	<queries>
-		<query>
-			<formula>E&lt;&gt; System.Max
-			</formula>
-			<comment>
-			</comment>
-		</query>
-	</queries>
+-<location y="-153" x="263" id="id0">
+
+<name y="-179" x="280">Max</name>
+
+<label kind="testcodeEnter">expect_max();</label>
+
+</location>
+
+
+-<location y="-93" x="136" id="id1">
+
+<name y="-76" x="119">On</name>
+
+<label kind="testcodeEnter">expect_on($(System.val));</label>
+
+</location>
+
+
+-<location y="-17" x="8" id="id2">
+
+<name y="-17" x="-26">Off</name>
+
+<label kind="testcodeEnter">expect_off();</label>
+
+</location>
+
+<init ref="id2"/>
+
+
+-<transition>
+
+<source ref="id1"/>
+
+<target ref="id1"/>
+
+<label y="-42" x="212" kind="guard">val<9</label>
+
+<label y="-25" x="212" kind="synchronisation">up?</label>
+
+<label y="-8" x="212" kind="assignment">val++</label>
+
+<label kind="testcode">assertTrue(cs.state<9); cs.up();</label>
+
+<nail y="-42" x="203"/>
+
+<nail y="-42" x="263"/>
+
+</transition>
+
+
+-<transition>
+
+<source ref="id1"/>
+
+<target ref="id1"/>
+
+<label y="-178" x="51" kind="guard">val>1</label>
+
+<label y="-161" x="51" kind="synchronisation">down?</label>
+
+<label y="-144" x="51" kind="assignment">val--</label>
+
+<label kind="testcode">assertTrue(cs.state>1); cs.down();</label>
+
+<nail y="-127" x="51"/>
+
+<nail y="-127" x="102"/>
+
+</transition>
+
+
+-<transition>
+
+<source ref="id0"/>
+
+<target ref="id1"/>
+
+<label y="-136" x="238" kind="synchronisation">down?</label>
+
+<label y="-119" x="238" kind="assignment">val--</label>
+
+<label kind="testcode">cs.down();</label>
+
+<nail y="-93" x="187"/>
+
+</transition>
+
+
+-<transition>
+
+<source ref="id1"/>
+
+<target ref="id0"/>
+
+<label y="-195" x="153" kind="guard">val == 9</label>
+
+<label y="-178" x="153" kind="synchronisation">up?</label>
+
+<label y="-161" x="153" kind="assignment">val++</label>
+
+<label kind="testcode">assertTrue(cs.state == 9); cs.up();</label>
+
+<nail y="-153" x="221"/>
+
+</transition>
+
+
+-<transition>
+
+<source ref="id1"/>
+
+<target ref="id2"/>
+
+<label y="17" x="51" kind="guard">val==1</label>
+
+<label y="-17" x="51" kind="synchronisation">down?</label>
+
+<label y="0" x="51" kind="assignment">val--</label>
+
+<label kind="testcode">assertTrue(cs.state == 1); cs.down();</label>
+
+<nail y="-17" x="42"/>
+
+</transition>
+
+
+-<transition>
+
+<source ref="id2"/>
+
+<target ref="id1"/>
+
+<label y="-68" x="-34" kind="synchronisation">up?</label>
+
+<label y="-51" x="-34" kind="assignment">val++</label>
+
+<label kind="testcode">cs.up();</label>
+
+<nail y="-93" x="102"/>
+
+</transition>
+
+</template>
+
+
+-<template>
+
+<name>User</name>
+
+<location y="-17" x="-17" id="id3"> </location>
+
+<init ref="id3"/>
+
+
+-<transition>
+
+<source ref="id3"/>
+
+<target ref="id3"/>
+
+<label y="34" x="-25" kind="synchronisation">down!</label>
+
+<nail y="34" x="-42"/>
+
+<nail y="34" x="9"/>
+
+</transition>
+
+
+-<transition>
+
+<source ref="id3"/>
+
+<target ref="id3"/>
+
+<label y="-85" x="-26" kind="synchronisation">up!</label>
+
+<nail y="-68" x="-43"/>
+
+<nail y="-68" x="8"/>
+
+</transition>
+
+</template>
+
+<system>// Place template instantiations here. // List one or more processes to be composed into a system. system System, User; /** TEST_PREFIX package app; import app.App; class Test extends App {public static void main(String[] args) { */ /** TEST_POSTFIX} } */ </system>
+
+
+-<queries>
+
+
+-<query>
+
+<formula>E<> System.Max </formula>
+
+<comment> </comment>
+
+</query>
+
+</queries>
+
 </nta>
