@@ -115,11 +115,14 @@ public class ModelHandler {
     private StringBuilder getTrace(String location, BoundaryValue boundaryValue, String processName) throws EngineException {
         UppaalSystem system = engine.getSystem(document, problems);
         Query q;
+
         if(!boundaryValue.getValidity()) {
-            q = new Query("E<> testgoal == true", "");
+            System.out.println("E<> testgoal == true && " + processName + "." + boundaryValue.getClock() + " == " + boundaryValue.getValue());
+            q = new Query("E<> testgoal == true && " + boundaryValue.getClock() + " == " + boundaryValue.getValue() , "");
         }
         else {
-            q = new Query("E<>" + processName + "." + location, "");
+            System.out.println("E<> " + processName + "." + location + " && " + processName + "." + boundaryValue.getClock() + " == " + boundaryValue.getValue());
+            q = new Query("E<> " + processName + "." + location + " && " + boundaryValue.getClock() + " == " + boundaryValue.getValue(), "");
             //q = new Query("E<> " + processName + "." + location, "");
         }
 

@@ -58,16 +58,14 @@ public class BoundaryVisitor implements ASTVisitor {
     @Override
     public Object visit(EQL eql) {
 
-        for (int i = 0; i < 2; i++) {
-            switch (eql.getChild(i).getType()) {
-                case "NUMBER" ->
-                        boundaryValues.put(eql.getChild(i).getToken().getIndex(),
-                        makeValues(parseInt(eql.getChild(i).getValue()), eql.getChild(i).getValue(), i == 0 ? "==L" : "==R", eql.getChild(i).getToken().getIndex()));
-                case "PLUS", "TIMES", "DIVIDED", "MINUS", "IDENTIFIER"->
-                        eql.getRight().accept(this);
-            }
+        if (eql.getRight().getType().equals(TokenType.NUMBER.toString())) {
+            boundaryValues.put(eql.getRight().getToken().getIndex(),
+                    makeValues(parseInt(eql.getRight().getValue()), eql.getLeft().getValue(), "==R", eql.getRight().getToken().getIndex()));
         }
-
+        if (eql.getLeft().getType().equals(TokenType.NUMBER.toString())) {
+            boundaryValues.put(eql.getLeft().getToken().getIndex(),
+                    makeValues(parseInt(eql.getLeft().getValue()), eql.getRight().getValue(),"==L", eql.getLeft().getToken().getIndex()));
+        }
         return null;
     }
 
@@ -148,58 +146,21 @@ public class BoundaryVisitor implements ASTVisitor {
 
     @Override
     public Object visit(Plus plus) {
-
-        for (int i = 0; i < 2; i++) {
-            switch (plus.getChild(i).getType()) {
-                case "NUMBER" ->
-                        boundaryValues.put(plus.getChild(i).getToken().getIndex(),
-                                makeValues(parseInt(plus.getChild(i).getValue()), plus.getChild(i).getValue(), i == 0 ? "+L" : "+R", plus.getChild(i).getToken().getIndex()));
-                case "PLUS", "TIMES", "DIVIDED", "MINUS", "IDENTIFIER" ->
-                        plus.getChild(i).accept(this);
-            }
-        }
         return null;
     }
 
     @Override
     public Object visit(Minus minus) {
-        for (int i = 0; i < 2; i++) {
-            switch (minus.getChild(i).getType()) {
-                case "NUMBER" ->
-                        boundaryValues.put(minus.getChild(i).getToken().getIndex(),
-                                makeValues(parseInt(minus.getChild(i).getValue()), minus.getChild(i).getValue(), i == 0 ? "-L" : "-R", minus.getChild(i).getToken().getIndex()));
-                case "PLUS", "TIMES", "DIVIDED", "MINUS", "IDENTIFIER" ->
-                        minus.getChild(i).accept(this);
-            }
-        }
         return null;
     }
 
     @Override
     public Object visit(Divide divide) {
-        for (int i = 0; i < 2; i++) {
-            switch (divide.getChild(i).getType()) {
-                case "NUMBER" ->
-                        boundaryValues.put(divide.getChild(i).getToken().getIndex(),
-                                makeValues(parseInt(divide.getChild(i).getValue()), divide.getChild(i).getValue(), i == 0 ? "/L" : "/R", divide.getChild(i).getToken().getIndex()));
-                case "PLUS", "TIMES", "DIVIDED", "MINUS", "IDENTIFIER" ->
-                        divide.getChild(i).accept(this);
-            }
-        }
         return null;
     }
 
     @Override
     public Object visit(Multiply multiply) {
-        for (int i = 0; i < 2; i++) {
-            switch (multiply.getChild(i).getType()) {
-                case "NUMBER" ->
-                        boundaryValues.put(multiply.getChild(i).getToken().getIndex(),
-                                makeValues(parseInt(multiply.getChild(i).getValue()), multiply.getChild(i).getValue(), i == 0 ? "*L" : "*R", multiply.getChild(i).getToken().getIndex()));
-                case "PLUS", "TIMES", "DIVIDED", "MINUS", "IDENTIFIER" ->
-                        multiply.getChild(i).accept(this);
-            }
-        }
         return null;
     }
 
@@ -208,37 +169,34 @@ public class BoundaryVisitor implements ASTVisitor {
 
         switch (operator) {
             case "<L", ">R" -> {
-                temp.add(new BoundaryValue(x, false, clock, x, index));
-                temp.add(new BoundaryValue(x + 1, true, clock, x, index));
+                temp.add(new BoundaryValue(x, true, clock, x + 1, index));
+                temp.add(new BoundaryValue(x, true, clock, x + 2, index));
                 temp.add(new BoundaryValue(x - 1, false, clock, x, index));
             }
             case "<R", ">L" -> {
-                temp.add(new BoundaryValue(x, false, clock, x, index));
+                temp.add(new BoundaryValue(x, true, clock, x - 2, index));
+                temp.add(new BoundaryValue(x, true, clock,  x - 1, index));
                 temp.add(new BoundaryValue(x + 1, false, clock, x, index));
-                temp.add(new BoundaryValue(x - 1, true, clock, x, index));
             }
             case "<=L", ">=R" -> {
                 temp.add(new BoundaryValue(x, true, clock, x, index));
-                temp.add(new BoundaryValue(x - 1, false, clock, x, index));
-                temp.add(new BoundaryValue(x + 1, true, clock, x, index));
+                temp.add(new BoundaryValue(x, true, clock, x + 1, index));
+                temp.add(new BoundaryValue(x - 1, false, clock, x - 1, index));
             }
             case "<=R", ">=L" -> {
                 temp.add(new BoundaryValue(x, true, clock, x, index));
-                temp.add(new BoundaryValue(x - 1, true, clock, x, index));
-                temp.add(new BoundaryValue(x + 1, false, clock, x, index));
+                temp.add(new BoundaryValue(x, true, clock, x - 1, index));
+                temp.add(new BoundaryValue(x + 1, false, clock, x + 1, index));
             }
             case "==L", "==R" -> {
                 temp.add(new BoundaryValue(x, true, clock, x, index));
-                temp.add(new BoundaryValue(x - 1, false, clock, x, index));
-                temp.add(new BoundaryValue(x + 1, false, clock, x, index));
+                temp.add(new BoundaryValue(x - 1, false, clock, x - 1, index));
+                temp.add(new BoundaryValue(x + 1, false, clock, x + 1, index));
             }
             case "!=L", "!=R" -> {
                 temp.add(new BoundaryValue(x, false, clock, x, index));
                 temp.add(new BoundaryValue(x - 1, true, clock, x, index));
                 temp.add(new BoundaryValue(x + 1, true, clock, x, index));
-            }
-            case "+L", "+R" -> {
-                temp.add(new BoundaryValue(x + 1,false, clock, x, index));
             }
             default -> System.out.println("Error");
         }
