@@ -44,7 +44,6 @@ public class ModelHandler {
      */
     public ArrayList<StringBuilder> createTestCode(String processName) throws EngineException, CloneNotSupportedException {
         GuardMaker gm = new GuardMaker();
-        StringBuilder sb;
         ArrayList<StringBuilder> testCases = new ArrayList<>();
         UppaalSystem system = engine.getSystem(document, problems);
         int j = 0;
@@ -53,8 +52,6 @@ public class ModelHandler {
                 for (SystemEdge edge : process.getEdges()) {
                     if (hasProperty(edge, "guard")) {
                         HashMap<Integer, ArrayList<BoundaryValue>> guards;
-                        sb = new StringBuilder();
-                        sb.append(edge.getEdge().getPropertyValue("guard"));
                         // creates new guards for an edge
                         guards = gm.makeGuards(edge.getEdge().getPropertyValue("guard").toString());
                         for (Integer i : guards.keySet()){
@@ -117,15 +114,11 @@ public class ModelHandler {
         Query q;
 
         if(!boundaryValue.getValidity()) {
-            System.out.println("E<> testgoal == true && " + processName + "." + boundaryValue.getClock() + " == " + boundaryValue.getValue());
             q = new Query("E<> testgoal == true && " + boundaryValue.getClock() + " == " + boundaryValue.getValue() , "");
         }
         else {
-            System.out.println("E<> " + processName + "." + location + " && " + processName + "." + boundaryValue.getClock() + " == " + boundaryValue.getValue());
             q = new Query("E<> " + processName + "." + location + " && " + boundaryValue.getClock() + " == " + boundaryValue.getValue(), "");
-            //q = new Query("E<> " + processName + "." + location, "");
         }
-
 
         QueryFeedback qf = new QueryFeedback() {
             @Override
