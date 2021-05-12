@@ -164,6 +164,8 @@ chan down;
 
 int MAX = 10;
 
+bool testgoal = false;
+		
 int __reach__ = 0;
 int __single__ = 0;
 </declaration>
