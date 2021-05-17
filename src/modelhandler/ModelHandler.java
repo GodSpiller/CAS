@@ -56,17 +56,30 @@ public class ModelHandler {
                         guards = gm.makeGuards(edge.getEdge().getPropertyValue("guard").toString());
                         for (Integer i : guards.keySet()){
                             for (BoundaryValue boundaryValue : guards.get(i)){
-                                System.out.println(boundaryValue.getValidity());
+
                                 if (!boundaryValue.getValidity()) {
                                     makeNegativeEdge(edge.getEdge(), boundaryValue, document, processName);
+                                    testCases.add(getTrace(edge.getEdge().getTarget().getName(), boundaryValue, processName));
+                                    removeNegativeEdge(processName);
                                 }
-                                try {
+                                else if (hasProperty(edge, "assignment")) {
+                                    String oldAssignment = edge.getEdge().getPropertyValue("assignment").toString();
+                                    edge.getEdge().setProperty("assignment", edge.getEdge().getPropertyValue("assignment") + ", testgoal = true");
+                                    testCases.add(getTrace(edge.getEdge().getTarget().getName(), boundaryValue, processName));
+                                    edge.getEdge().setProperty("assignment", oldAssignment);
+                                }
+                                else {
+                                    edge.getEdge().setProperty("assignment", "testgoal = true");
+                                    testCases.add(getTrace(edge.getEdge().getTarget().getName(), boundaryValue, processName));
+                                    edge.getEdge().setProperty("assignment", "");
+                                }
+
+                                /*try {
                                     document.save("sampledoc" + j++ + ".xml");
                                 } catch (IOException e) {
                                     e.printStackTrace(System.err);
                                 }
-                                testCases.add(getTrace(edge.getEdge().getTarget().getName(), boundaryValue, processName));
-                                removeNegativeEdge(processName);
+                                */
                             }
                         }
                     }
@@ -113,12 +126,7 @@ public class ModelHandler {
         UppaalSystem system = engine.getSystem(document, problems);
         Query q;
 
-        if(!boundaryValue.getValidity()) {
-            q = new Query("E<> testgoal == true && " + boundaryValue.getClock() + " == " + boundaryValue.getValue() , "");
-        }
-        else {
-            q = new Query("E<> " + processName + "." + location + " && " + boundaryValue.getClock() + " == " + boundaryValue.getValue(), "");
-        }
+        q = new Query("E<> testgoal == true && " + boundaryValue.getClock() + " == " + boundaryValue.getOriginalValue(), "");
 
         QueryFeedback qf = new QueryFeedback() {
             @Override

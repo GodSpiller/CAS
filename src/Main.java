@@ -7,7 +7,7 @@ public class Main {
 
         ModelHandler modelHandler = new ModelHandler();
 
-        UnitTestFactory.makeUnitTests(modelHandler.createTestCode("Spec"));
+        UnitTestFactory.makeUnitTests1(modelHandler.createTestCode("Spec"));
         modelHandler.engine.disconnect();
 
 

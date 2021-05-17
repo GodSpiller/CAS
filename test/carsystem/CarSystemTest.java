@@ -188,11 +188,61 @@ fail();
 @Test
 public void testcase006(){
 CarSystem cs = new CarSystem();
+cs.close();
+assertTrue(cs.closed);
+cs.c = 0;
+assertTrue(cs.c == 0);
+cs.lock();
+assertTrue(cs.locked);
+assertTrue(cs.c == 0);
+cs.tick(20);
+assertTrue(cs.c == 20);
+cs.armedOn();
+assertTrue(cs.armed);
+cs.e = 0;
+assertTrue(cs.e == 0);
+cs.open();
+assertFalse(cs.closed);
+cs.armedOff();
+assertFalse(cs.armed);
+cs.flashOn();
+assertTrue(cs.flash);
+cs.soundOn();
+assertTrue(cs.sound);
+cs.tick(26);
+assertTrue(25<cs.e && cs.e<30);
+cs.unlock();
+assertFalse(cs.locked);
 }
 
 @Test
 public void testcase007(){
 CarSystem cs = new CarSystem();
+cs.close();
+assertTrue(cs.closed);
+cs.c = 0;
+assertTrue(cs.c == 0);
+cs.lock();
+assertTrue(cs.locked);
+assertTrue(cs.c == 0);
+cs.tick(20);
+assertTrue(cs.c == 20);
+cs.armedOn();
+assertTrue(cs.armed);
+cs.e = 0;
+assertTrue(cs.e == 0);
+cs.open();
+assertFalse(cs.closed);
+cs.armedOff();
+assertFalse(cs.armed);
+cs.flashOn();
+assertTrue(cs.flash);
+cs.soundOn();
+assertTrue(cs.sound);
+cs.tick(26);
+assertTrue(25<cs.e && cs.e<30);
+cs.unlock();
+assertFalse(cs.locked);
 }
 
 @Test
@@ -220,25 +270,6 @@ assertTrue(cs.flash);
 cs.soundOn();
 assertTrue(cs.sound);
 fail();
-cs.soundOff();
-assertFalse(cs.sound);
-cs.flashOff();
-assertFalse(cs.flash);
-cs.close();
-assertTrue(cs.closed);
-cs.c = 0;
-assertTrue(cs.c == 0);
-cs.lock();
-assertTrue(cs.locked);
-assertTrue(cs.c == 0);
-cs.tick(20);
-assertTrue(cs.c == 20);
-cs.armedOn();
-assertTrue(cs.armed);
-cs.e = 0;
-assertTrue(cs.e == 0);
-cs.open();
-assertFalse(cs.closed);
 }
 
 @Test
@@ -373,15 +404,33 @@ fail();
 @Test
 public void testcase015(){
 CarSystem cs = new CarSystem();
+cs.close();
+assertTrue(cs.closed);
+cs.c = 0;
+assertTrue(cs.c == 0);
 cs.lock();
 assertTrue(cs.locked);
+assertTrue(cs.c == 0);
+cs.tick(16);
+assertTrue(15<cs.e && cs.e<20); 
+cs.open();
+assertFalse(cs.closed);
 }
 
 @Test
 public void testcase016(){
 CarSystem cs = new CarSystem();
+cs.close();
+assertTrue(cs.closed);
+cs.c = 0;
+assertTrue(cs.c == 0);
 cs.lock();
 assertTrue(cs.locked);
+assertTrue(cs.c == 0);
+cs.tick(16);
+assertTrue(15<cs.e && cs.e<20); 
+cs.open();
+assertFalse(cs.closed);
 }
 
 @Test
@@ -395,25 +444,38 @@ cs.lock();
 assertTrue(cs.locked);
 assertTrue(cs.c == 0);
 fail();
-cs.c = 0;
-assertTrue(cs.c == 0);
-cs.close();
-assertTrue(cs.closed);
-assertTrue(cs.c == 0);
 }
 
 @Test
 public void testcase018(){
 CarSystem cs = new CarSystem();
+cs.close();
+assertTrue(cs.closed);
+cs.c = 0;
+assertTrue(cs.c == 0);
 cs.lock();
 assertTrue(cs.locked);
+assertTrue(cs.c == 0);
+cs.tick(16);
+assertTrue(15<cs.e && cs.e<20); 
+cs.open();
+assertFalse(cs.closed);
 }
 
 @Test
 public void testcase019(){
 CarSystem cs = new CarSystem();
+cs.close();
+assertTrue(cs.closed);
+cs.c = 0;
+assertTrue(cs.c == 0);
 cs.lock();
 assertTrue(cs.locked);
+assertTrue(cs.c == 0);
+cs.tick(16);
+assertTrue(15<cs.e && cs.e<20); 
+cs.open();
+assertFalse(cs.closed);
 }
 
 @Test
@@ -434,6 +496,15 @@ public void testcase021(){
 CarSystem cs = new CarSystem();
 cs.close();
 assertTrue(cs.closed);
+cs.c = 0;
+assertTrue(cs.c == 0);
+cs.lock();
+assertTrue(cs.locked);
+assertTrue(cs.c == 0);
+cs.tick(16);
+assertTrue(15<cs.c && cs.c < 20);
+cs.unlock();
+assertFalse(cs.locked);
 }
 
 @Test
@@ -441,6 +512,15 @@ public void testcase022(){
 CarSystem cs = new CarSystem();
 cs.close();
 assertTrue(cs.closed);
+cs.c = 0;
+assertTrue(cs.c == 0);
+cs.lock();
+assertTrue(cs.locked);
+assertTrue(cs.c == 0);
+cs.tick(16);
+assertTrue(15<cs.c && cs.c < 20);
+cs.unlock();
+assertFalse(cs.locked);
 }
 
 @Test
@@ -454,11 +534,6 @@ cs.lock();
 assertTrue(cs.locked);
 assertTrue(cs.c == 0);
 fail();
-cs.c = 0;
-assertTrue(cs.c == 0);
-cs.lock();
-assertTrue(cs.locked);
-assertTrue(cs.c == 0);
 }
 
 @Test
@@ -466,6 +541,15 @@ public void testcase024(){
 CarSystem cs = new CarSystem();
 cs.close();
 assertTrue(cs.closed);
+cs.c = 0;
+assertTrue(cs.c == 0);
+cs.lock();
+assertTrue(cs.locked);
+assertTrue(cs.c == 0);
+cs.tick(16);
+assertTrue(15<cs.c && cs.c < 20);
+cs.unlock();
+assertFalse(cs.locked);
 }
 
 @Test
@@ -473,6 +557,15 @@ public void testcase025(){
 CarSystem cs = new CarSystem();
 cs.close();
 assertTrue(cs.closed);
+cs.c = 0;
+assertTrue(cs.c == 0);
+cs.lock();
+assertTrue(cs.locked);
+assertTrue(cs.c == 0);
+cs.tick(16);
+assertTrue(15<cs.c && cs.c < 20);
+cs.unlock();
+assertFalse(cs.locked);
 }
 
 @Test
