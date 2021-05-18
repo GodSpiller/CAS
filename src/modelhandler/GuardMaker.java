@@ -20,49 +20,18 @@ public class GuardMaker {
 
         for (Integer i : parser.boundaryValues.keySet()) {
             for (BoundaryValue boundaryValue : parser.boundaryValues.get(i)) {
-                boundaryValue.setGuard(newGuard(guard, boundaryValue));
-                //boundaryValue.setGuard(replace(guard, i.toString(), String.valueOf(boundaryValue.getValue())));
+                boundaryValue.setGuard(createNewGuard(guard, boundaryValue));
             }
         }
 
         return parser.boundaryValues;
     }
 
-    /*
-     * Replaces a string with another in a StringBuilder
-     *
-     * @param builder: StringBuilder to be modified
-     * @param from: the string to be replaced
-     * @param to: the string that replaces the 'from' string
-     */
-    private String replace(String guard, String from, String to){
-        StringBuilder builder = new StringBuilder(guard);
-        int index = builder.indexOf(from);
-        while (index != -1) {
-            builder.replace(index, index + from.length(), to);
-            index += to.length();
-            index = builder.indexOf(from, index);
-        }
-        return builder.toString();
-    }
-
-    private String newGuard(String guard, BoundaryValue boundaryValue) {
+    private String createNewGuard(String guard, BoundaryValue boundaryValue) {
         String sub1 = guard.substring(0, boundaryValue.getIndexStart());
         String sub2 = guard.substring(boundaryValue.getIndexEnd());
 
         return sub1 + boundaryValue.getValue() + sub2;
-    }
-
-    private ArrayList<String> removeDuplicates(ArrayList<String> guardList) {
-        ArrayList<String> newList = new ArrayList<>();
-
-        for (String s : guardList) {
-            if (!newList.contains(s)) {
-                newList.add(s);
-            }
-        }
-
-        return newList;
     }
 }
 

@@ -46,19 +46,21 @@ public class ModelHandler {
         GuardMaker gm = new GuardMaker();
         ArrayList<StringBuilder> testCases = new ArrayList<>();
         UppaalSystem system = engine.getSystem(document, problems);
-        int j = 0;
+
         for (Process process : system.getProcesses()) {
             if(process.getTemplate().getPropertyValue("name").equals(processName)) {
                 for (SystemEdge edge : process.getEdges()) {
+
                     if (hasProperty(edge, "guard")) {
                         HashMap<Integer, ArrayList<BoundaryValue>> guards;
                         // creates new guards for an edge
                         guards = gm.makeGuards(edge.getEdge().getPropertyValue("guard").toString());
                         for (Integer i : guards.keySet()){
+
                             for (BoundaryValue boundaryValue : guards.get(i)){
 
                                 if (!boundaryValue.getValidity()) {
-                                    makeNegativeEdge(edge.getEdge(), boundaryValue, document, processName);
+                                    createNegativeEdge(edge.getEdge(), boundaryValue, document, processName);
                                     testCases.add(getTrace(edge.getEdge().getTarget().getName(), boundaryValue, processName));
                                     removeNegativeEdge(processName);
                                 }
@@ -73,13 +75,6 @@ public class ModelHandler {
                                     testCases.add(getTrace(edge.getEdge().getTarget().getName(), boundaryValue, processName));
                                     edge.getEdge().setProperty("assignment", "");
                                 }
-
-                                /*try {
-                                    document.save("sampledoc" + j++ + ".xml");
-                                } catch (IOException e) {
-                                    e.printStackTrace(System.err);
-                                }
-                                */
                             }
                         }
                     }
@@ -102,7 +97,7 @@ public class ModelHandler {
         }
     }
 
-    private void makeNegativeEdge(Edge edge, BoundaryValue boundaryValue, Document doc, String processName) throws CloneNotSupportedException {
+    private void createNegativeEdge(Edge edge, BoundaryValue boundaryValue, Document doc, String processName) throws CloneNotSupportedException {
         template = (Template) doc.getTemplate(processName).clone();
         Edge newEdge = template.createEdge();
         document.getTemplate(processName).insert(newEdge, doc.getTemplate(processName).getLast());
