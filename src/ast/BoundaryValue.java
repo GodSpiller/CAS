@@ -5,17 +5,17 @@ public class BoundaryValue {
     private boolean validity;
     private String guard;
     private String clock;
-    private int originalValue;
+    private int queryValue;
     private int indexEnd;
     private int indexStart;
 
-    public BoundaryValue(int value, boolean validity, String clock, int originalValue, int index) {
+    public BoundaryValue(int value, boolean validity, String clock, int queryValue, int index) {
         this.value = value;
         this.validity = validity;
         this.clock = clock;
-        this.originalValue = originalValue;
+        this.queryValue = queryValue;
         this.indexEnd = index;
-        this.indexStart = index - String.valueOf(originalValue).length();
+        this.indexStart = index - String.valueOf(queryValue).length();
     }
 
 
@@ -40,8 +40,8 @@ public class BoundaryValue {
         return clock;
     }
 
-    public int getOriginalValue() {
-        return originalValue;
+    public int getQueryValue() {
+        return queryValue;
     }
 
     public int getIndexStart() {

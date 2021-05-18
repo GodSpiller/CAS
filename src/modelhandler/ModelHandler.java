@@ -126,7 +126,7 @@ public class ModelHandler {
         UppaalSystem system = engine.getSystem(document, problems);
         Query q;
 
-        q = new Query("E<> testgoal == true && " + boundaryValue.getClock() + " == " + boundaryValue.getOriginalValue(), "");
+        q = new Query("E<> testgoal == true && " + boundaryValue.getClock() + " == " + boundaryValue.getQueryValue(), "");
 
         QueryFeedback qf = new QueryFeedback() {
             @Override

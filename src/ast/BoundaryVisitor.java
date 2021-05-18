@@ -194,9 +194,9 @@ public class BoundaryVisitor implements ASTVisitor {
                 temp.add(new BoundaryValue(x + 1, false, clock, x + 1, index));
             }
             case "!=L", "!=R" -> {
-                temp.add(new BoundaryValue(x, false, clock, x, index));
-                temp.add(new BoundaryValue(x - 1, true, clock, x, index));
-                temp.add(new BoundaryValue(x + 1, true, clock, x, index));
+                temp.add(new BoundaryValue(x + 1, false, clock, x, index));
+                temp.add(new BoundaryValue(x, true, clock, x + 1, index));
+                temp.add(new BoundaryValue(x, true, clock, x - 1, index));
             }
             default -> System.out.println("Error");
         }
