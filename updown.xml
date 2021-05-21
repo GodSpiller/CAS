@@ -213,7 +213,7 @@ cs.expect_on(cs.state);</label>
 			<label kind="synchronisation" x="238" y="-136">down?</label>
 			<label kind="assignment" x="238" y="-119">val--</label>
 			<label kind="testcode">cs.down();
-cs.expect_on(8);</label>
+cs.expect_on(9);</label>
 			<nail x="187" y="-93"/>
 		</transition>
 		<transition>
