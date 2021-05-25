@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 public class UnitTestFactory {
     /*
-     * Creates a Unit Test for each element in the ArrayList
+     * Creates a Unit Test for each element in the ArrayList testCases
      *
      * @param testCases: Arraylist of testcode
      */
-    public static void makeUnitTests(ArrayList<StringBuilder> testCases) throws IOException {
+    public static void makeUnitTestsUpDown(ArrayList<StringBuilder> testCases) throws IOException {
         File file = new File("test\\evalclass\\UpDownTest.java");
         int numberOfTestCases = testCases.size();
         StringBuilder sb = new StringBuilder();
@@ -31,7 +31,7 @@ public class UnitTestFactory {
         writer.close();
     }
 
-    public static void makeUnitTests1(ArrayList<StringBuilder> testCases) throws IOException {
+    public static void makeUnitTestsCAS(ArrayList<StringBuilder> testCases) throws IOException {
         File file = new File("test\\carsystem\\CarSystemTest.java");
         int numberOfTestCases = testCases.size();
         StringBuilder sb = new StringBuilder();

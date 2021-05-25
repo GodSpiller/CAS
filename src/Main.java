@@ -12,7 +12,7 @@ public class Main {
         ModelHandler modelHandler = new ModelHandler();
 
         //the parameter of creatTestCode is the name of the uppaal template we wish to create tests for
-        UnitTestFactory.makeUnitTests(modelHandler.createTestCode("System"));
+        UnitTestFactory.makeUnitTestsCAS(modelHandler.createTestCode("Spec"));
         modelHandler.engine.disconnect();
     }
 }

@@ -1,4 +1,5 @@
 package carsystem;
+//implementation for the CAS UPPAAL model
 public class CarSystem implements ICarAlarmSystem {
     public boolean closed;
     public boolean locked;

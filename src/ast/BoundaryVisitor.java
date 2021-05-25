@@ -164,6 +164,17 @@ public class BoundaryVisitor implements ASTVisitor {
         return null;
     }
 
+    /*
+     *
+     *
+     * @param x: value of constant in guard
+     * @param clock: The identifier of the clock variable
+     * @param operator: String indicating which case is valid
+     * @param index: index of the constant in the guard (later used to create new guards)
+     *
+     * @return An ArrayList of 3 BoundaryValue objects.
+     */
+
     public ArrayList<BoundaryValue> makeValues(int x, String clock, String operator, int index) {
         ArrayList<BoundaryValue> temp = new ArrayList<>();
 

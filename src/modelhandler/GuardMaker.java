@@ -10,9 +10,11 @@ import java.util.HashMap;
 public class GuardMaker {
 
     /*
-     * calculates boundary values of a guard, and returns a new guard for each new value
+     * An AST is created through the lexer and parser, which is then visited by the BoundaryVisitor.
+     * parser.boundaryValues is a hashmap containing each boundary value of a guard.
+     * New guards are created for the boundary values which exhibit "negative" behaviour
      *
-     * @param sb: StringBuilder to create new guards of
+     * @param guard: The guard of an edge in a UPPAAL model
      * @return a HashMap containing the boundary values of a guard
      */
     public HashMap<Integer, ArrayList<BoundaryValue>> makeGuards(String guard) {
@@ -20,13 +22,25 @@ public class GuardMaker {
 
         for (Integer i : parser.boundaryValues.keySet()) {
             for (BoundaryValue boundaryValue : parser.boundaryValues.get(i)) {
-                boundaryValue.setGuard(createNewGuard(guard, boundaryValue));
+                if(!boundaryValue.getValidity()) {
+                    boundaryValue.setGuard(createNewGuard(guard, boundaryValue));
+                }
             }
         }
 
         return parser.boundaryValues;
     }
 
+
+    /*
+     *
+     * Splits a string in two, before a constant and after. These string are then combined with a new constant value.
+     *
+     * @param guard: The guard of an edge in a UPPAAL model
+     * @param boundaryValue: boundaryValue object, which contains information about the placement of the constant in the guard string.
+     *
+     * @return the string of the new guard
+     */
     private String createNewGuard(String guard, BoundaryValue boundaryValue) {
 
         String sub1 = guard.substring(0, boundaryValue.getIndexStart());

@@ -1,5 +1,5 @@
 package evalclass;
-
+//implementation for the Updown uppaal model
 class App {
   private static int OFF = 0;
   private static int ON = 1;
