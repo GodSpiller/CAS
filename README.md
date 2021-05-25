@@ -11,4 +11,4 @@ model.jar
 uppaal.jar
 
 ## SETTING SERVER PATH ##
-In the ModelHandler.java, change the engine.setServerPath to your local path
+In the ModelHandler.java, change the engine.setServerPath() to your local path
