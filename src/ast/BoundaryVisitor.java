@@ -168,35 +168,41 @@ public class BoundaryVisitor implements ASTVisitor {
         ArrayList<BoundaryValue> temp = new ArrayList<>();
 
         switch (operator) {
+            //clock is greater than constant
             case "<L", ">R" -> {
-                temp.add(new BoundaryValue(x, true, clock, x + 1, index));
-                temp.add(new BoundaryValue(x, true, clock, x + 2, index));
-                temp.add(new BoundaryValue(x - 1, false, clock, x, index));
+                temp.add(new BoundaryValue(x, true, clock, x + 1, index, x));
+                temp.add(new BoundaryValue(x - 2, false, clock, x - 1, index, x));
+                temp.add(new BoundaryValue(x - 1, false, clock, x, index, x));
             }
+            //clock is less than constant
             case "<R", ">L" -> {
-                temp.add(new BoundaryValue(x, true, clock, x - 2, index));
-                temp.add(new BoundaryValue(x, true, clock,  x - 1, index));
-                temp.add(new BoundaryValue(x + 1, false, clock, x, index));
+                temp.add(new BoundaryValue(x + 2, false, clock, x + 1, index, x));
+                temp.add(new BoundaryValue(x, true, clock,  x - 1, index, x));
+                temp.add(new BoundaryValue(x + 1, false, clock, x, index, x));
             }
+            //clock is equal to or greater than constant
             case "<=L", ">=R" -> {
-                temp.add(new BoundaryValue(x, true, clock, x, index));
-                temp.add(new BoundaryValue(x, true, clock, x + 1, index));
-                temp.add(new BoundaryValue(x - 1, false, clock, x - 1, index));
+                temp.add(new BoundaryValue(x, true, clock, x, index, x));
+                temp.add(new BoundaryValue(x, true, clock, x + 1, index, x));
+                temp.add(new BoundaryValue(x - 1, false, clock, x - 1, index, x));
             }
+            //clock is equal to or less than constant
             case "<=R", ">=L" -> {
-                temp.add(new BoundaryValue(x, true, clock, x, index));
-                temp.add(new BoundaryValue(x, true, clock, x - 1, index));
-                temp.add(new BoundaryValue(x + 1, false, clock, x + 1, index));
+                temp.add(new BoundaryValue(x, true, clock, x, index, x));
+                temp.add(new BoundaryValue(x, true, clock, x - 1, index, x));
+                temp.add(new BoundaryValue(x + 1, false, clock, x + 1, index, x));
             }
+            //clock is equal to constant
             case "==L", "==R" -> {
-                temp.add(new BoundaryValue(x, true, clock, x, index));
-                temp.add(new BoundaryValue(x - 1, false, clock, x - 1, index));
-                temp.add(new BoundaryValue(x + 1, false, clock, x + 1, index));
+                temp.add(new BoundaryValue(x, true, clock, x, index, x));
+                temp.add(new BoundaryValue(x - 1, false, clock, x - 1, index, x));
+                temp.add(new BoundaryValue(x + 1, false, clock, x + 1, index, x));
             }
+            //clock is not equal to constant
             case "!=L", "!=R" -> {
-                temp.add(new BoundaryValue(x + 1, false, clock, x, index));
-                temp.add(new BoundaryValue(x, true, clock, x + 1, index));
-                temp.add(new BoundaryValue(x, true, clock, x - 1, index));
+                temp.add(new BoundaryValue(x + 1, false, clock, x, index, x));
+                temp.add(new BoundaryValue(x, true, clock, x + 1, index, x));
+                temp.add(new BoundaryValue(x, true, clock, x - 1, index, x));
             }
             default -> System.out.println("Error");
         }

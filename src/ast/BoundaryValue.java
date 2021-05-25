@@ -9,13 +9,13 @@ public class BoundaryValue {
     private int indexEnd;
     private int indexStart;
 
-    public BoundaryValue(int value, boolean validity, String clock, int queryValue, int index) {
+    public BoundaryValue(int value, boolean validity, String clock, int queryValue, int index, int ogValue) {
         this.value = value;
         this.validity = validity;
         this.clock = clock;
         this.queryValue = queryValue;
         this.indexEnd = index;
-        this.indexStart = index - String.valueOf(queryValue).length();
+        this.indexStart = index - String.valueOf(ogValue).length();
     }
 
 

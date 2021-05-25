@@ -28,6 +28,7 @@ public class GuardMaker {
     }
 
     private String createNewGuard(String guard, BoundaryValue boundaryValue) {
+
         String sub1 = guard.substring(0, boundaryValue.getIndexStart());
         String sub2 = guard.substring(boundaryValue.getIndexEnd());
 

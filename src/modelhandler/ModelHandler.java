@@ -26,7 +26,7 @@ public class ModelHandler {
     public Engine engine = new Engine();
 
     ArrayList<Problem> problems = new ArrayList<Problem>();
-    URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/CAS2.3.xml");
+    URL url = new URL("https://raw.githubusercontent.com/GodSpiller/CAS/main/updown.xml");
     Document document;;
     ModelHandlerVisitor modelHandlerVisitor = new ModelHandlerVisitor();
     Template template;
@@ -121,7 +121,7 @@ public class ModelHandler {
         UppaalSystem system = engine.getSystem(document, problems);
         Query q;
 
-        q = new Query("E<> testgoal == true && " + boundaryValue.getClock() + " == " + boundaryValue.getQueryValue(), "");
+        q = new Query("E<> testgoal == true && " + processName + "." + boundaryValue.getClock() + " == " + boundaryValue.getQueryValue(), "");
 
         QueryFeedback qf = new QueryFeedback() {
             @Override
@@ -184,6 +184,7 @@ public class ModelHandler {
             public void setResultText(String s) {
             }
         };
+
         engine.query(system, "trace 1", q, qf);
 
         return modelHandlerVisitor.getStringBuilder();
