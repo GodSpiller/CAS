@@ -6,9 +6,13 @@
 
 File -> Project Structure -> Under project settings: 'Libraries' -> click the plus icon -> Java -> Add the following libraries:
 
-model.jar 
+model.jar (Found under the 'lib' folder in UPPAAL 2.1.24)
 
-uppaal.jar
+uppaal.jar (Found in the root of UPPAAL 2.1.24)
 
 ## SETTING SERVER PATH ##
 In the ModelHandler.java, change the engine.setServerPath() to your local path
+
+## CHOOSING MODEL TO TEST ##
+In the repository, there are 2 models that are also implemented: CAS 2.3.xml and updown.xml.
+In the ModelHandler.java, set the URL variable to the desired model
