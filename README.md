@@ -15,4 +15,7 @@ In the ModelHandler.java, change the engine.setServerPath() to your local path
 
 ## CHOOSING MODEL TO TEST ##
 In the repository, there are 2 models that are also implemented: CAS 2.3.xml and updown.xml.
-In the ModelHandler.java, set the URL variable to the desired model
+In the ModelHandler.java, set the URL variable to the desired model.
+UnitTestFactory.java has 2 methods, makeUnitTestsUpDown() and makeUnitTestsCAS().
+In Main.java, call the method corresponding to the model you wish to test.
+The output of the program is unit tests, the tests are located in the 'test' folder
