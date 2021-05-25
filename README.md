@@ -9,3 +9,6 @@ File -> Project Structure -> Under project settings: 'Libraries' -> click the pl
 model.jar 
 
 uppaal.jar
+
+## SETTING SERVER PATH ##
+In the ModelHandler.java, change the engine.setServerPath to your local path
